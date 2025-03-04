@@ -1,0 +1,97 @@
+[
+    {
+        "id": "1",
+        "category": ["🔥Em alta", "Eletrodomésticos"],
+        "nameProduct": "Mini Processador e Triturador",
+        "description": "Prático para cortar alimentos.",
+        "pictures": {
+            "thumb": {
+                "url": "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m2xkt259ozpx6c@resize_w450_nl.webp",
+                "alt": "Thumbnail do produto"
+            },
+            "images": [
+                {
+                    "url": "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m2xkt259ozpx6c@resize_w450_nl.webp",
+                    "alt": "Mini Processador"
+                }
+            ]
+        },
+        "urlink": "https://s.shopee.com.br/9pP2xUTPT1"
+    },
+    {
+        "id": "2",
+        "category": ["🔥Em alta", "Iluminação"],
+        "nameProduct": "Ring Light",
+        "description": "Ideal para criação de conteúdo.",
+        "pictures": {
+            "thumb": {
+                "url": "https://down-br.img.susercontent.com/file/sg-11134201-7rbkw-lm7zonxpngrt26.webp",
+                "alt": "Thumbnail do produto"
+            },
+            "images": [
+                {
+                    "url": "https://down-br.img.susercontent.com/file/sg-11134201-7rbkw-lm7zonxpngrt26.webp",
+                    "alt": "Ring Light"
+                }
+            ]
+        },
+        "urlink": "https://s.shopee.com.br/9ziT9nSm84"
+    },
+    {
+        "id": "3",
+        "category": ["🔥Em alta", "Eletrodomésticos"],
+        "nameProduct": "Air Fryer",
+        "description": "Popular por promover alimentação saudável.",
+        "pictures": {
+            "thumb": {
+                "url": "https://down-br.img.susercontent.com/file/sg-11134201-7rcez-lsacfljdq4ggd9@resize_w450_nl.webp",
+                "alt": "Thumbnail do produto"
+            },
+            "images": [
+                {
+                    "url": "https://down-br.img.susercontent.com/file/sg-11134201-7rcez-lsacfljdq4ggd9@resize_w450_nl.webp",
+                    "alt": "Air Fryer"
+                }
+            ]
+        },
+        "urlink": "https://s.shopee.com.br/AA1tM6S8n7"
+    },
+    {
+        "id": "4",
+        "category": ["🔥Em alta", "Higiene Pessoal"],
+        "nameProduct": "Escova elétrica",
+        "description": "Facilite a sua limpeza diária.",
+        "pictures": {
+            "thumb": {
+                "url": "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m1xawd2fn5s84e@resize_w450_nl.webp",
+                "alt": "Thumbnail do produto"
+            },
+            "images": [
+                {
+                    "url": "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m1xawd2fn5s84e@resize_w450_nl.webp",
+                    "alt": "Escova elétrica"
+                }
+            ]
+        },
+        "urlink": "https://s.shopee.com.br/AKLJYPRVSA"
+    },
+    {
+        "id": "5",
+        "category": ["🔥Em alta", "Higiene Pessoal"],
+        "nameProduct": "Escova elétrica",
+        "description": "Facilite a sua limpeza diária.",
+        "pictures": {
+            "thumb": {
+                "url": "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m1xawd2fn5s84e@resize_w450_nl.webp",
+                "alt": "Thumbnail do produto"
+            },
+            "images": [
+                {
+                    "url": "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m1xawd2fn5s84e@resize_w450_nl.webp",
+                    "alt": "Escova elétrica"
+                }
+            ]
+        },
+        "urlink": "https://s.shopee.com.br/AUejkiQs7D"
+    }
+]

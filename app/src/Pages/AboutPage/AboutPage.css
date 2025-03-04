@@ -1,0 +1,72 @@
+/* Estilos personalizados para o componente apto */
+
+/* Estilo para os cards */
+.card {
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para os ícones de cópia */
+.copy-icon {
+  cursor: pointer;
+  margin-left: 0.5rem;
+  color: #007bff;
+  transition: color 0.3s ease;
+}
+
+.copy-icon:hover {
+  color: #0056b3;
+}
+
+/* Estilo para os modais */
+.modal-content {
+  border-radius: 15px;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-title {
+  font-weight: bold;
+}
+
+.close {
+  font-size: 1.5rem;
+}
+
+/* Estilo para os inputs */
+.form-control {
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  padding: 0.375rem 0.75rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Estilo para os labels */
+label {
+  font-weight: bold;
+}
+
+/* Estilo para os botões */
+.btn-link {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.btn-link:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}

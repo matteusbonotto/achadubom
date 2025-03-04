@@ -1,0 +1,12 @@
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.carousel img {
+  scroll-snap-align: center;
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
