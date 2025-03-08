@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import './AccordionComponent.css';
-import Carroussel from '../CarrousselComponent/CarrousselComponent';
-
-const AccordionComponent = ({ title, content, carouselImages }) => {
+  
+const AccordionComponent = ({ title, category, nameProduct, description, pictures, images, urLink }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleAccordion = () => {
@@ -12,13 +11,15 @@ const AccordionComponent = ({ title, content, carouselImages }) => {
   return (
     <div className="accordion">
       <div className="accordion-header" onClick={toggleAccordion}>
-        <h3>{title}</h3>
+        <h3>{category}</h3>
         <span>{isOpen ? '-' : '+'}</span>
       </div>
       <div className={`accordion-content ${isOpen ? 'open' : ''}`}>
-        <p>{content}</p>
-        <img src="{carouselImages}" alt="" />
-          <Carroussel images={carouselImages} />
+        <h3>{nameProduct}</h3>
+        <img src={pictures} alt="" />
+        <img src={images} alt="" />
+        <p>{description}</p>
+        <a className='btn' href={urLink}>Eu quero</a>
       </div>
     </div>
   );

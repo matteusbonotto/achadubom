@@ -1,38 +1,17 @@
-import React, { useState } from 'react';
 import './CarrousselComponent.css';
 import './CarrousselComponent.css';
+import { Card } from 'primereact/card';
 
-const CarrousselComponent = ({ title, content }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleAccordion = () => {
-    setIsOpen(!isOpen);
-  };
-
-  return (
-    <div className="accordion">
-      <div className="accordion-header" onClick={toggleAccordion}>
-        <h3>{title}</h3>
-        <span>{isOpen ? '-' : '+'}</span>
-      </div>
-      {isOpen && (
-        <div className="accordion-content">
-          <p>{content}</p>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const Carroussel = ({ images }) => {
+const CarrousselComponent = ({ images }) => {
   return (
     <div className="carousel">
-      {images.map((image, index) => (
-        <img key={index} src={image.url} alt={image.alt} />
-      ))}
+      <Card title="Bem vindo a AchaduBom">
+      <p className="m-0">
+        Achadinhos BBB, Bom Bonito e Barato!!!
+      </p>
+    </Card>
     </div>
   );
 };
 
 export default CarrousselComponent;
-export { Carroussel };

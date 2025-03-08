@@ -1,21 +1,14 @@
 import React from 'react';
-import AccordionComponent from './Components/AccordionComponent/AccordionComponent';
-import productsData from './Assets/data/products.json';
 import './App.css';
+import Home from './Pages/HomePage/HomePage';
+import 'primeicons/primeicons.css';
+import 'primeflex/primeflex.css';
+import 'primereact/resources/primereact.css';
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
 
 const App = () => {
   return (
-    <div>
-      <h1>Produtos</h1>
-      {productsData.map((product) => (
-        <AccordionComponent
-          key={product.id}
-          title={product.nameProduct}
-          content={product.description}
-          carouselImages={product.pictures.images}
-        />
-      ))}
-    </div>
+    <Home />
   );
 };
 
