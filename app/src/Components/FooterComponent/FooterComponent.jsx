@@ -14,21 +14,21 @@ const FooterComponent = () => {
             icon="pi pi-tiktok"
             className="p-button-rounded tiktok"
             onClick={() =>
-              window.open("https://tinyurl.com/" + "product.code", "_blank")
+              window.open("https://www.tiktok.com/@achadubom", "_blank")
             }
           ></Button>
           <Button
             icon="pi pi-instagram"
             className="p-button-rounded instagram"
             onClick={() =>
-              window.open("https://tinyurl.com/" + "product.code", "_blank")
+              window.open("https://www.instagram.com/lojaachadubom/", "_blank")
             }
           ></Button>
           <Button
             icon="pi pi-shopping-bag"
             className="p-button-rounded shopee"
             onClick={() =>
-              window.open("https://tinyurl.com/" + "product.code", "_blank")
+              window.open("https://s.shopee.com.br/3q8rMqkIcx", "_blank")
             }
           ></Button>
         </div>

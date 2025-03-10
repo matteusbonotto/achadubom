@@ -35,7 +35,7 @@ const HeaderComponent = () => {
     {
       label: "Shopee",
       icon: "pi pi-shopping-bag",
-      url: "https://shopee.com.br/shop/467080933",
+      url: "https://s.shopee.com.br/3q8rMqkIcx",
       target: "_blank",
     },
     {
