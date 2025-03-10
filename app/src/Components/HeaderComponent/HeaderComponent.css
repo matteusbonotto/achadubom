@@ -9,16 +9,22 @@
   background-color: #027cf5;
   padding: 20px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  width: 100%;
 }
 
 /* Estiliza o logo */
 .header img {
-  width: 150px; /* Ajuste conforme necessário */
+  width: 150px;
   height: auto;
   margin-bottom: 15px;
 }
 
-/* Estiliza o TabMenu */
+/* Desktop Menu Styles */
+.desktop-menu {
+  width: 100%;
+}
+
 .p-tabmenu {
   background: none;
   border: none;
@@ -52,7 +58,86 @@
   color: rgb(206, 189, 3);
 }
 
-/* Altera a cor da linha azul do item ativo */
 .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight a {
-  border-bottom: 3px solid rgb(206, 189, 3) !important; /* Altere para a cor desejada */
+  border-bottom: 3px solid rgb(206, 189, 3) !important;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: row;
+    justify-content: center;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+
+  .header img {
+    margin-bottom: 0;
+    width: 120px;
+  }
+
+  .menu-button {
+    position: absolute !important;
+    left: 15px !important;
+    background: transparent !important;
+    border: none !important;
+    color: white !important;
+    padding: 0.5rem !important;
+  }
+
+  .menu-button:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  /* Mobile Sidebar Styles */
+  .mobile-sidebar {
+    width: 80% !important;
+    max-width: 300px !important;
+  }
+
+  .mobile-menu {
+    padding: 20px 0;
+  }
+
+  .mobile-menu-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border-bottom: 1px solid #eee;
+  }
+
+  .mobile-menu-item:hover {
+    background-color: #f5f5f5;
+    color: rgb(206, 189, 3);
+  }
+
+  .mobile-menu-item i {
+    margin-right: 15px;
+    font-size: 1.2rem;
+  }
+
+  .mobile-menu-item span {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  /* Ajuste para o conteúdo principal quando o header é fixo */
+  body {
+    padding-top: 70px;
+  }
+}
+
+/* PrimeReact Sidebar Customization */
+.p-sidebar-left {
+  padding: 0 !important;
+}
+
+.p-sidebar-content {
+  padding: 0 !important;
 }
