@@ -1,3 +1,11 @@
+.product-description {
+    font-size: 1rem;    
+    color: #495057;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
 /* Container Styles */
 .card {
     max-width: 1200px;
@@ -186,7 +194,7 @@
     }
 
     .product-code {
-        font-size: 0.875rem;
+        font-size: 0.575rem;
     }
 
     .p-button-rounded {
@@ -215,6 +223,35 @@
         gap: 0.5rem;
         padding: 0.75rem 0;
     }
+
+    
+    .text-ellipses-grid {
+        width: 160px; /* Ajuste conforme necessário */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+      }
+    
+      .text-ellipses-grid:hover {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+      }
+      
+      .text-ellipses-list {
+        width: 150px; /* Ajuste conforme necessário */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: start;
+      }
+    
+      .text-ellipses-list:hover {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+      } 
 }
 
 /* Tablet and up */
@@ -233,6 +270,34 @@
         align-items: flex-end;
         gap: 0.5rem;
     }
+
+    .text-ellipses-grid {
+        width: 160px; /* Ajuste conforme necessário */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+      }
+    
+      .text-ellipses-grid:hover {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+      }
+      
+      .text-ellipses-list {
+        width: 160px; /* Ajuste conforme necessário */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: start;
+      }
+    
+      .text-ellipses-list:hover {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+      }
 }
 
 /* Desktop */
@@ -241,3 +306,31 @@
         width: 33.33%;
     }
 }
+
+.text-ellipses-grid {
+    width: 240px; /* Ajuste conforme necessário */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+  }
+
+  .text-ellipses-grid:hover {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+  
+  .text-ellipses-list {
+    width: 240px; /* Ajuste conforme necessário */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: start;
+  }
+
+  .text-ellipses-list:hover {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }

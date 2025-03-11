@@ -47,13 +47,13 @@ export default function ProductsComponent() {
                     className="tag"
                   ></Tag>
               </div>
-              <div className="product-name">{product.name}</div>
-              <Rating value={product.rating} readOnly cancel={false}></Rating>
+              <div className="product-name text-ellipses-list">{product.name}</div>
+              {/* <p className="product-description">{product.description}</p> */}
             </div>
             <div className="product-list-action">
               <span className="product-code">Código: {product.code}</span>
               <Button icon="" className="p-button-rounded">
-                Eu quero
+                Quero
               </Button>
             </div>
           </div>
@@ -79,9 +79,9 @@ export default function ProductsComponent() {
           </div>
           <div className="product-grid-detail">
             <img src={product.image} alt={product.name} />
-            <div className="product-name">{product.name}</div>
-            <Rating value={product.rating} readOnly cancel={false}></Rating>
-          </div>
+            <div className="product-name text-ellipses-grid">{product.name}</div>
+            <p className="product-description">{product.description}</p>
+            </div>
           <div className="product-grid-action">
             <span className="product-code">Código: {product.code}</span>
             <Button
@@ -91,7 +91,7 @@ export default function ProductsComponent() {
                 window.open("https://tinyurl.com/" + product.code, "_blank")
               }
             >
-              Eu quero
+              Quero
             </Button>
           </div>
         </div>

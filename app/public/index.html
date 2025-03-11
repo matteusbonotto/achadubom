@@ -7,9 +7,72 @@
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="Achadinhos da shopee do jeito que você gosta, BBB (Bom, Bonito e Barato) Venha conferir, aproveite e siga, compartilhe e curta nossas redes sociais."
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!-- Splash Screen Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Achadubom" />
+    <link rel="apple-touch-startup-image" href="%PUBLIC_URL%/logo.png" />
+    <style>
+      /* Splash Screen Styles */
+      @media screen and (max-width: 768px) {
+        #root {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: #FFF;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999;
+        }
+        
+        #root::before {
+          content: '';
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background-image: url('%PUBLIC_URL%/logo.png');
+          background-color: #027cf5;
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
+          animation: fadeOut 0.5s ease-in-out 2s forwards;
+          z-index: 10000;
+        }
+
+        @keyframes fadeOut {
+          from {
+            opacity: 1;
+          }
+          to {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+          }
+        }
+
+        /* Remove fixed positioning and high z-index after splash screen */
+        @keyframes removeFixed {
+          from {
+            position: fixed;
+            z-index: 9999;
+          }
+          to {
+            position: relative;
+            z-index: 0;
+          }
+        }
+
+        #root {
+          animation: removeFixed 0s ease-in-out 2.5s forwards;
+        }
+      }
+    </style>
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
