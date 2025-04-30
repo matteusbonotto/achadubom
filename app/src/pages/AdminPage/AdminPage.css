@@ -1,0 +1,47 @@
+.admin-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-page main {
+  flex: 1;
+  padding: 2rem 0;
+}
+
+.admin-page h1 {
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+.admin-card {
+  transition: transform 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.admin-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-card .card-title {
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.admin-card .card-text {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.admin-card .btn-primary {
+  background-color: #1976d2;
+  border-color: #1976d2;
+}
+
+.admin-card .btn-primary:hover {
+  background-color: #1565c0;
+  border-color: #1565c0;
+} 

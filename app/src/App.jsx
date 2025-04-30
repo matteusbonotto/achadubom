@@ -1,19 +1,17 @@
 import React from 'react';
-import './App.css';
-import Home from './Pages/HomePage/HomePage';
-import AudioPlayer from './Components/AudioPlayer/AudioPlayer';
-import 'primeicons/primeicons.css';
-import 'primeflex/primeflex.css';
-import 'primereact/resources/primereact.css';
-import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage/HomePage';
+import StorePage from './pages/storePage/storePage';
 
-const App = () => {
+function App() {
   return (
-    <>
-      <AudioPlayer />
-      <Home />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/store" element={<StorePage />} />
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;

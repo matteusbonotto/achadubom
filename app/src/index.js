@@ -1,6 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+
+// Framework and Global CSS imports
+import 'bootstrap/dist/css/bootstrap.min.css';  // 1. Bootstrap CSS
+import './index.css';  // 2. Global styles
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+
+
+// App imports
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 

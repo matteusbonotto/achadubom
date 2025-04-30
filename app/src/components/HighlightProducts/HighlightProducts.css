@@ -1,0 +1,83 @@
+*{
+    text-decoration: none !important;
+}
+
+.product {
+    position: relative;
+    margin: 15px 0px;
+    -webkit-box-shadow: 0px 0px 0px 0px #E4E7ED, 0px 0px 0px 1px #E4E7ED;
+    box-shadow: 0px 0px 0px 0px #E4E7ED, 0px 0px 0px 1px #E4E7ED;
+    -webkit-transition: 0.2s all;
+    transition: 0.2s all;
+  }
+  
+  .product:hover {
+    -webkit-box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #027cf5;
+    box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #027cf5;
+  }
+  
+  .product .product-img {
+    position: relative;
+  }
+  
+  .product .product-img > img {
+    width: 100%;
+  }
+  
+  .product .product-img .product-tag {
+    position: absolute;
+    top: 10px;      /* alinhado ao topo */
+    right: 10px;
+    z-index: 2;
+  }
+  
+  .product .product-img .product-label {
+    position: absolute;
+    top: 10px;      /* alinhado ao topo */
+    left: 10px;
+    z-index: 2;
+  }
+  
+  .product .product-img .product-label > span {
+    border: 2px solid;
+    padding: 2px 10px;
+    font-size: 12px;
+    background-color: #027cf5;
+    border-color: #027cf5;
+    color: #FFF;
+    border-radius: 4px;
+  }
+  
+  .product .product-img .product-label > span.sale {
+    background-color: #FFF;
+    border-color: #027cf5;
+    color: #027cf5;
+  }
+  
+  .product .product-body {
+    position: relative;
+    padding: 15px;
+    background-color: #FFF;
+    text-align: center;
+    z-index: 20;
+  }
+  
+  /* ... o restante do seu CSS permanece igual ... */
+  
+  .group-carousel {
+    margin-bottom: 40px;
+  }
+  
+  .slick-slide {
+    padding: 10px;
+  }
+  
+  .slick-dots li button:before {
+    color: #027cf5;
+  }
+  
+  .slick-prev:before,
+  .slick-next:before {
+    color: #027cf5;
+  }
+  
