@@ -1,0 +1,197 @@
+[
+    {
+        "codigo": "LED001",
+        "ativo": true,
+        "titulo": "Lâmpada Inteligente RGB",
+        "descricao": "Lâmpada LED RGB com controle por aplicativo, 16 milhões de cores, compatível com Alexa e Google Home. Economia de energia até 80%. Controle de intensidade e temperatura de cor. Perfeita para criar ambientes únicos em sua casa.",
+        "url": "https://shopee.com.br/lampada-rgb",
+        "imagem": 
+        [
+            "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400",
+            "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400"
+        ],
+        "categorias": 
+        [
+            "destaque",
+            "eletrônicos"
+        ],
+        "favorito": false,
+        "loja": "Shopee",
+        "preco": 89.9
+    },
+    {
+        "codigo": "CAR002",
+        "ativo": true,
+        "titulo": "Carregador Wireless 15W",
+        "descricao": "Carregador sem fio ultra rápido de 15W, compatível com iPhone e Android. Design elegante e compacto, com proteção contra superaquecimento e sobrecarga. LED indicativo de carregamento.",
+        "url": "https://mercadolivre.com.br/carregador-wireless",
+        "imagem": 
+        [
+            "https://images.unsplash.com/photo-1609791452037-4d9b2d9b6d4b?w=400"
+        ],
+        "categorias": 
+        [
+            "eletrônicos",
+            "acessórios"
+        ],
+        "favorito": false,
+        "loja": "Mercado Livre",
+        "preco": 45.9
+    },
+    {
+        "codigo": "FON003",
+        "ativo": true,
+        "titulo": "Fone Bluetooth Premium",
+        "descricao": "Fone de ouvido Bluetooth 5.0 com cancelamento ativo de ruído, bateria de 30 horas, driver de 40mm para graves profundos. Ideal para música, jogos e chamadas profissionais.",
+        "url": "https://amazon.com.br/fone-bluetooth",
+        "imagem": 
+        [
+            "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
+            "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400"
+        ],
+        "categorias": 
+        [
+            "destaque",
+            "eletrônicos",
+            "áudio"
+        ],
+        "favorito": false,
+        "loja": "Amazon",
+        "preco": 199.9
+    },
+    {
+        "codigo": "REL004",
+        "ativo": true,
+        "titulo": "Smartwatch Fitness",
+        "descricao": "Relógio inteligente com monitor cardíaco, GPS, resistente à água IP68, mais de 100 modalidades esportivas. Tela AMOLED de 1.4 polegadas, bateria de 7 dias.",
+        "url": "https://shopee.com.br/smartwatch",
+        "imagem": 
+        [
+            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"
+        ],
+        "categorias": 
+        [
+            "eletrônicos",
+            "fitness"
+        ],
+        "favorito": false,
+        "loja": "Shopee",
+        "preco": 299.9
+    },
+    {
+        "codigo": "CAB005",
+        "ativo": true,
+        "titulo": "Cabo USB-C Magnético",
+        "descricao": "Cabo USB-C magnético de carregamento rápido 3A, comprimento de 1.5m, conectores rotativos 360°, LED indicativo, compatível com smartphones e tablets.",
+        "url": "https://mercadolivre.com.br/cabo-magnetico",
+        "imagem": 
+        [
+            "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400"
+        ],
+        "categorias": 
+        [
+            "acessórios",
+            "eletrônicos"
+        ],
+        "favorito": false,
+        "loja": "Mercado Livre",
+        "preco": 29.9
+    },
+    {
+        "codigo": "SUP006",
+        "ativo": true,
+        "titulo": "Suporte Notebook Ergonômico",
+        "descricao": "Suporte ajustável para notebook de 10 a 17 polegadas, alumínio premium, 6 níveis de altura, ventilação otimizada, antiderrapante, portátil e dobrável.",
+        "url": "https://amazon.com.br/suporte-notebook",
+        "imagem": 
+        [
+            "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400"
+        ],
+        "categorias": 
+        [
+            "acessórios",
+            "escritório"
+        ],
+        "favorito": false,
+        "loja": "Amazon",
+        "preco": 89.9
+    },
+    {
+        "codigo": "TEC007",
+        "ativo": true,
+        "titulo": "Teclado Mecânico RGB",
+        "descricao": "Teclado mecânico gamer com switches blue, iluminação RGB personalizável, ABNT2, teclas anti-ghosting, cabo USB removível, design compacto e elegante.",
+        "url": "https://shopee.com.br/teclado-mecanico",
+        "imagem": 
+        [
+            "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400",
+            "https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=400"
+        ],
+        "categorias": 
+        [
+            "destaque",
+            "eletrônicos",
+            "gamer"
+        ],
+        "favorito": false,
+        "loja": "Shopee",
+        "preco": 159.9
+    },
+    {
+        "codigo": "MOU008",
+        "ativo": true,
+        "titulo": "Mouse Gamer Wireless",
+        "descricao": "Mouse gamer sem fio com sensor óptico de 3200 DPI, 6 botões programáveis, iluminação RGB, bateria recarregável de 30 horas, design ergonômico.",
+        "url": "https://mercadolivre.com.br/mouse-gamer",
+        "imagem": 
+        [
+            "https://images.unsplash.com/photo-1527814050087-3793815479db?w=400"
+        ],
+        "categorias": 
+        [
+            "eletrônicos",
+            "gamer"
+        ],
+        "favorito": false,
+        "loja": "Mercado Livre",
+        "preco": 119.9
+    },
+    {
+        "codigo": "CAM009",
+        "ativo": false,
+        "titulo": "Câmera Web 4K",
+        "descricao": "Webcam 4K Ultra HD com microfone duplo, foco automático, correção de luz, ideal para streaming e videoconferências profissionais.",
+        "url": "https://amazon.com.br/camera-4k",
+        "imagem": 
+        [
+            "https://images.unsplash.com/photo-1588508065123-287b28e013da?w=400"
+        ],
+        "categorias": 
+        [
+            "eletrônicos",
+            "streaming"
+        ],
+        "favorito": false,
+        "loja": "Amazon",
+        "preco": 249.9
+    },
+    {
+        "codigo": "POW010",
+        "ativo": true,
+        "titulo": "Power Bank 20000mAh",
+        "descricao": "Carregador portátil de 20000mAh com carregamento rápido PD 22.5W, 3 portas USB, display LED, compatível com iPhone, Samsung, Xiaomi e outros dispositivos.",
+        "url": "https://shopee.com.br/power-bank",
+        "imagem": 
+        [
+            "https://images.unsplash.com/photo-1609592194037-4d9b2d9b6d4b?w=400"
+        ],
+        "categorias": 
+        [
+            "eletrônicos",
+            "acessórios"
+        ],
+        "favorito": false,
+        "loja": "Shopee",
+        "preco": 79.9
+    }
+]

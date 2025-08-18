@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta name="description"
+            content="Encontre os melhores achadinhos e ofertas imperdíveis da Shopee, Mercado Livre, Amazon e outras lojas. Produtos selecionados com os melhores preços!">
+        <meta name="keywords"
+            content="achadinhos, ofertas, promoções, shopee, mercado livre, amazon, produtos baratos">
+        <meta name="author" content="AchaduBom">
+        <meta name="robots" content="index, follow">
+
+        <!-- PWA Meta Tags -->
+        <meta name="theme-color" content="#FFFF00">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        <meta name="apple-mobile-web-app-title" content="AchaduBom">
+        <meta name="mobile-web-app-capable" content="yes">
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://achadubom.com/">
+        <meta property="og:title" content="AchaduBom - Achadinhos Imperdíveis">
+        <meta property="og:description"
+            content="Encontre os melhores achadinhos e ofertas imperdíveis das principais lojas online.">
+        <meta property="og:image" content="https://achadubom.com/og-image.jpg">
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="https://achadubom.com/">
+        <meta property="twitter:title"
+            content="AchaduBom - Achadinhos Imperdíveis">
+        <meta property="twitter:description"
+            content="Encontre os melhores achadinhos e ofertas imperdíveis das principais lojas online.">
+        <meta property="twitter:image"
+            content="https://achadubom.com/twitter-image.jpg">
+
+        <title>AchaduBom - Achadinhos Imperdíveis | Ofertas da Shopee, Mercado
+            Livre, Amazon</title>
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/svg+xml"
+            href="./assets/images/logo/favicon.png">
+
+        <!-- Manifest PWA -->
+        <link rel="manifest" href="./manifest.json">
+
+        <!-- CDN Assets -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+            crossorigin="anonymous">
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Open+Sans:wght@400;500;600&display=swap"
+            rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="./assets/css/globals.css">
+        <link rel="stylesheet" href="./assets/css/desktop.css"
+            media="(min-width: 992px)">
+        <link rel="stylesheet" href="./assets/css/mobile.css"
+            media="(max-width: 991px)">
+
+        <!-- Preload Critical Resources -->
+        <link rel="preload" href="./assets/data/produtos.json" as="fetch"
+            crossorigin>
+        <link rel="prefetch" href="./admin.html">
+    </head>
+    <body>
+        <!-- Header Desktop -->
+        <header class="header-desktop d-none d-lg-flex">
+            <a href="#" class="logo-desktop">
+                <img src="./assets/images/logo/az.png" width="100" alt>
+            </a>
+
+            <nav class="nav-desktop">
+                <ul class="nav-desktop-list">
+                    <li><a href="#hero" class="active">Início</a></li>
+                    <li><a href="#produtos">Produtos</a></li>
+                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="./admin.html">Admin</a></li>
+                </ul>
+            </nav>
+
+            <div class="busca-desktop">
+                <input type="text" id="campo-busca"
+                    placeholder="Buscar produtos..." autocomplete="off">
+                <button type="button" aria-label="Buscar">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Header Mobile -->
+        <header class="header-mobile d-lg-none">
+            <div class="header-content">
+                <a href="#" class="logo-mobile">
+                    <img src="./assets/images/logo/az.png" width="100" alt>
+                </a>
+
+                <button class="btn-menu-mobile" id="btn-menu-mobile"
+                    aria-label="Abrir menu">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+
+            <!-- Busca Mobile -->
+            <div class="busca-mobile">
+                <input type="text" id="campo-busca-mobile"
+                    placeholder="Buscar produtos..." autocomplete="off">
+                <button type="button" aria-label="Buscar">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Menu Mobile Overlay -->
+        <div class="menu-overlay" id="menu-overlay"></div>
+
+        <!-- Menu Mobile -->
+        <nav class="menu-mobile" id="menu-mobile">
+            <div class="menu-header">
+                <span class="logo-mobile">
+                    <i class="bi bi-lightning-charge-fill"></i>
+                    AchaduBom
+                </span>
+                <button class="btn-fechar-menu" id="btn-fechar-menu"
+                    aria-label="Fechar menu">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <ul class="nav-mobile">
+                <li><a href="#hero"><i class="bi bi-house"></i> Início</a></li>
+                <li><a href="#produtos"><i class="bi bi-grid"></i>
+                        Produtos</a></li>
+                <li><a href="#sobre"><i class="bi bi-info-circle"></i>
+                        Sobre</a></li>
+                <li><a href="./admin.html"><i class="bi bi-gear"></i>
+                        Admin</a></li>
+            </ul>
+        </nav>
+
+        <!-- Banner Hero -->
+        <section id="hero" class="hero-desktop d-none d-lg-block">
+            <div class="hero-content">
+                <div class="hero-text fade-in-up">
+                    <h1>Achadinhos <span
+                            class="text-gradient">Imperdíveis</span></h1>
+                    <p>Descubra os melhores produtos com preços incríveis das
+                        principais lojas online. Ofertas selecionadas
+                        especialmente para você economizar!</p>
+                    <a href="#produtos"
+                        class="btn-custom btn-urgente btn-lg pulsing">
+                        <i class="bi bi-lightning-fill"></i> Ver Ofertas
+                    </a>
+                </div>
+
+                <div class="hero-produto slide-in-left">
+                    <img src="./assets/images/logo/az.png" alt>
+                </div>
+            </div>
+        </section>
+
+        <!-- Banner Hero Mobile -->
+        <section class="hero-mobile d-lg-none">
+            <h1>Achadinhos <span class="text-gradient">Imperdíveis</span></h1>
+            <p>Encontre os melhores produtos com preços incríveis!</p>
+
+            <div class="hero-produto-mobile">
+                <div class="hero-produto-content">
+                    <!-- Conteúdo será preenchido via JavaScript -->
+                </div>
+            </div>
+
+            <a href="#produtos" class="btn-custom btn-urgente">
+                <i class="bi bi-lightning-fill"></i> Ver Ofertas
+            </a>
+        </section>
+
+        <!-- Main Content -->
+        <main class="container-custom">
+            <!-- Filtros Desktop -->
+            <section class="filtros-desktop d-none d-lg-flex">
+                <div class="filtros-grupo">
+                    <label for="filtro-loja">Loja:</label>
+                    <select id="filtro-loja">
+                        <option value="todas">Todas as Lojas</option>
+                    </select>
+                </div>
+
+                <div class="filtros-grupo">
+                    <label for="filtro-ordenacao">Ordenar por:</label>
+                    <select id="filtro-ordenacao">
+                        <option value="az">A-Z</option>
+                        <option value="za">Z-A</option>
+                        <option value="preco_asc">Menor Preço</option>
+                        <option value="preco_desc">Maior Preço</option>
+                    </select>
+                </div>
+
+                <div class="view-toggle">
+                    <button data-view="grade" class="active">
+                        <i class="bi bi-grid"></i> Grade
+                    </button>
+                    <button data-view="lista">
+                        <i class="bi bi-list"></i> Lista
+                    </button>
+                </div>
+
+                <label class="filtro-favoritos">
+                    <input type="checkbox" id="filtro-favoritos">
+                    <i class="bi bi-heart"></i> Favoritos
+                </label>
+            </section>
+
+            <!-- Filtros Mobile -->
+            <section class="filtros-mobile d-lg-none">
+                <div class="filtros-row">
+                    <div class="filtro-item">
+                        <label for="filtro-loja-mobile">Loja:</label>
+                        <select id="filtro-loja-mobile">
+                            <option value="todas">Todas</option>
+                        </select>
+                    </div>
+
+                    <div class="filtro-item">
+                        <label for="filtro-ordenacao-mobile">Ordenar:</label>
+                        <select id="filtro-ordenacao-mobile">
+                            <option value="az">A-Z</option>
+                            <option value="za">Z-A</option>
+                            <option value="preco_asc">↑ Preço</option>
+                            <option value="preco_desc">↓ Preço</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filtros-row">
+                    <label class="filtro-favoritos-mobile">
+                        <input type="checkbox" id="filtro-favoritos-mobile">
+                        <i class="bi bi-heart"></i> Favoritos
+                    </label>
+                </div>
+            </section>
+
+            <!-- Lista de Produtos -->
+            <section id="produtos"
+                class="produtos-container-desktop d-none d-lg-block">
+                <div id="produtos-container" class="produtos-grid">
+                    <!-- Produtos serão carregados via JavaScript -->
+                </div>
+            </section>
+
+            <!-- Lista de Produtos Mobile -->
+            <section class="produtos-container-mobile d-lg-none">
+                <div id="produtos-container-mobile"
+                    class="produtos-grid-mobile">
+                    <!-- Produtos serão carregados via JavaScript -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Seção Sobre -->
+        <section id="sobre" class="secao-sobre d-none d-lg-block">
+            <h2>Sobre o AchaduBom</h2>
+            <p>
+                Somos especialistas em encontrar os melhores achadinhos e
+                ofertas imperdíveis das principais lojas online do Brasil.
+                Nossa missão é ajudar você a economizar, oferecendo uma
+                curadoria de produtos com ótimo custo-benefício.
+            </p>
+            <p>
+                Trabalhamos com as maiores plataformas de e-commerce como
+                Shopee, Mercado Livre, Amazon, AliExpress e muito mais,
+                sempre buscando as melhores oportunidades para nossos usuários.
+            </p>
+        </section>
+
+        <!-- Seção Sobre Mobile -->
+        <section class="secao-sobre-mobile d-lg-none">
+            <h2>Sobre o AchaduBom</h2>
+            <p>
+                Encontramos os melhores achadinhos das principais lojas online
+                para você economizar.
+                Produtos selecionados com ótimo custo-benefício das maiores
+                plataformas de e-commerce.
+            </p>
+        </section>
+
+        <!-- Seção Redes Sociais -->
+        <section class="secao-redes d-none d-lg-block">
+            <h2>Siga-nos nas Redes Sociais</h2>
+            <p>Fique por dentro das melhores ofertas e novidades!</p>
+
+            <div class="redes-icons">
+                <a href="#" class="rede-icon" aria-label="Instagram">
+                    <i class="bi bi-instagram"></i>
+                </a>
+                <a href="#" class="rede-icon" aria-label="Facebook">
+                    <i class="bi bi-facebook"></i>
+                </a>
+                <a href="#" class="rede-icon" aria-label="WhatsApp">
+                    <i class="bi bi-whatsapp"></i>
+                </a>
+                <a href="#" class="rede-icon" aria-label="Telegram">
+                    <i class="bi bi-telegram"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- Seção Redes Sociais Mobile -->
+        <section class="secao-redes-mobile d-lg-none">
+            <h2>Siga-nos</h2>
+            <p>Fique por dentro das ofertas!</p>
+
+            <div class="redes-icons-mobile">
+                <a href="#" class="rede-icon-mobile" aria-label="Instagram">
+                    <i class="bi bi-instagram"></i>
+                    <span>Instagram</span>
+                </a>
+                <a href="#" class="rede-icon-mobile" aria-label="Facebook">
+                    <i class="bi bi-facebook"></i>
+                    <span>Facebook</span>
+                </a>
+                <a href="#" class="rede-icon-mobile" aria-label="WhatsApp">
+                    <i class="bi bi-whatsapp"></i>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="#" class="rede-icon-mobile" aria-label="Telegram">
+                    <i class="bi bi-telegram"></i>
+                    <span>Telegram</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Rodapé -->
+        <footer class="rodape d-none d-lg-block">
+            <p class="copyright">© 2024 AchaduBom. Feito com ❤️ para economizar
+                seu dinheiro.</p>
+            <p>Não somos afiliados às lojas mencionadas. Todos os preços e
+                ofertas são de responsabilidade dos respectivos vendedores.</p>
+        </footer>
+
+        <!-- Rodapé Mobile -->
+        <footer class="rodape-mobile d-lg-none">
+            <p class="copyright">© 2024 AchaduBom</p>
+            <p>Feito com ❤️ para economizar seu dinheiro.</p>
+            <p>Não somos afiliados às lojas mencionadas. Preços de
+                responsabilidade dos vendedores.</p>
+        </footer>
+
+        <!-- Scripts -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+        <script src="./assets/js/main.js" defer></script>
+
+        <!-- PWA Install Prompt -->
+        <script>
+    // Install prompt para PWA
+    let deferredPrompt;
+    const installButton = document.createElement('button');
+    installButton.innerHTML = '<i class="bi bi-download"></i> Instalar App';
+    installButton.className = 'btn-custom btn-confianca position-fixed';
+    installButton.style.cssText = 'bottom: 20px; right: 20px; z-index: 1000; display: none;';
+    document.body.appendChild(installButton);
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installButton.style.display = 'block';
+    });
+
+    installButton.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`PWA install: ${outcome}`);
+        deferredPrompt = null;
+        installButton.style.display = 'none';
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      console.log('PWA foi instalada');
+      installButton.style.display = 'none';
+    });
+
+    // Service Worker registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js')
+          .then(registration => {
+            console.log('SW registrado:', registration.scope);
+          })
+          .catch(error => {
+            console.log('SW falha:', error);
+          });
+      });
+    }
+
+    // Sync selects mobile e desktop
+    document.addEventListener('DOMContentLoaded', () => {
+      const syncSelects = (sourceId, targetId) => {
+        const source = document.getElementById(sourceId);
+        const target = document.getElementById(targetId);
+        if (source && target) {
+          source.addEventListener('change', () => {
+            target.value = source.value;
+            target.dispatchEvent(new Event('change'));
+          });
+        }
+      };
+
+      syncSelects('filtro-loja', 'filtro-loja-mobile');
+      syncSelects('filtro-loja-mobile', 'filtro-loja');
+      syncSelects('filtro-ordenacao', 'filtro-ordenacao-mobile');
+      syncSelects('filtro-ordenacao-mobile', 'filtro-ordenacao');
+
+      // Sync busca
+      const campoBuscaDesktop = document.getElementById('campo-busca');
+      const campoBuscaMobile = document.getElementById('campo-busca-mobile');
+      
+      if (campoBuscaDesktop && campoBuscaMobile) {
+        campoBuscaDesktop.addEventListener('input', (e) => {
+          campoBuscaMobile.value = e.target.value;
+        });
+        
+        campoBuscaMobile.addEventListener('input', (e) => {
+          campoBuscaDesktop.value = e.target.value;
+        });
+      }
+    });
+  </script>
+
+        <!-- Analytics (substitua por seu código) -->
+        <!-- Google Analytics, Facebook Pixel, etc. -->
+
+        <!-- Schema.org JSON-LD -->
+        <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "AchaduBom",
+    "description": "Encontre os melhores achadinhos e ofertas imperdíveis das principais lojas online",
+    "url": "https://achadubom.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://achadubom.com/?busca={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+    </body>
+</html>

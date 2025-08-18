@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description"
+            content="Painel administrativo do AchaduBom - Gerenciar produtos e ofertas">
+        <meta name="robots" content="noindex, nofollow">
+
+        <title>Admin - AchaduBom | Gerenciar Produtos</title>
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/svg+xml"
+            href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMmU3ZDMyO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMyZWNjNzE7c3RvcC1vcGFjaXR5OjEiIC8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMTIiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjI0IiB5PSIzMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9ImJvbGQiPkE8L3RleHQ+Cjx0ZXh0IHg9IjI0IiB5PSIzOCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmOTgwMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjgiPuKchTwvdGV4dD4KPC9zdmc+">
+
+        <!-- CDN Assets -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Open+Sans:wght@400;500;600&display=swap"
+            rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="./assets/css/globals.css">
+
+        <style>
+    /* Estilos específicos do Admin */
+    .admin-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: var(--cor-fundo);
+      min-height: 100vh;
+    }
+    
+    .admin-header {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: var(--sombra-suave);
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .admin-titulo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--cor-primaria);
+      margin: 0;
+    }
+    
+    .admin-acoes {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .form-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: var(--sombra-suave);
+      margin-bottom: 2rem;
+    }
+    
+    .form-titulo {
+      color: var(--cor-primaria);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .form-group label {
+      font-weight: 600;
+      color: var(--cor-texto);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 0.75rem;
+      border: 2px solid var(--cor-borda);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all var(--transicao-media);
+      background: white;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--cor-primaria);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+    }
+    
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    /* Estilos para o Modal */
+    .modal-dialog {
+      max-width: 900px;
+    }
+    
+    .modal-header {
+      background: var(--gradiente-hero);
+      color: white;
+      border-bottom: none;
+      border-radius: 15px 15px 0 0;
+    }
+    
+    .modal-header .modal-title {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .modal-header .btn-close {
+      filter: invert(1);
+    }
+    
+    .modal-body {
+      padding: 2rem;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+    
+    .modal-footer {
+      background: var(--cor-fundo);
+      border-top: 1px solid var(--cor-borda);
+      border-radius: 0 0 15px 15px;
+      padding: 1.5rem 2rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+    
+    .modal-footer .btn-custom {
+      margin: 0;
+    }
+    
+    .contador-caracteres {
+      margin-top: 0.5rem;
+    }
+    
+    .checkbox-group input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+    }
+    
+    .form-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .btn-codigo {
+      background: var(--cor-destaque);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all var(--transicao-media);
+    }
+    
+    .btn-codigo:hover {
+      background: #e67e22;
+    }
+    
+    .preview-imagens {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--cor-fundo);
+      border-radius: 8px;
+    }
+    
+    .preview-item {
+      position: relative;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--sombra-suave);
+    }
+    
+    .preview-item img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+    }
+    
+    .preview-numero {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      background: var(--cor-primaria);
+      color: white;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    
+    .preview-erro {
+      padding: 1rem;
+      text-align: center;
+      color: var(--cor-urgente);
+      font-size: 0.9rem;
+    }
+    
+    .contador-caracteres {
+      font-size: 0.9rem;
+      color: var(--cor-texto-claro);
+      margin-top: 0.5rem;
+    }
+    
+    .busca-admin {
+      position: relative;
+      max-width: 400px;
+    }
+    
+    .busca-admin input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      padding-right: 40px;
+      border: 2px solid var(--cor-borda);
+      border-radius: 25px;
+      background: white;
+    }
+    
+    .busca-admin i {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--cor-texto-claro);
+    }
+    
+    .lista-produtos {
+      background: white;
+      border-radius: 15px;
+      box-shadow: var(--sombra-suave);
+      overflow: hidden;
+    }
+    
+    .lista-header {
+      background: var(--cor-primaria);
+      color: white;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .lista-stats {
+      display: flex;
+      gap: 2rem;
+      font-size: 0.9rem;
+    }
+    
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .item-produto {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--cor-borda);
+      transition: background var(--transicao-media);
+    }
+    
+    .item-produto:hover {
+      background: var(--cor-fundo);
+    }
+    
+    .item-produto:last-child {
+      border-bottom: none;
+    }
+    
+    .item-produto.inativo {
+      opacity: 0.6;
+    }
+    
+    .item-imagem {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    
+    .item-imagem img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .item-status {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
+    
+    .badge {
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    
+    .badge.ativo {
+      background: var(--cor-confianca);
+      color: white;
+    }
+    
+    .badge.inativo {
+      background: var(--cor-texto-claro);
+      color: white;
+    }
+    
+    .item-info {
+      flex: 1;
+      margin-left: 1.5rem;
+    }
+    
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
+    }
+    
+    .item-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--cor-texto);
+    }
+    
+    .item-acoes {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .btn-acao {
+      width: 35px;
+      height: 35px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all var(--transicao-media);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .btn-editar {
+      background: var(--cor-primaria);
+      color: white;
+    }
+    
+    .btn-editar:hover {
+      background: var(--cor-confianca);
+      transform: scale(1.1);
+    }
+    
+    .btn-duplicar {
+      background: var(--cor-destaque);
+      color: white;
+    }
+    
+    .btn-duplicar:hover {
+      background: #e67e22;
+      transform: scale(1.1);
+    }
+    
+    .btn-deletar {
+      background: var(--cor-urgente);
+      color: white;
+    }
+    
+    .btn-deletar:hover {
+      background: #c0392b;
+      transform: scale(1.1);
+    }
+    
+    .item-detalhes {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+      font-size: 0.9rem;
+    }
+    
+    .item-detalhes span {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: var(--cor-texto-claro);
+    }
+    
+    .codigo {
+      background: var(--cor-fundo);
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      font-family: monospace;
+      font-weight: 600;
+    }
+    
+    .preco {
+      color: var(--cor-urgente);
+      font-weight: 600;
+    }
+    
+    .item-categorias {
+      margin-bottom: 0.5rem;
+    }
+    
+    .categoria-tag {
+      display: inline-block;
+      background: var(--cor-primaria);
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      margin-right: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+    
+    .item-descricao {
+      color: var(--cor-texto-claro);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+    
+    .lista-vazia {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--cor-texto-claro);
+    }
+    
+    .lista-vazia i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--cor-borda);
+    }
+    
+    .notificacoes-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1050;
+      max-width: 400px;
+    }
+    
+    .notificacao {
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: var(--sombra-media);
+      animation: slideIn 0.3s ease-out;
+    }
+    
+    .notificacao-conteudo {
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: white;
+    }
+    
+    .notificacao.sucesso .notificacao-conteudo {
+      background: var(--cor-confianca);
+    }
+    
+    .notificacao.erro .notificacao-conteudo {
+      background: var(--cor-urgente);
+    }
+    
+    .notificacao.info .notificacao-conteudo {
+      background: #3498db;
+    }
+    
+    .notificacao.alerta .notificacao-conteudo {
+      background: var(--cor-destaque);
+    }
+    
+    .btn-fechar-notificacao {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 0;
+      margin-left: auto;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .admin-container {
+        padding: 1rem;
+      }
+      
+      .admin-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .admin-acoes {
+        justify-content: center;
+      }
+      
+      .form-section {
+        padding: 1.5rem;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .form-buttons {
+        justify-content: stretch;
+      }
+      
+      .form-buttons .btn-custom {
+        flex: 1;
+      }
+      
+      .item-produto {
+        padding: 1rem;
+      }
+      
+      .item-info {
+        margin-left: 1rem;
+      }
+      
+      .item-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+      }
+      
+      .item-acoes {
+        align-self: flex-end;
+      }
+      
+      .lista-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+
+    /* Estilo para logo da loja no admin */
+    .logo-loja-admin {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.25rem;
+      vertical-align: middle;
+    }
+  </style>
+    </head>
+    <body>
+        <div class="admin-container">
+            <!-- Header -->
+            <header class="admin-header">
+                <h1 class="admin-titulo">
+                    <i class="bi bi-gear-fill"></i>
+                    Painel Administrativo
+                </h1>
+
+                <div class="admin-acoes">
+                    <div class="busca-admin">
+                        <input type="text" id="busca-admin"
+                            placeholder="Buscar produtos...">
+                        <i class="bi bi-search"></i>
+                    </div>
+
+                    <button class="btn-custom btn-confianca"
+                        id="btn-novo-produto">
+                        <i class="bi bi-plus-lg"></i> Novo Produto
+                    </button>
+
+                    <a href="./index.html" class="btn-custom btn-destaque">
+                        <i class="bi bi-house"></i> Voltar ao Site
+                    </a>
+                </div>
+            </header>
+
+            <!-- Formulário de Produto em Modal -->
+            <!-- Modal -->
+            <div class="modal fade" id="modalProduto" tabindex="-1"
+                aria-labelledby="modalProdutoLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalProdutoLabel">
+                                <i class="bi bi-box"></i>
+                                <span id="modal-titulo">Novo Produto</span>
+                            </h5>
+                            <button type="button" class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form-produto">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="codigo">
+                                            <i class="bi bi-hash"></i>
+                                            Código do Produto *
+                                        </label>
+                                        <div
+                                            style="display: flex; gap: 0.5rem;">
+                                            <input type="text" id="codigo"
+                                                name="codigo"
+                                                required maxlength="20"
+                                                placeholder="Ex: PRD001">
+                                            <button type="button"
+                                                class="btn-codigo"
+                                                id="btn-gerar-codigo">
+                                                <i class="bi bi-shuffle"></i>
+                                                Gerar
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="titulo">
+                                            <i class="bi bi-text-left"></i>
+                                            Título *
+                                        </label>
+                                        <input type="text" id="titulo"
+                                            name="titulo"
+                                            required maxlength="100"
+                                            placeholder="Nome do produto">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="loja">
+                                            <i class="bi bi-shop"></i>
+                                            Loja *
+                                        </label>
+                                        <select id="loja" name="loja" required>
+                                            <!-- Opções serão preenchidas via JavaScript -->
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="preco">
+                                            <i
+                                                class="bi bi-currency-dollar"></i>
+                                            Preço (R$) *
+                                        </label>
+                                        <input type="number" id="preco"
+                                            name="preco"
+                                            required min="0" step="0.01"
+                                            placeholder="0.00">
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group"
+                                        style="grid-column: 1 / -1;">
+                                        <label for="descricao">
+                                            <i class="bi bi-text-paragraph"></i>
+                                            Descrição *
+                                        </label>
+                                        <textarea id="descricao"
+                                            name="descricao" required
+                                            maxlength="1000"
+                                            placeholder="Descrição detalhada do produto"></textarea>
+                                        <div class="contador-caracteres"
+                                            id="contador-caracteres">0
+                                            caracteres</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group"
+                                        style="grid-column: 1 / -1;">
+                                        <label for="url">
+                                            <i class="bi bi-link-45deg"></i>
+                                            URL do Produto *
+                                        </label>
+                                        <input type="url" id="url" name="url"
+                                            required
+                                            placeholder="https://exemplo.com/produto">
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group"
+                                        style="grid-column: 1 / -1;">
+                                        <label for="imagem">
+                                            <i class="bi bi-image"></i>
+                                            URLs das Imagens * (separadas por
+                                            vírgula)
+                                        </label>
+                                        <textarea id="imagem" name="imagem"
+                                            required
+                                            placeholder="https://exemplo.com/imagem1.jpg, https://exemplo.com/imagem2.jpg"></textarea>
+                                        <div id="preview-imagens"
+                                            class="preview-imagens">
+                                            <p>Nenhuma imagem para
+                                                visualizar</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group"
+                                        style="grid-column: 1 / -1;">
+                                        <label for="categorias">
+                                            <i class="bi bi-tags"></i>
+                                            Categorias * (separadas por vírgula)
+                                        </label>
+                                        <input type="text" id="categorias"
+                                            name="categorias"
+                                            required
+                                            placeholder="eletrônicos, casa, jardim">
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>
+                                            <i class="bi bi-toggle-on"></i>
+                                            Status
+                                        </label>
+                                        <div class="checkbox-group">
+                                            <input type="checkbox" id="ativo"
+                                                name="ativo"
+                                                checked>
+                                            <label for="ativo">Produto
+                                                ativo</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>
+                                            <i class="bi bi-heart"></i>
+                                            Destaque
+                                        </label>
+                                        <div class="checkbox-group">
+                                            <input type="checkbox" id="favorito"
+                                                name="favorito">
+                                            <label for="favorito">Produto
+                                                favorito</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn-custom btn-urgente"
+                                id="btn-excluir" style="display: none;">
+                                <i class="bi bi-trash"></i> Excluir Produto
+                            </button>
+
+                            <button type="button" class="btn-custom"
+                                data-bs-dismiss="modal" id="btn-cancelar">
+                                <i class="bi bi-x-lg"></i> Cancelar
+                            </button>
+
+                            <button type="submit" form="form-produto"
+                                class="btn-custom btn-confianca"
+                                id="btn-salvar">
+                                <i class="bi bi-plus-lg"></i> Adicionar Produto
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Produtos -->
+            <section class="lista-produtos">
+                <div class="lista-header">
+                    <h2>
+                        <i class="bi bi-list-ul"></i>
+                        Produtos Cadastrados
+                    </h2>
+
+                    <div class="lista-stats">
+                        <div class="stat-item">
+                            <i class="bi bi-box"></i>
+                            <span id="total-produtos">0 produtos</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="bi bi-check-circle"></i>
+                            <span id="produtos-ativos">0 ativos</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="bi bi-heart"></i>
+                            <span id="produtos-favoritos">0 favoritos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="lista-produtos">
+                    <!-- Lista será preenchida via JavaScript -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Scripts -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="./assets/js/admin.js"></script>
+
+        <script>
+    // Atualização das estatísticas
+    function atualizarEstatisticas() {
+      if (window.adminManager) {
+        const stats = window.adminManager.getEstatisticas();
+        document.getElementById('total-produtos').textContent = `${stats.total} produtos`;
+        document.getElementById('produtos-ativos').textContent = `${stats.ativos} ativos`;
+        document.getElementById('produtos-favoritos').textContent = `${stats.favoritos} favoritos`;
+      }
+    }
+
+    // Atualizar estatísticas quando os dados mudarem
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        atualizarEstatisticas();
+        setInterval(atualizarEstatisticas, 5000);
+      }, 1000);
+    });
+  </script>
+    </body>
+</html>

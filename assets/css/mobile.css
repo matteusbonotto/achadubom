@@ -1,0 +1,925 @@
+/* =============================================
+   ESTILOS MOBILE - APP NATIVO (max-width: 991px)
+   ============================================= */
+
+/* Reset e base para mobile */
+@media (max-width: 991px) {
+    body {
+        padding-top: 0;
+        background: var(--cor-fundo);
+        overflow-x: hidden;
+    }
+}
+
+/* =============================================
+   HEADER MOBILE - ESTILO APP NATIVO
+   ============================================= */
+.header-mobile {
+    background: var(--cor-primaria);
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(0, 183, 255, 0.3);
+    padding: 0;
+}
+
+.header-mobile .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--espacamento-md) var(--espacamento-lg);
+    height: 60px;
+}
+
+.logo-mobile {
+    font-family: var(--fonte-primaria);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--cor-secundaria) !important;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: var(--espacamento-sm);
+}
+
+.logo-mobile img {
+    height: 35px;
+    width: auto;
+}
+
+.btn-menu-mobile {
+    background: none;
+    border: none;
+    color: var(--cor-secundaria);
+    font-size: 1.8rem;
+    padding: var(--espacamento-sm);
+    cursor: pointer;
+    transition: all var(--transicao-media);
+    border-radius: 8px;
+}
+
+.btn-menu-mobile:hover {
+    background: rgba(255, 234, 0, 0.2);
+    transform: scale(1.05);
+}
+
+/* Busca mobile integrada no header */
+.busca-mobile {
+    padding: 0 var(--espacamento-lg) var(--espacamento-md);
+    background: var(--cor-primaria);
+}
+
+.busca-mobile input {
+    width: 100%;
+    padding: var(--espacamento-md) var(--espacamento-lg);
+    padding-right: 50px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    backdrop-filter: blur(10px);
+    transition: all var(--transicao-media);
+}
+
+.busca-mobile input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.busca-mobile input:focus {
+    background: white;
+    color: var(--cor-texto);
+    outline: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.busca-mobile input:focus::placeholder {
+    color: var(--cor-texto-claro);
+}
+
+.busca-mobile button {
+    position: absolute;
+    right: calc(var(--espacamento-lg) + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--cor-secundaria);
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    color: var(--cor-primaria);
+    cursor: pointer;
+    transition: all var(--transicao-media);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.busca-mobile button:hover {
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 4px 15px rgba(255, 234, 0, 0.4);
+}
+
+/* =============================================
+   MENU MOBILE OVERLAY - ESTILO APP
+   ============================================= */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transicao-media);
+    backdrop-filter: blur(2px);
+}
+
+.menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.menu-mobile {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 280px;
+    height: 100vh;
+    background: white;
+    z-index: 1002;
+    transition: all var(--transicao-media);
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+    overflow-y: auto;
+}
+
+.menu-mobile.active {
+    right: 0;
+}
+
+.menu-header {
+    background: var(--cor-primaria);
+    color: white;
+    padding: var(--espacamento-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.menu-header .logo-mobile {
+    color: var(--cor-secundaria) !important;
+    font-size: 1.2rem;
+}
+
+.btn-fechar-menu {
+    background: none;
+    border: none;
+    color: var(--cor-secundaria);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: var(--espacamento-xs);
+    border-radius: 6px;
+    transition: all var(--transicao-media);
+}
+
+.btn-fechar-menu:hover {
+    background: rgba(255, 234, 0, 0.2);
+}
+
+.nav-mobile {
+    list-style: none;
+    margin: 0;
+    padding: var(--espacamento-lg) 0;
+}
+
+.nav-mobile li {
+    margin-bottom: var(--espacamento-xs);
+}
+
+.nav-mobile a {
+    display: flex;
+    align-items: center;
+    gap: var(--espacamento-md);
+    padding: var(--espacamento-md) var(--espacamento-lg);
+    color: var(--cor-texto);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all var(--transicao-media);
+    border-radius: 0;
+}
+
+.nav-mobile a:hover,
+.nav-mobile a.active {
+    background: rgba(0, 183, 255, 0.1);
+    color: var(--cor-primaria);
+    border-left: 4px solid var(--cor-primaria);
+}
+
+.nav-mobile i {
+    font-size: 1.2rem;
+    width: 20px;
+    text-align: center;
+}
+
+/* =============================================
+   HERO MOBILE - ESTILO APP CARD
+   ============================================= */
+.hero-mobile {
+    margin-top: 120px;
+    /* Header + busca */
+    background: var(--gradiente-hero);
+    padding: var(--espacamento-xl) var(--espacamento-lg);
+    color: white;
+    text-align: center;
+    border-radius: 0 0 30px 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-mobile::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1.5" fill="rgba(255,255,255,0.1)"/></svg>');
+    animation: float 6s ease-in-out infinite;
+}
+
+.hero-mobile h1 {
+    font-size: 2.2rem;
+    margin-bottom: var(--espacamento-md);
+    line-height: 1.2;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-mobile p {
+    font-size: 1.1rem;
+    margin-bottom: var(--espacamento-xl);
+    opacity: 0.95;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-produto-mobile {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: var(--espacamento-lg);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin: var(--espacamento-lg) 0;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-mobile .btn-custom {
+    background: white;
+    color: var(--cor-primaria);
+    border: none;
+    padding: var(--espacamento-md) var(--espacamento-xl);
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacamento-sm);
+    margin-top: var(--espacamento-lg);
+    transition: all var(--transicao-media);
+    position: relative;
+    z-index: 1;
+}
+
+.hero-mobile .btn-custom:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    color: var(--cor-primaria);
+}
+
+/* =============================================
+   FILTROS MOBILE - ESTILO APP CHIPS
+   ============================================= */
+.filtros-mobile {
+    background: white;
+    padding: var(--espacamento-lg);
+    margin: var(--espacamento-lg);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 183, 255, 0.1);
+}
+
+.filtros-row {
+    display: flex;
+    gap: var(--espacamento-md);
+    margin-bottom: var(--espacamento-md);
+    flex-wrap: wrap;
+}
+
+.filtros-row:last-child {
+    margin-bottom: 0;
+}
+
+.filtro-item {
+    flex: 1;
+    min-width: 120px;
+}
+
+.filtro-item label {
+    display: block;
+    font-weight: 600;
+    color: var(--cor-texto);
+    margin-bottom: var(--espacamento-xs);
+    font-size: 0.9rem;
+}
+
+.filtro-item select {
+    width: 100%;
+    padding: var(--espacamento-sm) var(--espacamento-md);
+    border: 2px solid var(--cor-borda);
+    border-radius: 12px;
+    background: white;
+    color: var(--cor-texto);
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all var(--transicao-media);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 8px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 32px;
+}
+
+.filtro-item select:focus {
+    border-color: var(--cor-primaria);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 183, 255, 0.1);
+}
+
+.filtro-favoritos-mobile {
+    display: flex;
+    align-items: center;
+    gap: var(--espacamento-sm);
+    background: var(--cor-fundo);
+    padding: var(--espacamento-md);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all var(--transicao-media);
+    border: 2px solid transparent;
+    user-select: none;
+}
+
+.filtro-favoritos-mobile:hover {
+    background: rgba(231, 76, 60, 0.1);
+    border-color: rgba(231, 76, 60, 0.2);
+}
+
+.filtro-favoritos-mobile input {
+    margin: 0;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--cor-urgente);
+}
+
+.filtro-favoritos-mobile label {
+    margin: 0;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--cor-texto);
+    font-size: 0.95rem;
+}
+
+/* =============================================
+   CONTAINER DE PRODUTOS MOBILE
+   ============================================= */
+.produtos-container-mobile {
+    padding: 0 var(--espacamento-lg) var(--espacamento-xxl);
+}
+
+.produtos-grid-mobile {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--espacamento-lg);
+}
+
+/* =============================================
+   CARDS DE PRODUTO MOBILE - ESTILO APP NATIVO
+   ============================================= */
+.card-produto-mobile {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 183, 255, 0.1);
+    transition: all var(--transicao-media);
+    position: relative;
+}
+
+.card-produto-mobile:active {
+    transform: scale(0.98);
+}
+
+/* Estilo para classe floating do JavaScript */
+.card-produto-mobile.floating {
+    animation: float 6s ease-in-out infinite;
+}
+
+.card-header-mobile {
+    position: absolute;
+    top: var(--espacamento-md);
+    left: var(--espacamento-md);
+    right: var(--espacamento-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 2;
+}
+
+.loja-badge-mobile {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 2px solid white;
+}
+
+.loja-badge-mobile img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.categoria-badge-mobile {
+    background: rgba(243, 156, 18, 0.95);
+    color: white;
+    padding: var(--espacamento-xs) var(--espacamento-sm);
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.card-imagem-mobile {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    background: var(--cor-fundo);
+}
+
+.card-imagem-mobile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transicao-lenta);
+}
+
+.card-produto-mobile:hover .card-imagem-mobile img {
+    transform: scale(1.03);
+}
+
+.btn-favorito-mobile {
+    position: absolute;
+    bottom: var(--espacamento-md);
+    right: var(--espacamento-md);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transicao-media);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cor-urgente);
+    font-size: 1.3rem;
+    z-index: 3;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 2px solid white;
+}
+
+.btn-favorito-mobile:active {
+    transform: scale(0.9);
+}
+
+.btn-favorito-mobile.favorito {
+    background: var(--cor-urgente);
+    color: white;
+    animation: heartbeat 0.6s ease-in-out;
+}
+
+@keyframes heartbeat {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.card-body-mobile {
+    padding: var(--espacamento-lg);
+}
+
+.card-body-mobile h3 {
+    font-size: 1.1rem;
+    margin-bottom: var(--espacamento-sm);
+    color: var(--cor-texto);
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+.card-footer-mobile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--espacamento-md);
+    margin-top: var(--espacamento-md);
+}
+
+.produto-codigo-mobile {
+    font-size: 0.8rem;
+    color: var(--cor-texto-claro);
+    font-weight: 500;
+    padding: var(--espacamento-xs) var(--espacamento-sm);
+    background: var(--cor-fundo);
+    border-radius: 8px;
+}
+
+.btn-quero-mobile {
+    background: var(--cor-urgente);
+    color: white;
+    border: none;
+    padding: var(--espacamento-sm) var(--espacamento-lg);
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all var(--transicao-media);
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--espacamento-xs);
+    flex: 1;
+    max-width: 120px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-quero-mobile:hover {
+    background: #0099cc;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 183, 255, 0.3);
+}
+
+.btn-quero-mobile:active {
+    transform: translateY(0);
+}
+
+/* =============================================
+   VERSÃO LISTA MOBILE (Caso Necessário)
+   ============================================= */
+.card-produto-mobile-lista {
+    background: white;
+    border-radius: 15px;
+    padding: var(--espacamento-md);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: var(--espacamento-md);
+    margin-bottom: var(--espacamento-md);
+    border: 1px solid rgba(0, 183, 255, 0.1);
+    transition: all var(--transicao-media);
+}
+
+.card-produto-mobile-lista:active {
+    transform: scale(0.98);
+}
+
+.produto-imagem-mobile {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    background: var(--cor-fundo);
+}
+
+.produto-imagem-mobile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.produto-info-mobile {
+    flex: 1;
+    min-width: 0;
+}
+
+.produto-info-mobile h3 {
+    font-size: 1rem;
+    margin-bottom: var(--espacamento-xs);
+    color: var(--cor-texto);
+    font-weight: 600;
+}
+
+.produto-badges-mobile {
+    display: flex;
+    gap: var(--espacamento-xs);
+    align-items: center;
+    margin-bottom: var(--espacamento-xs);
+}
+
+.loja-badge-mobile-lista {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 1px solid var(--cor-borda);
+}
+
+.loja-badge-mobile-lista img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.categoria-badge-mobile-lista {
+    background: var(--cor-destaque);
+    color: white;
+    padding: 2px var(--espacamento-xs);
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.btn-quero-mobile-lista {
+    background: var(--cor-urgente);
+    color: white;
+    border: none;
+    padding: var(--espacamento-sm) var(--espacamento-md);
+    border-radius: 15px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all var(--transicao-media);
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.btn-quero-mobile-lista:hover {
+    background: #0099cc;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.btn-quero-mobile-lista:active {
+    transform: translateY(0);
+}
+
+/* =============================================
+   SEÇÕES INFERIORES MOBILE
+   ============================================= */
+.secao-sobre-mobile {
+    background: white;
+    padding: var(--espacamento-xl) var(--espacamento-lg);
+    margin: var(--espacamento-lg);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    border: 1px solid rgba(0, 183, 255, 0.1);
+}
+
+.secao-sobre-mobile h2 {
+    color: var(--cor-primaria);
+    margin-bottom: var(--espacamento-lg);
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.secao-sobre-mobile p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--cor-texto-claro);
+}
+
+/* =============================================
+   ESTADOS ESPECIAIS MOBILE
+   ============================================= */
+.no-produtos-mobile {
+    text-align: center;
+    padding: var(--espacamento-xxl) var(--espacamento-lg);
+    color: var(--cor-texto-claro);
+    background: white;
+    border-radius: 20px;
+    margin: var(--espacamento-lg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.no-produtos-mobile i {
+    font-size: 3.5rem;
+    margin-bottom: var(--espacamento-lg);
+    color: var(--cor-borda);
+}
+
+.no-produtos-mobile h3 {
+    margin-bottom: var(--espacamento-md);
+    font-size: 1.3rem;
+    color: var(--cor-texto);
+}
+
+.no-produtos-mobile p {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* =============================================
+   LOADING MOBILE
+   ============================================= */
+.loading-produtos-mobile {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--espacamento-lg);
+    padding: 0 var(--espacamento-lg);
+}
+
+.skeleton-card-mobile {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    animation: pulse 1.5s ease-in-out infinite alternate;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.skeleton-card-mobile .skeleton-image {
+    height: 220px;
+    background: linear-gradient(90deg, var(--cor-fundo) 25%, #f0f0f0 50%, var(--cor-fundo) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.skeleton-card-mobile .skeleton-content {
+    padding: var(--espacamento-lg);
+}
+
+.skeleton-line-mobile {
+    height: 1rem;
+    background: linear-gradient(90deg, var(--cor-fundo) 25%, #f0f0f0 50%, var(--cor-fundo) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+    margin-bottom: var(--espacamento-sm);
+}
+
+.skeleton-line-mobile.short {
+    width: 60%;
+}
+
+.skeleton-line-mobile.medium {
+    width: 80%;
+}
+
+/* =============================================
+   MEDIA QUERIES MOBILE
+   ============================================= */
+
+/* Dispositivos muito pequenos */
+@media (max-width: 374px) {
+    .filtros-mobile {
+        margin: var(--espacamento-md);
+        padding: var(--espacamento-md);
+    }
+
+    .produtos-container-mobile {
+        padding: 0 var(--espacamento-md) var(--espacamento-xl);
+    }
+
+    .hero-mobile {
+        padding: var(--espacamento-lg) var(--espacamento-md);
+    }
+
+    .hero-mobile h1 {
+        font-size: 1.8rem;
+    }
+}
+
+/* Tablets em modo retrato */
+@media (min-width: 576px) and (max-width: 991px) {
+    .produtos-grid-mobile {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--espacamento-lg);
+    }
+
+    .hero-mobile h1 {
+        font-size: 2.8rem;
+    }
+
+    .filtros-row {
+        justify-content: center;
+    }
+
+    .filtro-item {
+        max-width: 200px;
+    }
+}
+
+/* Orientação landscape */
+@media (max-width: 991px) and (orientation: landscape) {
+    .hero-mobile {
+        margin-top: 100px;
+        padding: var(--espacamento-lg);
+    }
+
+    .hero-mobile h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero-produto-mobile {
+        margin: var(--espacamento-md) 0;
+    }
+}
+
+/* =============================================
+   UTILITÁRIOS E MELHORIAS TOUCH
+   ============================================= */
+* {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.btn-favorito-mobile,
+.btn-quero-mobile,
+.btn-menu-mobile {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+/* Scroll suave */
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Otimização para scroll em dispositivos touch */
+.produtos-container-mobile {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* =============================================
+   FINAL MOBILE.CSS - ESTILO APP NATIVO
+   ============================================= */
+
+/* =============================================
+   FINAL MOBILE.CSS - ESTILO APP NATIVO
+   ============================================= */
