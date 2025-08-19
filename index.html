@@ -665,16 +665,30 @@
         const adminDesktop = document.getElementById('admin-link-desktop');
         const adminMobile = document.getElementById('admin-link-mobile');
         
-        if (adminDesktop) adminDesktop.style.display = 'none';
-        if (adminMobile) adminMobile.style.display = 'none';
+        if (adminDesktop) {
+          adminDesktop.style.display = 'none';
+          adminDesktop.style.visibility = 'hidden';
+        }
+        if (adminMobile) {
+          adminMobile.style.display = 'none';
+          adminMobile.style.visibility = 'hidden';
+        }
+        
+        console.log('🔒 Links do Admin foram ocultados');
       };
 
       const showAdminElements = () => {
         const adminDesktop = document.getElementById('admin-link-desktop');
         const adminMobile = document.getElementById('admin-link-mobile');
         
-        if (adminDesktop) adminDesktop.style.display = '';
-        if (adminMobile) adminMobile.style.display = '';
+        if (adminDesktop) {
+          adminDesktop.style.display = '';
+          adminDesktop.style.visibility = '';
+        }
+        if (adminMobile) {
+          adminMobile.style.display = '';
+          adminMobile.style.visibility = '';
+        }
       };
 
       const blockAdminAccess = () => {
