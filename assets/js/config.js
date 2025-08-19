@@ -17,7 +17,8 @@ window.AchaduBomConfig = {
         showBetaFeatures: false,
         enableAnalytics: true,
         maintenanceMode: false,
-        autoRefreshInterval: 10 // minutos para limpeza automática do cache
+        autoRefreshInterval: 10, // minutos para limpeza automática do cache
+        autoReloadAfterCacheClear: true // recarregar página automaticamente após limpar cache
     },
 
     // Configurações de debug/desenvolvimento

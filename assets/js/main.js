@@ -873,6 +873,16 @@ class DataRefreshManager {
             localStorage.setItem('lastRefreshTime', this.lastRefreshTime);
             this.updateTooltip();
 
+            // Recarregar a página se habilitado na configuração
+            const config = window.AchaduBomConfig;
+            const shouldAutoReload = config?.site?.autoReloadAfterCacheClear !== false;
+
+            if (shouldAutoReload) {
+                setTimeout(() => {
+                    window.location.reload(true);
+                }, 1500);
+            }
+
         } catch (error) {
             console.error('Erro na atualização manual:', error);
             this.showErrorMessage();
@@ -985,8 +995,15 @@ class DataRefreshManager {
     }
 
     showSuccessMessage() {
-        // Criar toast de sucesso
-        this.showToast('✅ Dados atualizados com sucesso!', 'success');
+        // Verificar se vai fazer reload automático
+        const config = window.AchaduBomConfig;
+        const shouldAutoReload = config?.site?.autoReloadAfterCacheClear !== false;
+
+        const message = shouldAutoReload
+            ? '✅ Cache limpo! Recarregando página...'
+            : '✅ Cache limpo com sucesso!';
+
+        this.showToast(message, 'success');
     }
 
     showErrorMessage() {
