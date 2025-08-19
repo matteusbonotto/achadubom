@@ -177,12 +177,14 @@ class ProdutosManager {
 
         if (btnMenu && menu && overlay && btnFechar) {
             const abrirMenu = () => {
+                console.log('[MOBILE] Menu aberto');
                 menu.classList.add('active');
                 overlay.classList.add('active');
                 document.body.style.overflow = 'hidden';
             };
 
             const fecharMenu = () => {
+                console.log('[MOBILE] Menu fechado');
                 menu.classList.remove('active');
                 overlay.classList.remove('active');
                 document.body.style.overflow = 'auto';
@@ -194,7 +196,10 @@ class ProdutosManager {
 
             // Fechar menu ao clicar em link
             menu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', fecharMenu);
+                link.addEventListener('click', (e) => {
+                    console.log('[MOBILE] Link menu clicado:', link.href);
+                    fecharMenu();
+                });
             });
         }
     }
@@ -221,7 +226,7 @@ class ProdutosManager {
         <h3>${this.produtoDestaque.titulo}</h3>
         <p class="preco">R$ ${this.produtoDestaque.preco.toFixed(2).replace('.', ',')}</p>
         <a href="${this.produtoDestaque.url}" target="_blank" class="btn-custom btn-urgente">
-          <i class="bi bi-lightning-fill"></i> Ver Oferta
+          <i class="bi bi-star-fill"></i> Ver Oferta
         </a>
       `;
         }
@@ -257,6 +262,7 @@ class ProdutosManager {
             produtosFiltrados = produtosFiltrados.filter(produto =>
                 produto.titulo.toLowerCase().includes(this.filtroAtual.busca) ||
                 produto.descricao.toLowerCase().includes(this.filtroAtual.busca) ||
+                produto.codigo.toLowerCase().includes(this.filtroAtual.busca) ||
                 produto.categorias.some(cat => cat.toLowerCase().includes(this.filtroAtual.busca))
             );
         }
@@ -361,12 +367,12 @@ class ProdutosManager {
                     <div class="loja-badge-lista">
                       <img src="${logoLoja}" alt="${produto.loja}" />
                     </div>
-                    <div class="categoria-badge-lista">${produto.categorias[0]}</div>
+                    <div class="categoria-badge-lista"><i class="bi bi-tag-fill"></i> ${produto.categorias[0]}</div>
                   </div>
                   <span class="produto-codigo">#${produto.codigo}</span>
                 </div>
                 <a href="${produto.url}" target="_blank" class="btn-quero-lista" rel="noopener">
-                  QUERO!
+                  <i class="bi bi-link-45deg"></i> QUERO!
                 </a>
               </div>
             `;
@@ -379,6 +385,7 @@ class ProdutosManager {
                 <img src="${logoLoja}" alt="${produto.loja}" />
               </div>
               <div class="categoria-badge">
+              <i class="bi bi-tag-fill"></i>
                 ${produto.categorias[0]}
               </div>
             </div>
@@ -406,7 +413,7 @@ class ProdutosManager {
             <div class="card-footer">
               <span class="produto-codigo">#${produto.codigo}</span>
               <a href="${produto.url}" target="_blank" class="btn-quero" rel="noopener">
-                QUERO! <i class="bi bi-box-arrow-up-right"></i>
+                <i class="bi bi-link-45deg"></i> QUERO!</i>
               </a>
             </div>
           </div>
@@ -437,7 +444,7 @@ class ProdutosManager {
                     <div class="loja-badge-mobile-lista">
                       <img src="${logoLoja}" alt="${produto.loja}" />
                     </div>
-                    <div class="categoria-badge-mobile-lista">${produto.categorias[0]}</div>
+                    <div class="categoria-badge-mobile-lista"><i class="bi bi-tag-fill"></i>${produto.categorias[0]}</div>
                   </div>
                   <span class="produto-codigo-mobile">#${produto.codigo}</span>
                 </div>
@@ -455,7 +462,7 @@ class ProdutosManager {
                 <img src="${logoLoja}" alt="${produto.loja}" />
               </div>
               <div class="categoria-badge-mobile">
-                ${produto.categorias[0]}
+                <i class="bi bi-tag-fill"></i>${produto.categorias[0]}
               </div>
             </div>
             
@@ -474,7 +481,7 @@ class ProdutosManager {
               <div class="card-footer-mobile">
                 <span class="produto-codigo-mobile">#${produto.codigo}</span>
                 <a href="${produto.url}" target="_blank" class="btn-quero-mobile" rel="noopener">
-                  QUERO!
+                  <i class="bi bi-link-45deg"></i> QUERO!
                 </a>
               </div>
             </div>
@@ -523,6 +530,7 @@ class ProdutosManager {
                 e.preventDefault();
                 e.stopPropagation();
                 const codigo = e.currentTarget.dataset.codigo;
+                console.log('[MOBILE] Botão favorito clicado:', codigo);
                 this.toggleFavorito(codigo);
             });
         });
@@ -552,26 +560,37 @@ class ProdutosManager {
      */
     toggleFavorito(codigo) {
         const index = this.favoritos.indexOf(codigo);
-        const btn = document.querySelector(`[data-codigo="${codigo}"].btn-favorito, [data-codigo="${codigo}"].btn-favorito-mobile`);
-        const icon = btn.querySelector('i');
+
+        // Buscar todos os botões de favorito para esse produto (desktop e mobile)
+        const btnsDesktop = document.querySelectorAll(`[data-codigo="${codigo}"].btn-favorito`);
+        const btnsMobile = document.querySelectorAll(`[data-codigo="${codigo}"].btn-favorito-mobile`);
+        const todosBotoes = [...btnsDesktop, ...btnsMobile];
 
         if (index === -1) {
             // Adicionar aos favoritos
             this.favoritos.push(codigo);
-            btn.classList.add('favorito');
-            icon.className = 'bi bi-heart-fill';
-            btn.title = 'Remover dos favoritos';
 
-            // Animação de pulso
-            btn.classList.add('pulsing');
-            setTimeout(() => btn.classList.remove('pulsing'), 600);
+            todosBotoes.forEach(btn => {
+                const icon = btn.querySelector('i');
+                btn.classList.add('favorito');
+                icon.className = 'bi bi-heart-fill';
+                btn.title = 'Remover dos favoritos';
+
+                // Animação de pulso
+                btn.classList.add('pulsing');
+                setTimeout(() => btn.classList.remove('pulsing'), 600);
+            });
 
         } else {
             // Remover dos favoritos
             this.favoritos.splice(index, 1);
-            btn.classList.remove('favorito');
-            icon.className = 'bi bi-heart';
-            btn.title = 'Adicionar aos favoritos';
+
+            todosBotoes.forEach(btn => {
+                const icon = btn.querySelector('i');
+                btn.classList.remove('favorito');
+                icon.className = 'bi bi-heart';
+                btn.title = 'Adicionar aos favoritos';
+            });
         }
 
         this.salvarFavoritos();
@@ -780,3 +799,267 @@ window.scrollSuave = (elemento) => {
 };
 
 console.log('📦 Sistema de produtos carregado com sucesso!');
+
+/**
+ * =============================================
+ * SISTEMA DE ATUALIZAÇÃO DE DADOS E CACHE
+ * =============================================
+ */
+
+class DataRefreshManager {
+    constructor() {
+        this.refreshButton = null;
+        this.autoRefreshInterval = null;
+        this.isRefreshing = false;
+        this.lastRefreshTime = localStorage.getItem('lastRefreshTime') || Date.now();
+
+        this.init();
+    }
+
+    init() {
+        this.setupRefreshButton();
+        this.setupAutoRefresh();
+        this.updateLastRefreshDisplay();
+    }
+
+    setupRefreshButton() {
+        // Aguardar o botão ser criado
+        setTimeout(() => {
+            this.refreshButton = document.getElementById('refresh-data-button');
+            if (this.refreshButton) {
+                this.refreshButton.addEventListener('click', () => this.manualRefresh());
+
+                // Adicionar tooltip com horário da última atualização
+                this.updateTooltip();
+            }
+        }, 100);
+    }
+
+    setupAutoRefresh() {
+        const config = window.AchaduBomConfig;
+        if (!config || !config.site) return;
+
+        const intervalMinutes = config.site.autoRefreshInterval || 10;
+        const intervalMs = intervalMinutes * 60 * 1000; // Converter para millisegundos
+
+        // Limpar intervalo anterior se existir
+        if (this.autoRefreshInterval) {
+            clearInterval(this.autoRefreshInterval);
+        }
+
+        // Configurar novo intervalo
+        this.autoRefreshInterval = setInterval(() => {
+            this.autoRefresh();
+        }, intervalMs);
+
+        if (config.debug && config.debug.showConsoleMessages) {
+            console.log(`🔄 Auto-refresh configurado para ${intervalMinutes} minutos`);
+        }
+    }
+
+    async manualRefresh() {
+        if (this.isRefreshing) return;
+
+        this.isRefreshing = true;
+        this.showRefreshingState();
+
+        try {
+            await this.clearAllCaches();
+            await this.reloadData();
+            this.showSuccessMessage();
+
+            // Atualizar timestamp
+            this.lastRefreshTime = Date.now();
+            localStorage.setItem('lastRefreshTime', this.lastRefreshTime);
+            this.updateTooltip();
+
+        } catch (error) {
+            console.error('Erro na atualização manual:', error);
+            this.showErrorMessage();
+        } finally {
+            this.isRefreshing = false;
+            this.hideRefreshingState();
+        }
+    }
+
+    async autoRefresh() {
+        const config = window.AchaduBomConfig;
+
+        if (config && config.debug && config.debug.showConsoleMessages) {
+            console.log('🔄 Executando limpeza automática de cache...');
+        }
+
+        try {
+            await this.clearAllCaches();
+
+            // Atualizar timestamp
+            this.lastRefreshTime = Date.now();
+            localStorage.setItem('lastRefreshTime', this.lastRefreshTime);
+            this.updateTooltip();
+
+            if (config && config.debug && config.debug.showConsoleMessages) {
+                console.log('✅ Cache limpo automaticamente');
+            }
+        } catch (error) {
+            console.error('Erro na limpeza automática:', error);
+        }
+    }
+
+    async clearAllCaches() {
+        // Limpar cache do navegador
+        if ('caches' in window) {
+            const cacheNames = await caches.keys();
+            await Promise.all(
+                cacheNames.map(cacheName => caches.delete(cacheName))
+            );
+        }
+
+        // Limpar localStorage relacionado aos produtos
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && (key.includes('produtos') || key.includes('cache') || key.includes('data'))) {
+                keysToRemove.push(key);
+            }
+        }
+        keysToRemove.forEach(key => localStorage.removeItem(key));
+
+        // Limpar sessionStorage
+        sessionStorage.clear();
+    }
+
+    async reloadData() {
+        // Forçar reload dos produtos sem cache
+        const timestamp = Date.now();
+        const response = await fetch(`./assets/data/produtos.json?t=${timestamp}`, {
+            cache: 'no-cache',
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro ao carregar novos dados');
+        }
+
+        // Reinicializar o sistema de produtos
+        if (window.produtosManager) {
+            await window.produtosManager.carregarProdutos();
+            window.produtosManager.aplicarFiltros();
+        }
+    }
+
+    showRefreshingState() {
+        if (this.refreshButton) {
+            this.refreshButton.innerHTML = '<i class="bi bi-arrow-clockwise spin"></i>';
+            this.refreshButton.style.pointerEvents = 'none';
+            this.refreshButton.style.opacity = '0.5';
+            this.refreshButton.style.color = '#999';
+        }
+
+        // Adicionar CSS para animação de rotação se não existir
+        if (!document.getElementById('refresh-spinner-css')) {
+            const style = document.createElement('style');
+            style.id = 'refresh-spinner-css';
+            style.textContent = `
+                .spin {
+                    animation: spin 1s linear infinite;
+                }
+                @keyframes spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+
+    hideRefreshingState() {
+        if (this.refreshButton) {
+            this.refreshButton.innerHTML = '<i class="bi bi-arrow-clockwise"></i>';
+            this.refreshButton.style.pointerEvents = '';
+            this.refreshButton.style.opacity = '0.7';
+            this.refreshButton.style.color = '#666';
+        }
+    }
+
+    showSuccessMessage() {
+        // Criar toast de sucesso
+        this.showToast('✅ Dados atualizados com sucesso!', 'success');
+    }
+
+    showErrorMessage() {
+        this.showToast('❌ Erro ao atualizar dados. Tente novamente.', 'error');
+    }
+
+    showToast(message, type = 'info') {
+        // Remover toast anterior se existir
+        const existingToast = document.getElementById('refresh-toast');
+        if (existingToast) {
+            existingToast.remove();
+        }
+
+        const toast = document.createElement('div');
+        toast.id = 'refresh-toast';
+        toast.textContent = message;
+        toast.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 10000;
+            padding: 8px 16px;
+            border-radius: 6px;
+            color: ${type === 'success' ? '#27ae60' : type === 'error' ? '#e74c3c' : '#3498db'};
+            font-weight: 500;
+            font-size: 13px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid ${type === 'success' ? '#27ae60' : type === 'error' ? '#e74c3c' : '#3498db'};
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(10px);
+            max-width: 250px;
+        `;
+
+        document.body.appendChild(toast);
+
+        // Animar entrada
+        setTimeout(() => {
+            toast.style.transform = 'translateX(0)';
+        }, 100);
+
+        // Remover após 2.5 segundos (mais discreto)
+        setTimeout(() => {
+            toast.style.transform = 'translateX(-100%)';
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }, 2500);
+    }
+
+    updateTooltip() {
+        if (this.refreshButton) {
+            const lastUpdate = new Date(parseInt(this.lastRefreshTime));
+            const timeString = lastUpdate.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            this.refreshButton.title = `Atualizar dados\nÚltima atualização: ${timeString}`;
+        }
+    }
+
+    updateLastRefreshDisplay() {
+        // Pode ser usado para mostrar em algum lugar da interface
+        const config = window.AchaduBomConfig;
+        if (config && config.debug && config.debug.showConsoleMessages) {
+            const lastUpdate = new Date(parseInt(this.lastRefreshTime));
+            console.log('🕒 Última atualização:', lastUpdate.toLocaleString('pt-BR'));
+        }
+    }
+}
+
+// Inicializar o sistema de atualização quando a página carregar
+window.addEventListener('DOMContentLoaded', () => {
+    window.dataRefreshManager = new DataRefreshManager();
+});

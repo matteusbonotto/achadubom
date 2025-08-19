@@ -627,12 +627,15 @@ body>li {
     transition: all var(--transicao-media);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    text-decoration: none;
 }
 
 .btn-quero:hover {
     background: #c0392b;
+    color: white;
     transform: translateY(-2px);
     box-shadow: var(--sombra-media);
+    text-decoration: none;
 }
 
 /* =============================================

@@ -1,32 +1,67 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description"
-            content="Painel administrativo do AchaduBom - Gerenciar produtos e ofertas">
-        <meta name="robots" content="noindex, nofollow">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+      content="Painel administrativo do AchaduBom - Gerenciar produtos e ofertas">
+    <meta name="robots" content="noindex, nofollow">
 
-        <title>Admin - AchaduBom | Gerenciar Produtos</title>
+    <title>Admin - AchaduBom | Gerenciar Produtos</title>
 
-        <!-- Favicon -->
-        <link rel="icon" type="image/svg+xml"
-            href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMmU3ZDMyO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMyZWNjNzE7c3RvcC1vcGFjaXR5OjEiIC8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMTIiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjI0IiB5PSIzMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9ImJvbGQiPkE8L3RleHQ+Cjx0ZXh0IHg9IjI0IiB5PSIzOCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmOTgwMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjgiPuKchTwvdGV4dD4KPC9zdmc+">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml"
+      href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMmU3ZDMyO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMyZWNjNzE7c3RvcC1vcGFjaXR5OjEiIC8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMTIiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjI0IiB5PSIzMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9ImJvbGQiPkE8L3RleHQ+Cjx0ZXh0IHg9IjI0IiB5PSIzOCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmOTgwMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjgiPuKchTwvdGV4dD4KPC9zdmc+">
 
-        <!-- CDN Assets -->
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-            rel="stylesheet">
-        <link rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-        <link
-            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Open+Sans:wght@400;500;600&display=swap"
-            rel="stylesheet">
+    <!-- CDN Assets -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet">
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Open+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet">
 
-        <!-- Custom CSS -->
-        <link rel="stylesheet" href="./assets/css/globals.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./assets/css/globals.css">
 
-        <style>
+    <!-- Admin Protection Script -->
+    <script src="./assets/js/config.js"></script>
+    <script>
+            // Proteção do painel administrativo
+            (function() {
+                const checkAdminAccess = () => {
+                    if (typeof window.AchaduBomConfig === 'undefined') {
+                        redirectToHome('Configuração não encontrada.');
+                        return;
+                    }
+
+                    const config = window.AchaduBomConfig;
+                    const adminEnabled = config.admin && config.admin.enabled === true;
+
+                    if (!adminEnabled) {
+                        redirectToHome('Painel administrativo desabilitado.');
+                        return;
+                    }
+
+                    // Se chegou aqui, o admin está habilitado
+                    if (config.debug && config.debug.showConsoleMessages) {
+                        console.log('🔑 Acesso ao admin autorizado');
+                    }
+                };
+
+                const redirectToHome = (message) => {
+                    alert('⚠️ ' + message);
+                    window.location.href = './index.html';
+                };
+
+                // Verificar acesso imediatamente
+                checkAdminAccess();
+            })();
+        </script>
+
+    <style>
     /* Estilos específicos do Admin */
     .admin-container {
       max-width: 1400px;
@@ -616,256 +651,256 @@
       vertical-align: middle;
     }
   </style>
-    </head>
-    <body>
-        <div class="admin-container">
-            <!-- Header -->
-            <header class="admin-header">
-                <h1 class="admin-titulo">
-                    <i class="bi bi-gear-fill"></i>
-                    Painel Administrativo
-                </h1>
+  </head>
+  <body>
+    <div class="admin-container">
+      <!-- Header -->
+      <header class="admin-header">
+        <h1 class="admin-titulo">
+          <i class="bi bi-gear-fill"></i>
+          Painel Administrativo
+        </h1>
 
-                <div class="admin-acoes">
-                    <div class="busca-admin">
-                        <input type="text" id="busca-admin"
-                            placeholder="Buscar produtos...">
-                        <i class="bi bi-search"></i>
-                    </div>
+        <div class="admin-acoes">
+          <div class="busca-admin">
+            <input type="text" id="busca-admin"
+              placeholder="Buscar produtos...">
+            <i class="bi bi-search"></i>
+          </div>
 
-                    <button class="btn-custom btn-confianca"
-                        id="btn-novo-produto">
-                        <i class="bi bi-plus-lg"></i> Novo Produto
-                    </button>
+          <button class="btn-custom btn-confianca"
+            id="btn-novo-produto">
+            <i class="bi bi-plus-lg"></i> Novo Produto
+          </button>
 
-                    <a href="./index.html" class="btn-custom btn-destaque">
-                        <i class="bi bi-house"></i> Voltar ao Site
-                    </a>
-                </div>
-            </header>
+          <a href="./index.html" class="btn-custom btn-destaque">
+            <i class="bi bi-house"></i> Voltar ao Site
+          </a>
+        </div>
+      </header>
 
-            <!-- Formulário de Produto em Modal -->
-            <!-- Modal -->
-            <div class="modal fade" id="modalProduto" tabindex="-1"
-                aria-labelledby="modalProdutoLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalProdutoLabel">
-                                <i class="bi bi-box"></i>
-                                <span id="modal-titulo">Novo Produto</span>
-                            </h5>
-                            <button type="button" class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="form-produto">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="codigo">
-                                            <i class="bi bi-hash"></i>
-                                            Código do Produto *
-                                        </label>
-                                        <div
-                                            style="display: flex; gap: 0.5rem;">
-                                            <input type="text" id="codigo"
-                                                name="codigo"
-                                                required maxlength="20"
-                                                placeholder="Ex: PRD001">
-                                            <button type="button"
-                                                class="btn-codigo"
-                                                id="btn-gerar-codigo">
-                                                <i class="bi bi-shuffle"></i>
-                                                Gerar
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="titulo">
-                                            <i class="bi bi-text-left"></i>
-                                            Título *
-                                        </label>
-                                        <input type="text" id="titulo"
-                                            name="titulo"
-                                            required maxlength="100"
-                                            placeholder="Nome do produto">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="loja">
-                                            <i class="bi bi-shop"></i>
-                                            Loja *
-                                        </label>
-                                        <select id="loja" name="loja" required>
-                                            <!-- Opções serão preenchidas via JavaScript -->
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="preco">
-                                            <i
-                                                class="bi bi-currency-dollar"></i>
-                                            Preço (R$) *
-                                        </label>
-                                        <input type="number" id="preco"
-                                            name="preco"
-                                            required min="0" step="0.01"
-                                            placeholder="0.00">
-                                    </div>
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="form-group"
-                                        style="grid-column: 1 / -1;">
-                                        <label for="descricao">
-                                            <i class="bi bi-text-paragraph"></i>
-                                            Descrição *
-                                        </label>
-                                        <textarea id="descricao"
-                                            name="descricao" required
-                                            maxlength="1000"
-                                            placeholder="Descrição detalhada do produto"></textarea>
-                                        <div class="contador-caracteres"
-                                            id="contador-caracteres">0
-                                            caracteres</div>
-                                    </div>
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="form-group"
-                                        style="grid-column: 1 / -1;">
-                                        <label for="url">
-                                            <i class="bi bi-link-45deg"></i>
-                                            URL do Produto *
-                                        </label>
-                                        <input type="url" id="url" name="url"
-                                            required
-                                            placeholder="https://exemplo.com/produto">
-                                    </div>
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="form-group"
-                                        style="grid-column: 1 / -1;">
-                                        <label for="imagem">
-                                            <i class="bi bi-image"></i>
-                                            URLs das Imagens * (separadas por
-                                            vírgula)
-                                        </label>
-                                        <textarea id="imagem" name="imagem"
-                                            required
-                                            placeholder="https://exemplo.com/imagem1.jpg, https://exemplo.com/imagem2.jpg"></textarea>
-                                        <div id="preview-imagens"
-                                            class="preview-imagens">
-                                            <p>Nenhuma imagem para
-                                                visualizar</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="form-group"
-                                        style="grid-column: 1 / -1;">
-                                        <label for="categorias">
-                                            <i class="bi bi-tags"></i>
-                                            Categorias * (separadas por vírgula)
-                                        </label>
-                                        <input type="text" id="categorias"
-                                            name="categorias"
-                                            required
-                                            placeholder="eletrônicos, casa, jardim">
-                                    </div>
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label>
-                                            <i class="bi bi-toggle-on"></i>
-                                            Status
-                                        </label>
-                                        <div class="checkbox-group">
-                                            <input type="checkbox" id="ativo"
-                                                name="ativo"
-                                                checked>
-                                            <label for="ativo">Produto
-                                                ativo</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>
-                                            <i class="bi bi-heart"></i>
-                                            Destaque
-                                        </label>
-                                        <div class="checkbox-group">
-                                            <input type="checkbox" id="favorito"
-                                                name="favorito">
-                                            <label for="favorito">Produto
-                                                favorito</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn-custom btn-urgente"
-                                id="btn-excluir" style="display: none;">
-                                <i class="bi bi-trash"></i> Excluir Produto
-                            </button>
-
-                            <button type="button" class="btn-custom"
-                                data-bs-dismiss="modal" id="btn-cancelar">
-                                <i class="bi bi-x-lg"></i> Cancelar
-                            </button>
-
-                            <button type="submit" form="form-produto"
-                                class="btn-custom btn-confianca"
-                                id="btn-salvar">
-                                <i class="bi bi-plus-lg"></i> Adicionar Produto
-                            </button>
-                        </div>
-                    </div>
-                </div>
+      <!-- Formulário de Produto em Modal -->
+      <!-- Modal -->
+      <div class="modal fade" id="modalProduto" tabindex="-1"
+        aria-labelledby="modalProdutoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalProdutoLabel">
+                <i class="bi bi-box"></i>
+                <span id="modal-titulo">Novo Produto</span>
+              </h5>
+              <button type="button" class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"></button>
             </div>
-
-            <!-- Lista de Produtos -->
-            <section class="lista-produtos">
-                <div class="lista-header">
-                    <h2>
-                        <i class="bi bi-list-ul"></i>
-                        Produtos Cadastrados
-                    </h2>
-
-                    <div class="lista-stats">
-                        <div class="stat-item">
-                            <i class="bi bi-box"></i>
-                            <span id="total-produtos">0 produtos</span>
-                        </div>
-                        <div class="stat-item">
-                            <i class="bi bi-check-circle"></i>
-                            <span id="produtos-ativos">0 ativos</span>
-                        </div>
-                        <div class="stat-item">
-                            <i class="bi bi-heart"></i>
-                            <span id="produtos-favoritos">0 favoritos</span>
-                        </div>
+            <div class="modal-body">
+              <form id="form-produto">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="codigo">
+                      <i class="bi bi-hash"></i>
+                      Código do Produto *
+                    </label>
+                    <div
+                      style="display: flex; gap: 0.5rem;">
+                      <input type="text" id="codigo"
+                        name="codigo"
+                        required maxlength="20"
+                        placeholder="Ex: PRD001">
+                      <button type="button"
+                        class="btn-codigo"
+                        id="btn-gerar-codigo">
+                        <i class="bi bi-shuffle"></i>
+                        Gerar
+                      </button>
                     </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="titulo">
+                      <i class="bi bi-text-left"></i>
+                      Título *
+                    </label>
+                    <input type="text" id="titulo"
+                      name="titulo"
+                      required maxlength="100"
+                      placeholder="Nome do produto">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="loja">
+                      <i class="bi bi-shop"></i>
+                      Loja *
+                    </label>
+                    <select id="loja" name="loja" required>
+                      <!-- Opções serão preenchidas via JavaScript -->
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="preco">
+                      <i
+                        class="bi bi-currency-dollar"></i>
+                      Preço (R$) *
+                    </label>
+                    <input type="number" id="preco"
+                      name="preco"
+                      required min="0" step="0.01"
+                      placeholder="0.00">
+                  </div>
                 </div>
 
-                <div id="lista-produtos">
-                    <!-- Lista será preenchida via JavaScript -->
+                <div class="form-row">
+                  <div class="form-group"
+                    style="grid-column: 1 / -1;">
+                    <label for="descricao">
+                      <i class="bi bi-text-paragraph"></i>
+                      Descrição *
+                    </label>
+                    <textarea id="descricao"
+                      name="descricao" required
+                      maxlength="1000"
+                      placeholder="Descrição detalhada do produto"></textarea>
+                    <div class="contador-caracteres"
+                      id="contador-caracteres">0
+                      caracteres</div>
+                  </div>
                 </div>
-            </section>
+
+                <div class="form-row">
+                  <div class="form-group"
+                    style="grid-column: 1 / -1;">
+                    <label for="url">
+                      <i class="bi bi-link-45deg"></i>
+                      URL do Produto *
+                    </label>
+                    <input type="url" id="url" name="url"
+                      required
+                      placeholder="https://exemplo.com/produto">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group"
+                    style="grid-column: 1 / -1;">
+                    <label for="imagem">
+                      <i class="bi bi-image"></i>
+                      URLs das Imagens * (separadas por
+                      vírgula)
+                    </label>
+                    <textarea id="imagem" name="imagem"
+                      required
+                      placeholder="https://exemplo.com/imagem1.jpg, https://exemplo.com/imagem2.jpg"></textarea>
+                    <div id="preview-imagens"
+                      class="preview-imagens">
+                      <p>Nenhuma imagem para
+                        visualizar</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group"
+                    style="grid-column: 1 / -1;">
+                    <label for="categorias">
+                      <i class="bi bi-tags"></i>
+                      Categorias * (separadas por vírgula)
+                    </label>
+                    <input type="text" id="categorias"
+                      name="categorias"
+                      required
+                      placeholder="eletrônicos, casa, jardim">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>
+                      <i class="bi bi-toggle-on"></i>
+                      Status
+                    </label>
+                    <div class="checkbox-group">
+                      <input type="checkbox" id="ativo"
+                        name="ativo"
+                        checked>
+                      <label for="ativo">Produto
+                        ativo</label>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>
+                      <i class="bi bi-heart"></i>
+                      Destaque
+                    </label>
+                    <div class="checkbox-group">
+                      <input type="checkbox" id="favorito"
+                        name="favorito">
+                      <label for="favorito">Produto
+                        favorito</label>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn-custom btn-urgente"
+                id="btn-excluir" style="display: none;">
+                <i class="bi bi-trash"></i> Excluir Produto
+              </button>
+
+              <button type="button" class="btn-custom"
+                data-bs-dismiss="modal" id="btn-cancelar">
+                <i class="bi bi-x-lg"></i> Cancelar
+              </button>
+
+              <button type="submit" form="form-produto"
+                class="btn-custom btn-confianca"
+                id="btn-salvar">
+                <i class="bi bi-plus-lg"></i> Adicionar Produto
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista de Produtos -->
+      <section class="lista-produtos">
+        <div class="lista-header">
+          <h2>
+            <i class="bi bi-list-ul"></i>
+            Produtos Cadastrados
+          </h2>
+
+          <div class="lista-stats">
+            <div class="stat-item">
+              <i class="bi bi-box"></i>
+              <span id="total-produtos">0 produtos</span>
+            </div>
+            <div class="stat-item">
+              <i class="bi bi-check-circle"></i>
+              <span id="produtos-ativos">0 ativos</span>
+            </div>
+            <div class="stat-item">
+              <i class="bi bi-heart"></i>
+              <span id="produtos-favoritos">0 favoritos</span>
+            </div>
+          </div>
         </div>
 
-        <!-- Scripts -->
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="./assets/js/admin.js"></script>
+        <div id="lista-produtos">
+          <!-- Lista será preenchida via JavaScript -->
+        </div>
+      </section>
+    </div>
 
-        <script>
+    <!-- Scripts -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./assets/js/admin.js"></script>
+
+    <script>
     // Atualização das estatísticas
     function atualizarEstatisticas() {
       if (window.adminManager) {
@@ -884,5 +919,5 @@
       }, 1000);
     });
   </script>
-    </body>
+  </body>
 </html>

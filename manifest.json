@@ -1,5 +1,5 @@
 {
-    "name": "AchaduBom - Achadinhos Imperdíveis",
+    "name": "AchaduBom",
     "short_name": "AchaduBom",
     "description": "Encontre os melhores achadinhos e ofertas imperdíveis da Shopee, Mercado Livre, Amazon e outras lojas. Produtos selecionados com os melhores preços para você economizar!",
     "version": "1.0.0",
@@ -8,7 +8,7 @@
     "display": "standalone",
     "orientation": "portrait-primary",
     "theme_color": "#ffea00",
-    "background_color": "#f8f9fa",
+    "background_color": "#00b7ff",
     "categories": 
     [
         "shopping",
@@ -20,39 +20,39 @@
     "icons": 
     [
         {
-            "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZmZlYTAwO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM4N2NlZWI7c3RvcC1vcGFjaXR5OjEiIC8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMTIiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjI0IiB5PSIzMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzJjM2U1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iYm9sZCI+QTwvdGV4dD4KPHRleHQgeD0iMjQiIHk9IjM4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZjM5YzEyIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOCI+4pyFPC90ZXh0Pgo8L3N2Zz4=",
+            "src": "./assets/images/logo/favicon.png",
             "sizes": "48x48",
-            "type": "image/svg+xml",
+            "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzIiIGhlaWdodD0iNzIiIHZpZXdCb3g9IjAgMCA3MiA3MiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZmZlYTAwO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM4N2NlZWI7c3RvcC1vcGFjaXR5OjEiIC8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjcyIiBoZWlnaHQ9IjcyIiByeD0iMTgiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjM2IiB5PSI0NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzJjM2U1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iYm9sZCI+QTwvdGV4dD4KPHRleHQgeD0iMzYiIHk9IjU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZjM5YzEyIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiPuKchTwvdGV4dD4KPC9zdmc+",
+            "src": "./assets/images/logo/favicon.png",
             "sizes": "72x72",
-            "type": "image/svg+xml",
+            "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZmZlYTAwO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM4N2NlZWI7c3RvcC1vcGFjaXR5OjEiIC8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9Ijk2IiBoZWlnaHQ9Ijk2IiByeD0iMjQiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjQ4IiB5PSI2MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzJjM2U1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjM2IiBmb250LXdlaWdodD0iYm9sZCI+QTwvdGV4dD4KPHRleHQgeD0iNDgiIHk9Ijc0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZjM5YzEyIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiPuKchTwvdGV4dD4KPC9zdmc+",
+            "src": "./assets/images/logo/favicon.png",
             "sizes": "96x96",
-            "type": "image/svg+xml",
+            "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDEyOCAxMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6I2ZmZWEwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojODdjZWViO3N0b3Atb3BhY2l0eToxIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxyZWN0IHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiByeD0iMzIiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjY0IiB5PSI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzJjM2U1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjQ4IiBmb250LXdlaWdodD0iYm9sZCI+QTwvdGV4dD4KPHRleHQgeD0iNjQiIHk9Ijk4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZjM5YzEyIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjAiPuKchTwvdGV4dD4KPC9zdmc+",
+            "src": "./assets/images/logo/favicon.png",
             "sizes": "128x128",
-            "type": "image/svg+xml",
+            "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6I2ZmZWEwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojODdjZWViO3N0b3Atb3BhY2l0eToxIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iNDgiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9Ijk2IiB5PSIxMjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMyYzNlNTAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI3MiIgZm9udC13ZWlnaHQ9ImJvbGQiPkE8L3RleHQ+Cjx0ZXh0IHg9Ijk2IiB5PSIxNDYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmMzljMTIiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyOCI+4pyFPC90ZXh0Pgo8L3N2Zz4=",
+            "src": "./assets/images/logo/favicon.png",
             "sizes": "192x192",
-            "type": "image/svg+xml",
+            "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6I2ZmZWEwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojODdjZWViO3N0b3Atb3BhY2l0eToxIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iMTI4IiBmaWxsPSJ1cmwoI2dyYWRpZW50KSIvPgo8dGV4dCB4PSIyNTYiIHk9IjMyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzJjM2U1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE5MiIgZm9udC13ZWlnaHQ9ImJvbGQiPkE8L3RleHQ+Cjx0ZXh0IHg9IjI1NiIgeT0iMzg0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZjM5YzEyIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNzIiPuKchTwvdGV4dD4KPC9zdmc+",
+            "src": "./assets/images/logo/favicon.png",
             "sizes": "512x512",
-            "type": "image/svg+xml",
+            "type": "image/png",
             "purpose": "any maskable"
         }
     ],
@@ -66,9 +66,9 @@
             "icons": 
             [
                 {
-                    "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIGZpbGw9IiMyZTdkMzIiIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZD0iTTggMmEuNS41IDAgMCAxIC41LjVWNGgtMS41djEuNWgxLjVWN2gtMS41djEuNWgxLjVWMTBoMy41VjguNWgtM1Y3aDNWNS41aC0zVjRoM1YyLjVoLTNWMWguNXYuNUg4eiIvPjwvc3ZnPg==",
-                    "sizes": "96x96",
-                    "type": "image/svg+xml"
+                    "src": "./assets/images/logo/favicon.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
                 }
             ]
         },
@@ -80,9 +80,9 @@
             "icons": 
             [
                 {
-                    "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIGZpbGw9IiNlNzRjM2MiIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZD0ibTggMi43NDggNy4wMjYtLjAxIDIuMzggNy4yODMtMy4wMTYgMi41OTVMMTAgMTQuMzA3IDYuNjEgMTIuNjE2IDMuNTk0IDEwLjAyMSA1Ljk3NCAyLjczOCJmaWxsLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4=",
-                    "sizes": "96x96",
-                    "type": "image/svg+xml"
+                    "src": "./assets/images/logo/favicon.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
                 }
             ]
         },
@@ -94,9 +94,9 @@
             "icons": 
             [
                 {
-                    "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIGZpbGw9IiNmMzljMTIiIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZD0iTTkuNSA4YTIuNSAyLjUgMCAxIDEtNSAwIDIuNSAyLjUgMCAwIDEgNSAwek0yIDEycy0xIDAtMS0xIDEtNCA2LTQgNiAzIDYgNHYxSDJ6bTEwLTFhNS45NiA1Ljk2IDAgMCAwLTUuMjI2LTUuOTE2IDYuOTc0IDYuOTc0IDAgMCAwLS4xNjEgMS4xNjZBNiA2IDAgMCAxIDEyIDEwdjF6bTMtMXYxaC0ydi0xYzAtLjA4LS4wMS0uMTU4LS4wMjQtLjIzNkE0IDQgMCAwIDAgMTEgNi44MTJhNCA0IDAgMCAwLTQuODA4LTMuNzkzIDUuOTYgNS45NiAwIDAgMC0uMTc3LS4zOTMgNCA0IDAgMCAxIDYuNDUzIDJzMS4xMzUtMy4zIDIuMDgzLTQuODMxYzEuMTczLTEuODkzIDEuNTU3LS42MTkgMS43NTktLjE2OVM4LjI2MSA4IDguNDMzIDEwczEuNDc5IDMgMS45NjcgMyIvPjwvc3ZnPg==",
-                    "sizes": "96x96",
-                    "type": "image/svg+xml"
+                    "src": "./assets/images/logo/favicon.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
                 }
             ]
         }
@@ -104,16 +104,16 @@
     "screenshots": 
     [
         {
-            "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjU2OCIgdmlld0JveD0iMCAwIDMyMCA1NjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMjAiIGhlaWdodD0iNTY4IiBmaWxsPSIjZjhmOWZhIi8+CjxyZWN0IHg9IjIwIiB5PSIyMCIgd2lkdGg9IjI4MCIgaGVpZ2h0PSI2MCIgcng9IjEwIiBmaWxsPSJ3aGl0ZSIvPgo8dGV4dCB4PSIzMCIgeT0iNDUiIGZpbGw9IiNmZmVhMDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9ImJvbGQiPkFjaGFkdUJvbTwvdGV4dD4KPHJlY3QgeD0iMjAiIHk9IjEwMCIgd2lkdGg9IjI4MCIgaGVpZ2h0PSIxNDAiIHJ4PSIxMCIgZmlsbD0idXJsKCNsaW5lYXJHcmFkaWVudCkiLz4KPGV0ZXh0IHg9IjMwIiB5PSIxMzAiIGZpbGw9IiMyYzNlNTAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiPkFjaGFkaW5ob3MgSW1wZXJkw612ZWlzPC90ZXh0Pgo8cmVjdCB4PSIyMCIgeT0iMjYwIiB3aWR0aD0iMTM1IiBoZWlnaHQ9IjIwMCIgcng9IjEwIiBmaWxsPSJ3aGl0ZSIvPgo8cmVjdCB4PSIxNjUiIHk9IjI2MCIgd2lkdGg9IjEzNSIgaGVpZ2h0PSIyMDAiIHJ4PSIxMCIgZmlsbD0id2hpdGUiLz4KPHJlY3QgeD0iMjAiIHk9IjQ4MCIgd2lkdGg9IjEzNSIgaGVpZ2h0PSIyMDAiIHJ4PSIxMCIgZmlsbD0id2hpdGUiLz4KPHJlY3QgeD0iMTY1IiB5PSI0ODAiIHdpZHRoPSIxMzUiIGhlaWdodD0iMjAwIiByeD0iMTAiIGZpbGw9IndoaXRlIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImxpbmVhckdyYWRpZW50IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6I2ZmZWEwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojODdjZWViO3N0b3Atb3BhY2l0eToxIiAvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPg==",
+            "src": "./assets/images/logo/favicon.png",
             "sizes": "320x568",
-            "type": "image/svg+xml",
+            "type": "image/png",
             "form_factor": "narrow",
             "label": "Página inicial em dispositivo móvel"
         },
         {
-            "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAyNCIgaGVpZ2h0PSI3NjgiIHZpZXdCb3g9IjAgMCAxMDI0IDc2OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMjQiIGhlaWdodD0iNzY4IiBmaWxsPSIjZjhmOWZhIi8+CjxyZWN0IHg9IjIwIiB5PSIyMCIgd2lkdGg9Ijk4NCIgaGVpZ2h0PSI4MCIgcng9IjEwIiBmaWxsPSJ3aGl0ZSIvPgo8dGV4dCB4PSI0MCIgeT0iNjUiIGZpbGw9IiNmZmVhMDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZm9udC13ZWlnaHQ9ImJvbGQiPkFjaGFkdUJvbTwvdGV4dD4KPHJlY3QgeD0iMjAiIHk9IjEyMCIgd2lkdGg9Ijk4NCIgaGVpZ2h0PSIyMDAiIHJ4PSIxMCIgZmlsbD0idXJsKCNsaW5lYXJHcmFkaWVudCkiLz4KPHRleHQgeD0iNDAiIHk9IjE3MCIgZmlsbD0iIzJjM2U1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjMyIiBmb250LXdlaWdodD0iYm9sZCI+RW5jb250cmUgb3MgbWVsaG9yZXMgYWNoYWRpbmhvczwvdGV4dD4KPHJlY3QgeD0iMjAiIHk9IjM0MCIgd2lkdGg9IjMxMCIgaGVpZ2h0PSI0MDAiIHJ4PSIxMCIgZmlsbD0id2hpdGUiLz4KPHJlY3QgeD0iMzUwIiB5PSIzNDAiIHdpZHRoPSIzMTAiIGhlaWdodD0iNDAwIiByeD0iMTAiIGZpbGw9IndoaXRlIi8+CjxyZWN0IHg9IjY4MCIgeT0iMzQwIiB3aWR0aD0iMzI0IiBoZWlnaHQ9IjQwMCIgcng9IjEwIiBmaWxsPSJ3aGl0ZSIvPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXJHcmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNmZmVhMDA7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6Izg3Y2VlYjtzdG9wLW9wYWNpdHk6MSIgLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4=",
+            "src": "./assets/images/logo/favicon.png",
             "sizes": "1024x768",
-            "type": "image/svg+xml",
+            "type": "image/png",
             "form_factor": "wide",
             "label": "Página inicial em desktop"
         }

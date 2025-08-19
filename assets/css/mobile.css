@@ -1,4 +1,82 @@
 /* =============================================
+   SEÇÃO REDES SOCIAIS E RODAPÉ MOBILE
+   ============================================= */
+
+.secao-redes-mobile {
+    background: var(--gradiente-hero);
+    padding: var(--espacamento-xl);
+    text-align: center;
+    color: white;
+}
+
+.secao-redes-mobile h2 {
+    font-size: 1.4rem;
+    margin-bottom: var(--espacamento-md);
+    color: white;
+    font-weight: 700;
+}
+
+.secao-redes-mobile p {
+    color: white;
+    margin-bottom: var(--espacamento-lg);
+    opacity: 0.9;
+}
+
+.redes-icons-mobile {
+    display: flex;
+    justify-content: center;
+    gap: var(--espacamento-lg);
+    margin-top: var(--espacamento-md);
+}
+
+.rede-icon-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: white;
+    text-decoration: none;
+    font-size: 1.3rem;
+    transition: all var(--transicao-media);
+}
+
+.rede-icon-mobile:hover {
+    background: white;
+    color: var(--cor-primaria);
+    transform: translateY(-3px);
+}
+
+.rede-icon-mobile i {
+    font-size: 1.3rem;
+}
+
+.rede-icon-mobile span {
+    display: none;
+}
+
+.rodape-mobile {
+    background: var(--cor-texto);
+    color: white;
+    text-align: center;
+    padding: var(--espacamento-xl) var(--espacamento-lg);
+}
+
+.rodape-mobile p {
+    margin-bottom: var(--espacamento-sm);
+    opacity: 0.8;
+    line-height: 1.6;
+}
+
+.rodape-mobile .copyright {
+    font-weight: 600;
+    font-size: 1rem;
+    opacity: 1;
+}
+
+/* =============================================
    ESTILOS MOBILE - APP NATIVO (max-width: 991px)
    ============================================= */
 
@@ -58,7 +136,12 @@
     padding: var(--espacamento-sm);
     cursor: pointer;
     transition: all var(--transicao-media);
-    border-radius: 8px;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-menu-mobile:hover {
@@ -103,7 +186,7 @@
 .busca-mobile button {
     position: absolute;
     right: calc(var(--espacamento-lg) + 8px);
-    top: 50%;
+    top: 66%;
     transform: translateY(-50%);
     background: var(--cor-secundaria);
     border: none;
@@ -183,12 +266,18 @@
     font-size: 1.5rem;
     cursor: pointer;
     padding: var(--espacamento-xs);
-    border-radius: 6px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all var(--transicao-media);
 }
 
 .btn-fechar-menu:hover {
     background: rgba(255, 234, 0, 0.2);
+    transform: scale(1.05);
 }
 
 .nav-mobile {
@@ -519,10 +608,47 @@
     transform: scale(0.9);
 }
 
-.btn-favorito-mobile.favorito {
-    background: var(--cor-urgente);
-    color: white;
+/* Estado favorito - mobile */
+.card-produto-mobile .btn-favorito-mobile.favorito,
+.card-produto-mobile-lista .btn-favorito-mobile.favorito {
+    background: #00b7ff !important;
+    color: white !important;
+    border-color: #00b7ff !important;
     animation: heartbeat 0.6s ease-in-out;
+}
+
+.card-produto-mobile .btn-favorito-mobile.favorito i,
+.card-produto-mobile-lista .btn-favorito-mobile.favorito i {
+    color: white !important;
+}
+
+/* Estado não favorito - mobile */
+.card-produto-mobile .btn-favorito-mobile:not(.favorito),
+.card-produto-mobile-lista .btn-favorito-mobile:not(.favorito) {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #00b7ff !important;
+}
+
+.card-produto-mobile .btn-favorito-mobile:not(.favorito) i,
+.card-produto-mobile-lista .btn-favorito-mobile:not(.favorito) i {
+    color: #00b7ff !important;
+}
+
+/* Animação pulsing para mobile */
+.btn-favorito-mobile.pulsing {
+    animation: pulsing 0.6s ease-in-out !important;
+}
+
+@keyframes pulsing {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
 }
 
 @keyframes heartbeat {
