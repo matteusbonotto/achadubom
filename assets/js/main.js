@@ -15,7 +15,8 @@ class ProdutosManager {
             loja: 'todas',
             ordenacao: 'az',
             visualizacao: 'grade',
-            favoritos: false
+            favoritos: false,
+            categorias: false
         };
         this.favoritos = this.carregarFavoritos();
 
@@ -33,10 +34,43 @@ class ProdutosManager {
             this.renderizarInterface();
             this.aplicarFiltros();
             this.ocultarLoading();
+
+            // Inicializar componentes adicionais após carregamento
+            this.inicializarComponentesExtras();
         } catch (error) {
             console.error('Erro na inicialização:', error);
             this.mostrarErro('Erro ao carregar produtos. Tente novamente.');
         }
+    }
+
+    /**
+     * Inicializa componentes extras (apenas slider)
+     */
+    inicializarComponentesExtras() {
+        console.log('🔄 Inicializando componentes extras...');
+
+        // DEBUG: Verificar se os elementos existem no DOM
+        const sliderDesktop = document.querySelector('.top-produtos-slider');
+        const sliderMobile = document.querySelector('.top-produtos-slider-mobile');
+        console.log('📱 Slider Desktop encontrado:', !!sliderDesktop);
+        console.log('📱 Slider Mobile encontrado:', !!sliderMobile);
+
+        // Aguardar um pouco para garantir que o DOM esteja pronto
+        setTimeout(() => {
+            try {
+                console.log('🚀 Inicializando slider...');
+
+                // Inicializar apenas o slider top produtos
+                if (typeof TopProdutosSlider !== 'undefined') {
+                    window.topProdutosSlider = new TopProdutosSlider(this);
+                    console.log('✅ TopProdutosSlider inicializado');
+                } else {
+                    console.error('❌ TopProdutosSlider não definido');
+                }
+            } catch (error) {
+                console.error('❌ Erro ao inicializar slider:', error);
+            }
+        }, 100);
     }
 
     /**
@@ -153,6 +187,26 @@ class ProdutosManager {
 
                     // Sincronizar com outros checkboxes
                     filtrosFavoritos.forEach(otherId => {
+                        const otherCheck = document.getElementById(otherId);
+                        if (otherCheck && otherCheck !== e.target) {
+                            otherCheck.checked = e.target.checked;
+                        }
+                    });
+                });
+            }
+        });
+
+        // Filtro de categorias - múltiplos checkboxes
+        const filtrosCategorias = ['filtro-categorias', 'filtro-categorias-mobile'];
+        filtrosCategorias.forEach(id => {
+            const filtro = document.getElementById(id);
+            if (filtro) {
+                filtro.addEventListener('change', (e) => {
+                    this.filtroAtual.categorias = e.target.checked;
+                    this.aplicarFiltros();
+
+                    // Sincronizar com outros checkboxes
+                    filtrosCategorias.forEach(otherId => {
                         const otherCheck = document.getElementById(otherId);
                         if (otherCheck && otherCheck !== e.target) {
                             otherCheck.checked = e.target.checked;
@@ -323,47 +377,118 @@ class ProdutosManager {
                 return;
             }
 
-            const isLista = this.filtroAtual.visualizacao === 'lista';
-            const isMobile = containerId.includes('mobile');
-
-            // Expandir produtos para criar um card por categoria
-            const produtosExpandidos = [];
-            this.produtosFiltrados.forEach(produto => {
-                if (produto.categorias && produto.categorias.length > 1) {
-                    // Criar um produto para cada categoria
-                    produto.categorias.forEach(categoria => {
-                        const produtoCategoria = {
-                            ...produto,
-                            categoriaAtual: categoria, // Categoria específica para este card
-                            categoriasOriginais: produto.categorias // Manter categorias originais
-                        };
-                        produtosExpandidos.push(produtoCategoria);
-                    });
-                } else {
-                    // Produto com uma categoria ou sem categoria
-                    produtosExpandidos.push({
-                        ...produto,
-                        categoriaAtual: produto.categorias?.[0] || 'outros',
-                        categoriasOriginais: produto.categorias
-                    });
-                }
-            });
-
-            if (isMobile) {
-                container.className = isLista ? 'produtos-lista-mobile' : 'produtos-grid-mobile';
-                container.innerHTML = produtosExpandidos
-                    .map(produto => this.templateProdutoMobile(produto, isLista))
-                    .join('');
+            // Verificar se deve mostrar por categorias
+            if (this.filtroAtual.categorias) {
+                this.renderizarProdutosPorCategoria(container, containerId);
             } else {
-                container.className = isLista ? 'produtos-lista' : 'produtos-grid';
-                container.innerHTML = produtosExpandidos
-                    .map(produto => this.templateProduto(produto, isLista))
-                    .join('');
+                this.renderizarProdutosNormal(container, containerId);
             }
         });
 
         // Configurar event listeners dos produtos
         this.configurarEventListenersProdutos();
+    }
+
+    /**
+     * Renderiza produtos agrupados por categoria
+     */
+    renderizarProdutosPorCategoria(container, containerId) {
+        const isMobile = containerId.includes('mobile');
+
+        // Agrupar produtos por categoria
+        const produtosPorCategoria = this.agruparProdutosPorCategoria();
+
+        // Criar índice de navegação
+        const indiceNavegacao = this.criarIndiceNavegacao(Object.keys(produtosPorCategoria).filter(cat => produtosPorCategoria[cat].length > 0));
+
+        const html = Object.entries(produtosPorCategoria)
+            .filter(([categoria, produtos]) => produtos.length > 0)
+            .map(([categoria, produtos]) => {
+                const nomeCategoria = categoria === 'em-alta' ? 'Em Alta' :
+                    categoria === 'outros' ? 'Outros' :
+                        categoria.charAt(0).toUpperCase() + categoria.slice(1);
+                const categoriaId = `categoria-${categoria.replace(/\s+/g, '-').toLowerCase()}`;
+
+                const produtosHtml = produtos.map(produto => {
+                    const isLista = this.filtroAtual.visualizacao === 'lista';
+                    return isMobile ? this.templateProdutoMobile(produto, isLista) : this.templateProduto(produto, isLista);
+                }).join('');
+
+                const classeProdutos = isMobile ?
+                    (this.filtroAtual.visualizacao === 'lista' ? 'produtos-lista-mobile' : 'produtos-grid-mobile') :
+                    (this.filtroAtual.visualizacao === 'lista' ? 'produtos-lista' : 'produtos-grid');
+
+                return `
+                    <div class="categoria-secao" id="${categoriaId}">
+                        <h3 class="categoria-titulo" onclick="window.produtosManager.toggleCategoria('${categoriaId}')">
+                            <div class="categoria-titulo-texto">
+                                <i class="bi bi-tag-fill"></i> ${nomeCategoria} (${produtos.length})
+                            </div>
+                            <button class="categoria-toggle">
+                                <i class="bi bi-chevron-down"></i>
+                            </button>
+                        </h3>
+                        <div class="categoria-produtos ${classeProdutos}" id="${categoriaId}-produtos">
+                            ${produtosHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+        container.className = 'produtos-categorias';
+        container.innerHTML = `${indiceNavegacao}${html}` || this.templateNenhumProduto();
+    }
+
+    /**
+     * Agrupa produtos por categoria
+     */
+    agruparProdutosPorCategoria() {
+        const grupos = {};
+
+        this.produtosFiltrados.forEach(produto => {
+            if (produto.categorias && produto.categorias.length > 0) {
+                produto.categorias.forEach(categoria => {
+                    const catLower = categoria.toLowerCase();
+                    if (!grupos[catLower]) {
+                        grupos[catLower] = [];
+                    }
+
+                    // Evitar duplicatas
+                    const jaExiste = grupos[catLower].some(p => p.codigo === produto.codigo);
+                    if (!jaExiste) {
+                        grupos[catLower].push(produto);
+                    }
+                });
+            } else {
+                // Produtos sem categoria
+                if (!grupos['outros']) {
+                    grupos['outros'] = [];
+                }
+                grupos['outros'].push(produto);
+            }
+        });
+
+        return grupos;
+    }
+
+    /**
+     * Renderiza produtos de forma normal (lista/grade)
+     */
+    renderizarProdutosNormal(container, containerId) {
+        const isLista = this.filtroAtual.visualizacao === 'lista';
+        const isMobile = containerId.includes('mobile');
+
+        if (isMobile) {
+            container.className = isLista ? 'produtos-lista-mobile' : 'produtos-grid-mobile';
+            container.innerHTML = this.produtosFiltrados
+                .map(produto => this.templateProdutoMobile(produto, isLista))
+                .join('');
+        } else {
+            container.className = isLista ? 'produtos-lista' : 'produtos-grid';
+            container.innerHTML = this.produtosFiltrados
+                .map(produto => this.templateProduto(produto, isLista))
+                .join('');
+        }
     }
 
     /**
@@ -1125,7 +1250,314 @@ class DataRefreshManager {
     }
 }
 
-// Inicializar o sistema de atualização quando a página carregar
+// =============================================
+// EXTENSÕES PARA NAVEGAÇÃO POR CATEGORIAS
+// =============================================
+
+// Adicionar funções à classe ProdutosManager
+Object.assign(ProdutosManager.prototype, {
+    /**
+     * Cria o índice de navegação das categorias
+     */
+    criarIndiceNavegacao(categorias) {
+        if (categorias.length <= 1) return '';
+
+        const botoes = categorias.map(categoria => {
+            const nomeCategoria = categoria === 'outros' ? 'Outros' :
+                categoria.charAt(0).toUpperCase() + categoria.slice(1);
+            const categoriaId = `categoria-${categoria.replace(/\s+/g, '-').toLowerCase()}`;
+
+            const icone = this.getIconeCategoria(categoria);
+
+            return `
+                <a href="#${categoriaId}" class="categoria-nav-btn" onclick="window.produtosManager.navegarParaCategoria('${categoriaId}')">
+                    <i class="${icone}"></i>
+                    ${nomeCategoria}
+                </a>
+            `;
+        }).join('');
+
+        return `
+            <div class="categorias-indice">
+                <h4><i class="bi bi-compass"></i> Navegação Rápida</h4>
+                <div class="categorias-nav">
+                    ${botoes}
+                </div>
+            </div>
+        `;
+    },
+
+    /**
+     * Retorna o ícone apropriado para cada categoria
+     */
+    getIconeCategoria(categoria) {
+        const icones = {
+            'eletrônicos': 'bi-phone',
+            'casa': 'bi-house',
+            'moda': 'bi-bag',
+            'beleza': 'bi-heart',
+            'esporte': 'bi-trophy',
+            'livros': 'bi-book',
+            'brinquedos': 'bi-puzzle',
+            'outros': 'bi-three-dots',
+            'default': 'bi-tag'
+        };
+        return icones[categoria.toLowerCase()] || icones.default;
+    },
+
+    /**
+     * Navega para uma categoria específica
+     */
+    navegarParaCategoria(categoriaId) {
+        const elemento = document.getElementById(categoriaId);
+        if (elemento) {
+            elemento.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+
+            // Expandir categoria se estiver recolhida
+            const produtos = document.getElementById(`${categoriaId}-produtos`);
+            if (produtos && produtos.classList.contains('collapsed')) {
+                this.toggleCategoria(categoriaId);
+            }
+        }
+    },
+
+    /**
+     * Alterna entre expandir/recolher uma categoria
+     */
+    toggleCategoria(categoriaId) {
+        const produtos = document.getElementById(`${categoriaId}-produtos`);
+        const toggle = document.querySelector(`#${categoriaId} .categoria-toggle`);
+
+        if (produtos && toggle) {
+            produtos.classList.toggle('collapsed');
+            toggle.classList.toggle('collapsed');
+        }
+    }
+});
+
+// =============================================
+// SISTEMA DE SLIDER TOP 10 PRODUTOS
+// =============================================
+class TopProdutosSlider {
+    constructor(produtosManager) {
+        this.produtosManager = produtosManager;
+        this.currentIndex = 0;
+        this.itemsPerView = 2;
+        this.produtos = [];
+
+        this.init();
+    }
+
+    init() {
+        this.configurarEventListeners();
+        this.carregarTopProdutos();
+    }
+
+    configurarEventListeners() {
+        // Botões Desktop
+        const prevBtn = document.getElementById('slider-prev');
+        const nextBtn = document.getElementById('slider-next');
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => this.anterior());
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => this.proximo());
+        }
+
+        // Botões Mobile
+        const prevBtnMobile = document.getElementById('slider-prev-mobile');
+        const nextBtnMobile = document.getElementById('slider-next-mobile');
+
+        if (prevBtnMobile) {
+            prevBtnMobile.addEventListener('click', () => this.anteriorMobile());
+        }
+
+        if (nextBtnMobile) {
+            nextBtnMobile.addEventListener('click', () => this.proximoMobile());
+        }
+
+        // Auto-slide a cada 5 segundos (apenas desktop)
+        setInterval(() => {
+            if (window.innerWidth >= 992) { // Apenas no desktop
+                this.proximo();
+            }
+        }, 5000);
+    }
+
+    carregarTopProdutos() {
+        console.log('🔄 Carregando top produtos...');
+        console.log('📦 Total de produtos disponíveis:', this.produtosManager.produtos.length);
+
+        // Debug: Verificar quantos produtos têm vendas
+        const produtosComVendas = this.produtosManager.produtos.filter(p => p.ativo && p.vendas);
+        console.log('💰 Produtos ativos com vendas:', produtosComVendas.length);
+
+        if (produtosComVendas.length > 0) {
+            console.log('📊 Exemplo de produto com vendas:', produtosComVendas[0]);
+        }
+
+        // Pegar os 10 produtos mais vendidos (ordenar por vendas)
+        this.produtos = this.produtosManager.produtos
+            .filter(p => p.ativo && p.vendas)
+            .sort((a, b) => {
+                const vendasA = parseInt(a.vendas.replace(/\D/g, '')) || 0;
+                const vendasB = parseInt(b.vendas.replace(/\D/g, '')) || 0;
+                return vendasB - vendasA;
+            })
+            .slice(0, 10);
+
+        console.log(`📊 ${this.produtos.length} produtos top carregados`);
+
+        if (this.produtos.length === 0) {
+            console.warn('⚠️ Nenhum produto encontrado para o slider!');
+        } else {
+            console.log('🎯 Produtos selecionados para slider:', this.produtos.map(p => ({ titulo: p.titulo, vendas: p.vendas })));
+        }
+
+        this.renderizar();
+    }
+
+    renderizar() {
+        console.log('🎨 Iniciando renderização do slider...');
+
+        // Renderizar slider desktop
+        const track = document.getElementById('slider-track');
+        if (track) {
+            console.log('🖥️ Renderizando slider desktop...');
+            this.renderizarSlider(track, 'desktop');
+        } else {
+            console.warn('❌ Elemento slider-track não encontrado!');
+        }
+
+        // Renderizar slider mobile
+        const trackMobile = document.getElementById('slider-track-mobile');
+        if (trackMobile) {
+            console.log('📱 Renderizando slider mobile...');
+            this.renderizarSlider(trackMobile, 'mobile');
+        } else {
+            console.warn('❌ Elemento slider-track-mobile não encontrado!');
+        }
+    }
+
+    renderizarSlider(track, tipo) {
+        if (!track) {
+            console.warn(`❌ Elemento slider-track-${tipo} não encontrado`);
+            return;
+        }
+
+        console.log(`🎨 Renderizando slider ${tipo} com`, this.produtos.length, 'produtos');
+
+        track.innerHTML = this.produtos.map(produto => {
+            const imagemPrimaria = produto.imagem && produto.imagem.length > 0 ? produto.imagem[0] : './assets/images/logo/placeholder.png';
+            const logoLoja = this.getLogoLoja(produto.loja);
+            const categoriaPrimaria = produto.categorias && produto.categorias.length > 0 ? produto.categorias[0] : null;
+
+            return `
+                <div class="slider-item" data-codigo="${produto.codigo}">
+                    <div class="card-imagem">
+                        <img src="${imagemPrimaria}" alt="${produto.titulo}" loading="lazy">
+                        
+                        <!-- Logo da loja - canto superior esquerdo -->
+                        <div class="loja-badge">
+                            <img src="${logoLoja}" alt="${produto.loja}">
+                        </div>
+                        
+                        <!-- Categoria - canto superior direito -->
+                        ${categoriaPrimaria ? `<div class="categoria-badge">${categoriaPrimaria}</div>` : ''}
+                        
+                        <!-- Código - canto inferior esquerdo -->
+                        <div class="produto-codigo">${produto.codigo}</div>
+                        
+                        <!-- Botão Quero - canto inferior direito -->
+                        <a href="${produto.url}" target="_blank" class="btn-quero" onclick="event.stopPropagation()">
+                            <i class="bi bi-link-45deg"></i> Quero
+                        </a>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        console.log(`✅ Slider ${tipo} renderizado`);
+
+        // Adicionar eventos de clique
+        track.querySelectorAll('.slider-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const codigo = item.dataset.codigo;
+                const produto = this.produtos.find(p => p.codigo === codigo);
+                if (produto) {
+                    this.produtosManager.abrirProduto(produto);
+                }
+            });
+        });
+    }
+
+    proximo() {
+        const maxIndex = Math.max(0, this.produtos.length - this.itemsPerView);
+        this.currentIndex = (this.currentIndex + 1) % (maxIndex + 1);
+        this.atualizarPosicao();
+    }
+
+    anterior() {
+        const maxIndex = Math.max(0, this.produtos.length - this.itemsPerView);
+        this.currentIndex = this.currentIndex <= 0 ? maxIndex : this.currentIndex - 1;
+        this.atualizarPosicao();
+    }
+
+    proximoMobile() {
+        const maxIndex = Math.max(0, this.produtos.length - 1); // Mobile mostra 1 por vez
+        this.currentIndex = (this.currentIndex + 1) % (maxIndex + 1);
+        this.atualizarPosicaoMobile();
+    }
+
+    anteriorMobile() {
+        const maxIndex = Math.max(0, this.produtos.length - 1); // Mobile mostra 1 por vez
+        this.currentIndex = this.currentIndex <= 0 ? maxIndex : this.currentIndex - 1;
+        this.atualizarPosicaoMobile();
+    }
+
+    atualizarPosicao() {
+        const track = document.getElementById('slider-track');
+        if (track) {
+            const translateX = -(this.currentIndex * (100 / this.itemsPerView));
+            track.style.transform = `translateX(${translateX}%)`;
+        }
+    }
+
+    atualizarPosicaoMobile() {
+        const track = document.getElementById('slider-track-mobile');
+        if (track) {
+            const translateX = -(this.currentIndex * 100);
+            track.style.transform = `translateX(${translateX}%)`;
+        }
+    }
+
+    /**
+     * Retorna o logo da loja
+     */
+    getLogoLoja(loja) {
+        const logos = {
+            'Shopee': './assets/images/shopee.png',
+            'AliExpress': './assets/images/aliexpress.png',
+            'Amazon': './assets/images/amazon.jpg',
+            'Mercado Livre': './assets/images/ml.png'
+        };
+        return logos[loja] || './assets/images/logo/placeholder.png';
+    }
+}
+
+// =============================================
+// SISTEMA DE FILTROS POR CATEGORIAS
+// =============================================
+// Inicializar o sistema quando a página carregar
 window.addEventListener('DOMContentLoaded', () => {
+    // Inicializar gerenciador de dados
     window.dataRefreshManager = new DataRefreshManager();
+
+    // Inicializar gerenciador principal de produtos
+    window.produtosManager = new ProdutosManager();
 });

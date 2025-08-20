@@ -7,7 +7,7 @@
 window.AchaduBomConfig = {
     // Configurações do Painel Administrativo
     admin: {
-        enabled: false,
+        enabled: true,
         requireAuth: true,
         allowedUsers: [],
     },

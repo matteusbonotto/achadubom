@@ -1,4 +1,251 @@
 /* =============================================
+   HERO SLIDER MOBILE
+   ============================================= */
+
+.hero-mobile {
+    padding: var(--espacamento-xl) var(--espacamento-lg);
+    background: var(--gradiente-hero);
+    color: white;
+    text-align: center;
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.top-produtos-slider-mobile {
+    margin-top: var(--espacamento-xl);
+    width: 100%;
+}
+
+.top-produtos-slider-mobile h3 {
+    color: white;
+    font-weight: 600;
+    margin-bottom: var(--espacamento-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.top-produtos-slider-mobile h3 i {
+    color: #FFD700;
+}
+
+.slider-wrapper-mobile {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    background: white;
+    box-shadow: var(--sombra-media);
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+.slider-track-mobile {
+    display: flex;
+    transition: transform 0.4s ease;
+    gap: 0;
+    padding: 0;
+}
+
+/* ===== SLIDER MOBILE - DESIGN SIMPLES SOBRE A IMAGEM ===== */
+.slider-track-mobile .slider-item {
+    min-width: 100%;
+    flex: 0 0 100%;
+    border-radius: 20px;
+    margin: 0.75rem;
+    width: calc(100% - 1.5rem);
+    height: 250px;
+    background: transparent;
+}
+
+.slider-track-mobile .slider-item .card-imagem {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 20px;
+    position: relative;
+}
+
+.slider-track-mobile .slider-item .card-imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.slider-track-mobile .slider-item .loja-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: var(--sombra-suave);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    z-index: 3;
+}
+
+.slider-track-mobile .slider-item .loja-badge img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.slider-track-mobile .slider-item .categoria-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--cor-destaque);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    z-index: 3;
+    box-shadow: var(--sombra-suave);
+}
+
+.slider-track-mobile .slider-item .produto-codigo {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    z-index: 3;
+    backdrop-filter: blur(10px);
+}
+
+.slider-track-mobile .slider-item .btn-quero {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: var(--cor-urgente);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 3;
+    box-shadow: var(--sombra-suave);
+}
+
+.slider-track-mobile .slider-item .btn-quero:hover {
+    background: #c0392b;
+    color: white;
+    text-decoration: none;
+}
+
+.slider-btn-mobile {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--cor-texto);
+    box-shadow: var(--sombra-suave);
+    z-index: 10;
+    transition: all var(--transicao-rapida);
+}
+
+.slider-btn-mobile:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.slider-btn-mobile.prev {
+    left: 10px;
+}
+
+.slider-btn-mobile.next {
+    right: 10px;
+}
+
+.hero-slider {
+    display: block !important;
+    margin-bottom: var(--espacamento-lg);
+}
+
+.slider-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    background: white;
+    box-shadow: var(--sombra-suave);
+}
+
+.slider-track {
+    display: flex;
+    transition: transform 0.4s ease;
+    gap: 0.75rem;
+    padding: 0.75rem;
+}
+
+.slider-item {
+    min-width: 200px;
+    flex: 0 0 200px;
+}
+
+.slider-item .produto-imagem {
+    height: 120px;
+}
+
+.slider-item-content {
+    padding: 0.75rem;
+}
+
+.slider-item h4 {
+    font-size: 0.8rem;
+    margin-bottom: 0.4rem;
+}
+
+.slider-item .produto-preco {
+    font-size: 1rem;
+}
+
+.slider-item .produto-vendas {
+    font-size: 0.75rem;
+}
+
+.slider-item .produto-codigo {
+    font-size: 0.65rem;
+}
+
+.btn-quero-slider {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+}
+
+.slider-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem;
+}
+
+/* =============================================
    SEÇÃO REDES SOCIAIS E RODAPÉ MOBILE
    ============================================= */
 
@@ -698,10 +945,10 @@
     background: var(--cor-urgente);
     color: white;
     border: none;
-    padding: var(--espacamento-sm) var(--espacamento-lg);
+    padding: 0.4rem 0.8rem;
     border-radius: 20px;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     cursor: pointer;
     transition: all var(--transicao-media);
     text-decoration: none;
@@ -709,11 +956,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--espacamento-xs);
+    gap: 0.25rem;
     flex: 1;
-    max-width: 120px;
+    max-width: 100px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
 }
 
 .btn-quero-mobile:hover {

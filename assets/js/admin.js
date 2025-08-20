@@ -225,9 +225,6 @@ class AdminManager {
               <button class="btn-acao btn-editar" data-codigo="${produto.codigo}" title="Editar">
                 <i class="bi bi-pencil"></i>
               </button>
-              <button class="btn-acao btn-duplicar" data-codigo="${produto.codigo}" title="Duplicar">
-                <i class="bi bi-copy"></i>
-              </button>
               <button class="btn-acao btn-deletar" data-codigo="${produto.codigo}" title="Excluir">
                 <i class="bi bi-trash"></i>
               </button>
@@ -264,14 +261,6 @@ class AdminManager {
             btn.addEventListener('click', (e) => {
                 const codigo = e.currentTarget.dataset.codigo;
                 this.editarProduto(codigo);
-            });
-        });
-
-        // Duplicar
-        document.querySelectorAll('.btn-duplicar').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const codigo = e.currentTarget.dataset.codigo;
-                this.duplicarProduto(codigo);
             });
         });
 
@@ -329,29 +318,6 @@ class AdminManager {
         if (modalTitulo) {
             modalTitulo.innerHTML = '<i class="bi bi-pencil"></i> Editar Produto';
         }
-    }
-
-    /**
-     * Duplicar produto
-     */
-    duplicarProduto(codigo) {
-        const produto = this.produtos.find(p => p.codigo === codigo);
-        if (!produto) {
-            this.mostrarNotificacao('Produto não encontrado', 'erro');
-            return;
-        }
-
-        this.modoEdicao = false;
-        this.produtoEditando = null;
-        this.preencherFormulario(produto);
-        this.gerarCodigo(); // Gera novo código
-        this.atualizarBotoesFormulario();
-
-        // Abrir modal
-        const modal = new bootstrap.Modal(document.getElementById('modalProduto'));
-        modal.show();
-
-        this.mostrarNotificacao('Produto duplicado! Altere o código se necessário.', 'info');
     }
 
     /**
@@ -788,7 +754,6 @@ class AdminManager {
             total: this.produtos.length,
             ativos: this.produtos.filter(p => p.ativo).length,
             inativos: this.produtos.filter(p => !p.ativo).length,
-            favoritos: this.produtos.filter(p => p.favorito).length,
             lojas: [...new Set(this.produtos.map(p => p.loja))].length,
             categorias: [...new Set(this.produtos.flatMap(p => p.categorias))].length
         };

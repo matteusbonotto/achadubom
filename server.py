@@ -870,7 +870,7 @@ def import_csv():
                 # Criar descrição
                 vendas = linha.get('Sales', '0 vendas')
                 shop_original = linha.get('Shop Name', '')
-                descricao = f"{titulo}. Vendas: {vendas}. Loja original: {shop_original}."
+                descricao = f"{titulo}. Vendas: {vendas}. Vendido por: {shop_original}."
                 
                 # URL: usar Offer Link
                 url = offer_link
