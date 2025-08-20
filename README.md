@@ -22,8 +22,6 @@ Um Progressive Web App (PWA) moderno e responsivo para exibir produtos e ofertas
 - **Base de Dados:** JSON local (simulando API)
 
 ### 🎨 **Design & UX**
-- **Cores Persuasivas:** Verde (#2e7d32), Laranja (#ff9800), Vermelho urgente (#e74c3c)
-- **Tipografia:** Hierarquia clara com Poppins (títulos) e Open Sans (corpo)
 - **Animações:** Efeitos flutuantes, transições suaves, micro-interações
 - **Acessibilidade:** Contraste adequado, foco visível, navegação por teclado
 
@@ -145,17 +143,6 @@ python -m http.server 8000
 - ⚙️ **Admin** - Abre o painel administrativo
 
 ## 🎨 Personalização
-
-### **Cores (em `globals.css`)**
-```css
-:root {
-  --cor-primaria: #2e7d32;      /* Verde principal */
-  --cor-urgente: #e74c3c;       /* Vermelho para ações */
-  --cor-destaque: #f39c12;      /* Laranja para destaques */
-  --cor-confianca: #2ecc71;     /* Verde para confirmações */
-  /* ... outras variáveis */
-}
-```
 
 ### **Fontes**
 - **Títulos:** Poppins (weights: 400, 500, 700)

@@ -1043,6 +1043,40 @@ html {
 }
 
 /* =============================================
+   ESTILOS PREÇO E VENDAS MOBILE
+   ============================================= */
+
+.produto-preco-mobile,
+.card-preco-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin: 0.4rem 0;
+}
+
+.produto-preco-mobile .preco-valor,
+.card-preco-mobile .preco-valor {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--cor-urgente);
+}
+
+.produto-preco-mobile .vendas-info,
+.card-preco-mobile .vendas-info {
+    font-size: 0.75rem;
+    color: var(--cor-texto-claro);
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.produto-preco-mobile .vendas-info i,
+.card-preco-mobile .vendas-info i {
+    color: var(--cor-destaque);
+    font-size: 0.7rem;
+}
+
+/* =============================================
    FINAL MOBILE.CSS - ESTILO APP NATIVO
    ============================================= */
 

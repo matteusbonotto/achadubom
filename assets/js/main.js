@@ -326,14 +326,37 @@ class ProdutosManager {
             const isLista = this.filtroAtual.visualizacao === 'lista';
             const isMobile = containerId.includes('mobile');
 
+            // Expandir produtos para criar um card por categoria
+            const produtosExpandidos = [];
+            this.produtosFiltrados.forEach(produto => {
+                if (produto.categorias && produto.categorias.length > 1) {
+                    // Criar um produto para cada categoria
+                    produto.categorias.forEach(categoria => {
+                        const produtoCategoria = {
+                            ...produto,
+                            categoriaAtual: categoria, // Categoria específica para este card
+                            categoriasOriginais: produto.categorias // Manter categorias originais
+                        };
+                        produtosExpandidos.push(produtoCategoria);
+                    });
+                } else {
+                    // Produto com uma categoria ou sem categoria
+                    produtosExpandidos.push({
+                        ...produto,
+                        categoriaAtual: produto.categorias?.[0] || 'outros',
+                        categoriasOriginais: produto.categorias
+                    });
+                }
+            });
+
             if (isMobile) {
                 container.className = isLista ? 'produtos-lista-mobile' : 'produtos-grid-mobile';
-                container.innerHTML = this.produtosFiltrados
+                container.innerHTML = produtosExpandidos
                     .map(produto => this.templateProdutoMobile(produto, isLista))
                     .join('');
             } else {
                 container.className = isLista ? 'produtos-lista' : 'produtos-grid';
-                container.innerHTML = this.produtosFiltrados
+                container.innerHTML = produtosExpandidos
                     .map(produto => this.templateProduto(produto, isLista))
                     .join('');
             }
@@ -349,6 +372,9 @@ class ProdutosManager {
     templateProduto(produto, isLista = false) {
         const isFavorito = this.favoritos.includes(produto.codigo);
         const logoLoja = this.getLogoLoja(produto.loja);
+        const categoriaAtual = produto.categoriaAtual || produto.categorias?.[0] || 'outros';
+        const precoFormatado = window.formatarPreco ? window.formatarPreco(produto.preco) : `R$ ${produto.preco?.toFixed(2) || '0,00'}`;
+        const vendas = produto.vendas || '0 vendas';
 
         if (isLista) {
             return `
@@ -363,11 +389,15 @@ class ProdutosManager {
                 </div>
                 <div class="produto-info">
                   <h3>${produto.titulo}</h3>
+                  <div class="produto-preco">
+                    <span class="preco-valor">${precoFormatado}</span>
+                    <span class="vendas-info"><i class="bi bi-graph-up"></i> ${vendas}</span>
+                  </div>
                   <div class="produto-badges">
                     <div class="loja-badge-lista">
                       <img src="${logoLoja}" alt="${produto.loja}" />
                     </div>
-                    <div class="categoria-badge-lista"><i class="bi bi-tag-fill"></i> ${produto.categorias[0]}</div>
+                    <div class="categoria-badge-lista"><i class="bi bi-tag-fill"></i> ${categoriaAtual}</div>
                   </div>
                   <span class="produto-codigo">#${produto.codigo}</span>
                 </div>
@@ -386,7 +416,7 @@ class ProdutosManager {
               </div>
               <div class="categoria-badge">
               <i class="bi bi-tag-fill"></i>
-                ${produto.categorias[0]}
+                ${categoriaAtual}
               </div>
             </div>
             
@@ -402,6 +432,10 @@ class ProdutosManager {
             
             <div class="card-body">
               <h3>${produto.titulo}</h3>
+              <div class="card-preco">
+                <span class="preco-valor">${precoFormatado}</span>
+                <span class="vendas-info"><i class="bi bi-graph-up"></i> ${vendas}</span>
+              </div>
               <p class="card-descricao truncate" data-codigo="${produto.codigo}">
                 ${produto.descricao}
               </p>
@@ -426,6 +460,9 @@ class ProdutosManager {
     templateProdutoMobile(produto, isLista = false) {
         const isFavorito = this.favoritos.includes(produto.codigo);
         const logoLoja = this.getLogoLoja(produto.loja);
+        const categoriaAtual = produto.categoriaAtual || produto.categorias?.[0] || 'outros';
+        const precoFormatado = window.formatarPreco ? window.formatarPreco(produto.preco) : `R$ ${produto.preco?.toFixed(2) || '0,00'}`;
+        const vendas = produto.vendas || '0 vendas';
 
         if (isLista) {
             return `
@@ -440,11 +477,15 @@ class ProdutosManager {
                 </div>
                 <div class="produto-info-mobile">
                   <h3>${produto.titulo}</h3>
+                  <div class="produto-preco-mobile">
+                    <span class="preco-valor">${precoFormatado}</span>
+                    <span class="vendas-info"><i class="bi bi-graph-up"></i> ${vendas}</span>
+                  </div>
                   <div class="produto-badges-mobile">
                     <div class="loja-badge-mobile-lista">
                       <img src="${logoLoja}" alt="${produto.loja}" />
                     </div>
-                    <div class="categoria-badge-mobile-lista"><i class="bi bi-tag-fill"></i>${produto.categorias[0]}</div>
+                    <div class="categoria-badge-mobile-lista"><i class="bi bi-tag-fill"></i>${categoriaAtual}</div>
                   </div>
                   <span class="produto-codigo-mobile">#${produto.codigo}</span>
                 </div>
@@ -462,7 +503,7 @@ class ProdutosManager {
                 <img src="${logoLoja}" alt="${produto.loja}" />
               </div>
               <div class="categoria-badge-mobile">
-                <i class="bi bi-tag-fill"></i>${produto.categorias[0]}
+                <i class="bi bi-tag-fill"></i>${categoriaAtual}
               </div>
             </div>
             
@@ -478,6 +519,10 @@ class ProdutosManager {
             
             <div class="card-body-mobile">
               <h3>${produto.titulo}</h3>
+              <div class="card-preco-mobile">
+                <span class="preco-valor">${precoFormatado}</span>
+                <span class="vendas-info"><i class="bi bi-graph-up"></i> ${vendas}</span>
+              </div>
               <div class="card-footer-mobile">
                 <span class="produto-codigo-mobile">#${produto.codigo}</span>
                 <a href="${produto.url}" target="_blank" class="btn-quero-mobile" rel="noopener">
@@ -935,7 +980,11 @@ class DataRefreshManager {
         keysToRemove.forEach(key => localStorage.removeItem(key));
 
         // Limpar sessionStorage
-        sessionStorage.clear();
+        try {
+            sessionStorage.clear();
+        } catch (e) {
+            console.log('🔒 SessionStorage não disponível (modo file://)');
+        }
     }
 
     async reloadData() {

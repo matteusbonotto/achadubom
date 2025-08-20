@@ -169,6 +169,16 @@ p {
     color: white;
 }
 
+.btn-sucesso {
+    background: #28a745;
+    color: white;
+}
+
+.btn-sucesso:hover {
+    background: #218838;
+    color: white;
+}
+
 /* =============================================
    ANIMAÇÕES
    ============================================= */
