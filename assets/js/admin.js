@@ -8,6 +8,7 @@
 class AdminManager {
     constructor() {
         this.produtos = [];
+        this.lojas = []; // Banco de dados de lojas
         this.produtoEditando = null;
         this.modoEdicao = false;
         this.apiUrl = 'http://localhost:5000/api'; // URL da API
@@ -51,6 +52,7 @@ class AdminManager {
      */
     async init() {
         try {
+            await this.carregarLojas(); // Carregar lojas primeiro
             await this.carregarProdutos();
             this.configurarEventListeners();
             this.renderizarLista();
@@ -58,6 +60,232 @@ class AdminManager {
         } catch (error) {
             console.error('Erro na inicialização do admin:', error);
             this.mostrarNotificacao('Erro ao carregar dados', 'erro');
+        }
+    }
+
+    /**
+     * Carrega lojas do arquivo JSON
+     */
+    async carregarLojas() {
+        try {
+            console.log('🔄 Iniciando carregamento de lojas...');
+            const response = await fetch('./assets/data/lojas.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            this.lojas = await response.json();
+            console.log(`✅ Admin: ${this.lojas.length} lojas carregadas`, this.lojas);
+
+        } catch (error) {
+            console.error('❌ Erro ao carregar lojas no admin:', error);
+            // Fallback para lojas hardcoded
+            this.lojas = [
+                { id: "shopee", loja: "Shopee", imagem: "./assets/images/shopee.png" },
+                { id: "mercado_livre", loja: "Mercado Livre", imagem: "./assets/images/ml.png" },
+                { id: "amazon", loja: "Amazon", imagem: "./assets/images/amazon.jpg" },
+                { id: "aliexpress", loja: "AliExpress", imagem: "./assets/images/aliexpress.png" }
+            ];
+            console.log('🔄 Usando lojas fallback:', this.lojas);
+        }
+
+        // Preencher formulário de lojas após carregar
+        console.log('🔄 Chamando preencherSelectLojas...');
+        this.preencherSelectLojas();
+
+        // Preencher lojas no modal CSV
+        console.log('🔄 Chamando preencherLojasCSV...');
+        this.preencherLojasCSV();
+
+        // Iniciar monitoramento contínuo
+        console.log('🔄 Iniciando monitoramento...');
+        this.monitorarSelectLojas();
+    }
+
+    /**
+     * Monitora e garante que o select de lojas esteja sempre preenchido
+     */
+    monitorarSelectLojas() {
+        console.log('🔄 [monitorarSelectLojas] Iniciando monitoramento...');
+
+        const verificarEPreencher = () => {
+            const selectLoja = document.getElementById('loja');
+
+            if (selectLoja && this.lojas && this.lojas.length > 0) {
+                // Verificar se o select está vazio ou só tem a opção padrão
+                if (selectLoja.options.length <= 1) {
+                    console.log('🔄 [monitorarSelectLojas] Select vazio detectado, preenchendo...');
+                    selectLoja.innerHTML = '<option value="">Selecione uma loja</option>';
+                    this.lojas.forEach(loja => {
+                        selectLoja.innerHTML += `<option value="${loja.loja}">${loja.loja}</option>`;
+                    });
+                    console.log('✅ [monitorarSelectLojas] Select preenchido automaticamente');
+                }
+            }
+        };
+
+        // Verificar a cada 2 segundos
+        this.monitorInterval = setInterval(verificarEPreencher, 2000);
+
+        // Verificar quando o documento estiver carregado
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', verificarEPreencher);
+        } else {
+            verificarEPreencher();
+        }
+
+        // Verificar quando o modal for mostrado
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('[data-bs-target="#modalProduto"]')) {
+                console.log('🔄 [monitorarSelectLojas] Botão do modal clicado, verificando em 500ms...');
+                setTimeout(verificarEPreencher, 500);
+            }
+
+            // Também monitorar o modal CSV
+            if (e.target.closest('[data-bs-target="#modalImportarCSV"]') || e.target.id === 'btn-importar-csv') {
+                console.log('🔄 [monitorarSelectLojas] Modal CSV será aberto, preenchendo lojas...');
+                setTimeout(() => {
+                    this.preencherLojasCSV();
+                }, 200);
+            }
+        });
+    }
+
+    /**
+     * Preenche as lojas no modal de importação CSV
+     */
+    preencherLojasCSV() {
+        console.log('🔄 [preencherLojasCSV] Iniciando preenchimento do modal CSV...');
+
+        const csvLojaSelection = document.getElementById('csv-loja-selection');
+
+        if (!csvLojaSelection) {
+            console.warn('⚠️ [preencherLojasCSV] Elemento csv-loja-selection não encontrado');
+            return;
+        }
+
+        if (!this.lojas || this.lojas.length === 0) {
+            console.warn('⚠️ [preencherLojasCSV] Nenhuma loja carregada');
+            csvLojaSelection.innerHTML = '<p class="text-danger">Erro ao carregar lojas disponíveis</p>';
+            return;
+        }
+
+        console.log('🔄 [preencherLojasCSV] Preenchendo com', this.lojas.length, 'lojas');
+
+        // Mapear ícones para cada loja
+        const icones = {
+            'Shopee': 'bi-bag-fill text-warning',
+            'Mercado Livre': 'bi-link text-primary',
+            'Amazon': 'bi-box-fill text-success',
+            'AliExpress': 'bi-globe text-danger'
+        };
+
+        // Criar HTML das lojas dinamicamente
+        let html = '<div class="row">';
+
+        this.lojas.forEach((loja, index) => {
+            const icone = icones[loja.loja] || 'bi-shop text-secondary';
+            const col = index % 2 === 0 ? 'col-md-6' : 'col-md-6';
+            const lojaId = loja.loja.toLowerCase().replace(/\s+/g, '-');
+
+            if (index % 2 === 0 && index > 0) {
+                html += '</div><div class="row">';
+            }
+
+            html += `
+                <div class="${col}">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" 
+                               name="loja" id="loja-${lojaId}" value="${loja.loja}">
+                        <label class="form-check-label" for="loja-${lojaId}">
+                            <i class="bi ${icone}"></i> ${loja.loja}
+                        </label>
+                    </div>
+                </div>
+            `;
+        });
+
+        html += '</div>';
+
+        csvLojaSelection.innerHTML = html;
+
+        console.log('✅ [preencherLojasCSV] Modal CSV preenchido com sucesso!');
+    }
+
+    /**
+     * Para o monitoramento do select
+     */
+    pararMonitoramento() {
+        if (this.monitorInterval) {
+            clearInterval(this.monitorInterval);
+            this.monitorInterval = null;
+            console.log('🛑 [monitorarSelectLojas] Monitoramento parado');
+        }
+    }
+    preencherSelectLojas() {
+        console.log('🔄 [preencherSelectLojas] Iniciando...', this.lojas);
+
+        // Função para preencher o select
+        const preencherSelect = () => {
+            console.log('🔄 [preencherSelect] Tentando encontrar elemento...');
+            const selectLoja = document.getElementById('loja');
+
+            if (!selectLoja) {
+                console.warn('⚠️ [preencherSelect] Elemento select#loja não encontrado');
+                return false;
+            }
+
+            if (!this.lojas || this.lojas.length === 0) {
+                console.warn('⚠️ [preencherSelect] Nenhuma loja carregada');
+                return false;
+            }
+
+            console.log('🔄 [preencherSelect] Elemento encontrado, preenchendo...', selectLoja);
+            selectLoja.innerHTML = '<option value="">Selecione uma loja</option>';
+
+            this.lojas.forEach((loja, index) => {
+                console.log(`🔄 [preencherSelect] Adicionando loja ${index + 1}:`, loja);
+                selectLoja.innerHTML += `<option value="${loja.loja}">${loja.loja}</option>`;
+            });
+
+            console.log('✅ [preencherSelect] Select preenchido com sucesso! Total de opções:', selectLoja.options.length);
+            return true;
+        };
+
+        // Estratégia 1: Tentar imediatamente
+        console.log('🔄 [preencherSelectLojas] Estratégia 1: Tentativa imediata...');
+        if (preencherSelect()) {
+            return;
+        }
+
+        // Estratégia 2: Aguardar DOM estar pronto
+        console.log('🔄 [preencherSelectLojas] Estratégia 2: Aguardando 100ms...');
+        setTimeout(() => {
+            if (preencherSelect()) {
+                return;
+            }
+
+            // Estratégia 3: Aguardar mais tempo
+            console.log('🔄 [preencherSelectLojas] Estratégia 3: Aguardando 1s...');
+            setTimeout(() => {
+                if (!preencherSelect()) {
+                    console.error('❌ [preencherSelectLojas] Todas as estratégias falharam!');
+                }
+            }, 1000);
+        }, 100);
+
+        // Estratégia 4: Event listener para modal
+        console.log('🔄 [preencherSelectLojas] Estratégia 4: Event listener para modal...');
+        const modal = document.getElementById('modalProduto');
+        if (modal) {
+            modal.addEventListener('shown.bs.modal', () => {
+                console.log('🔄 [preencherSelectLojas] Modal aberto, tentando novamente...');
+                setTimeout(() => {
+                    preencherSelect();
+                }, 100);
+            });
+        } else {
+            console.warn('⚠️ [preencherSelectLojas] Modal modalProduto não encontrado');
         }
     }
 
@@ -155,15 +383,7 @@ class AdminManager {
             });
         }
 
-        // Pré-definir opções de loja
-        const selectLoja = document.getElementById('loja');
-        if (selectLoja) {
-            const lojas = ['Shopee', 'Mercado Livre', 'Amazon', 'AliExpress', 'Casas Bahia', 'Magazine Luiza'];
-            selectLoja.innerHTML = '<option value="">Selecione uma loja</option>';
-            lojas.forEach(loja => {
-                selectLoja.innerHTML += `<option value="${loja}">${loja}</option>`;
-            });
-        }
+        // Lojas já foram preenchidas no método preencherSelectLojas()
 
         // Contador de caracteres na descrição
         const campoDescricao = document.getElementById('descricao');
@@ -213,21 +433,23 @@ class AdminManager {
       <div class="item-produto ${statusClass}" data-codigo="${produto.codigo}">
         <div class="item-imagem">
           <img src="${produto.imagem[0]}" alt="${produto.titulo}" loading="lazy">
-          <div class="item-status">
-            <span class="badge ${statusClass}">${statusTexto}</span>
-          </div>
         </div>
         
         <div class="item-info">
           <div class="item-header">
             <h3>${produto.titulo}</h3>
-            <div class="item-acoes">
-              <button class="btn-acao btn-editar" data-codigo="${produto.codigo}" title="Editar">
-                <i class="bi bi-pencil"></i>
-              </button>
-              <button class="btn-acao btn-deletar" data-codigo="${produto.codigo}" title="Excluir">
-                <i class="bi bi-trash"></i>
-              </button>
+            <div class="item-acoes-container">
+              <div class="item-badge-status">
+                <span class="badge ${statusClass}">${statusTexto}</span>
+              </div>
+              <div class="item-acoes">
+                <button class="btn-acao btn-editar" data-codigo="${produto.codigo}" title="Editar">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn-acao btn-deletar" data-codigo="${produto.codigo}" title="Excluir">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
             </div>
           </div>
           
@@ -673,10 +895,6 @@ class AdminManager {
             console.log('� [SIMULAÇÃO] Arquivo produtos.json atualizado com sucesso!');
             console.log('📊 Total de produtos:', this.produtos.length);
 
-        } catch (error) {
-            console.error('Erro ao salvar:', error);
-            this.mostrarNotificacao('❌ Erro ao salvar dados', 'erro');
-            throw error;
         }
     }
 

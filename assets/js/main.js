@@ -10,6 +10,7 @@ class ProdutosManager {
         this.produtos = [];
         this.produtosFiltrados = [];
         this.produtoDestaque = null;
+        this.lojas = []; // Banco de dados de lojas
         this.filtroAtual = {
             busca: '',
             loja: 'todas',
@@ -29,6 +30,7 @@ class ProdutosManager {
     async init() {
         try {
             this.mostrarLoading();
+            await this.carregarLojas(); // Carregar lojas primeiro
             await this.carregarProdutos();
             this.configurarEventListeners();
             this.renderizarInterface();
@@ -71,6 +73,35 @@ class ProdutosManager {
                 console.error('❌ Erro ao inicializar slider:', error);
             }
         }, 100);
+    }
+
+    /**
+     * Carrega lojas do arquivo JSON
+     */
+    async carregarLojas() {
+        try {
+            const response = await fetch('./assets/data/lojas.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            this.lojas = await response.json();
+            console.log(`✅ ${this.lojas.length} lojas carregadas com sucesso`);
+
+            // Preencher filtros de loja
+            this.preencherFiltrosLoja();
+
+        } catch (error) {
+            console.error('❌ Erro ao carregar lojas:', error);
+            // Fallback para lojas hardcoded se houver erro
+            this.lojas = [
+                { id: "shopee", loja: "Shopee", imagem: "./assets/images/shopee.png" },
+                { id: "mercado_livre", loja: "Mercado Livre", imagem: "./assets/images/ml.png" },
+                { id: "amazon", loja: "Amazon", imagem: "./assets/images/amazon.jpg" },
+                { id: "aliexpress", loja: "AliExpress", imagem: "./assets/images/aliexpress.png" }
+            ];
+            this.preencherFiltrosLoja();
+        }
     }
 
     /**
@@ -287,22 +318,48 @@ class ProdutosManager {
     }
 
     /**
-     * Renderiza as opções de filtros
+     * Obtém dados completos da loja pelo ID
      */
-    renderizarFiltros() {
-        // Preencher select de lojas - múltiplos selects
+    obterDadosLoja(lojaId) {
+        const loja = this.lojas.find(l => l.id === lojaId);
+        if (loja) {
+            return loja;
+        }
+
+        // Fallback para lojas não encontradas
+        console.warn(`⚠️ Loja não encontrada: ${lojaId}`);
+        return {
+            id: lojaId,
+            loja: lojaId,
+            imagem: './assets/images/shopee.png' // Imagem padrão
+        };
+    }
+
+    /**
+     * Preenche os filtros de loja com dados do banco de lojas
+     */
+    preencherFiltrosLoja() {
         const seletoresLoja = ['filtro-loja', 'filtro-loja-mobile'];
         seletoresLoja.forEach(id => {
             const filtroLoja = document.getElementById(id);
             if (filtroLoja) {
-                const lojas = [...new Set(this.produtos.map(p => p.loja))];
                 const labelTodas = id.includes('mobile') ? 'Todas' : 'Todas as Lojas';
                 filtroLoja.innerHTML = `<option value="todas">${labelTodas}</option>`;
-                lojas.forEach(loja => {
-                    filtroLoja.innerHTML += `<option value="${loja}">${loja}</option>`;
+
+                // Usar dados do banco de lojas
+                this.lojas.forEach(loja => {
+                    filtroLoja.innerHTML += `<option value="${loja.id}">${loja.loja}</option>`;
                 });
             }
         });
+    }
+
+    /**
+     * Renderiza as opções de filtros
+     */
+    renderizarFiltros() {
+        // Os filtros de loja já foram preenchidos em preencherFiltrosLoja()
+        // Aqui podemos adicionar outros filtros no futuro se necessário
     }
 
     /**
@@ -660,9 +717,16 @@ class ProdutosManager {
     }
 
     /**
-     * Função para obter logo da loja
+     * Função para obter logo da loja pelo banco de dados
      */
     getLogoLoja(nomeLoja) {
+        // Primeiro, buscar no banco de dados de lojas
+        const loja = this.lojas.find(l => l.loja === nomeLoja);
+        if (loja) {
+            return loja.imagem;
+        }
+
+        // Fallback para compatibilidade com dados antigos
         const logos = {
             'Shopee': './assets/images/shopee.png',
             'Mercado Livre': './assets/images/ml.png',
@@ -1537,9 +1601,18 @@ class TopProdutosSlider {
     }
 
     /**
-     * Retorna o logo da loja
+     * Retorna o logo da loja usando o banco de dados de lojas
      */
     getLogoLoja(loja) {
+        // Acessar o banco de lojas do ProdutosManager
+        if (window.produtosManager && window.produtosManager.lojas) {
+            const lojaData = window.produtosManager.lojas.find(l => l.loja === loja);
+            if (lojaData) {
+                return lojaData.imagem;
+            }
+        }
+
+        // Fallback para compatibilidade
         const logos = {
             'Shopee': './assets/images/shopee.png',
             'AliExpress': './assets/images/aliexpress.png',
@@ -1547,6 +1620,51 @@ class TopProdutosSlider {
             'Mercado Livre': './assets/images/ml.png'
         };
         return logos[loja] || './assets/images/logo/placeholder.png';
+    }
+}
+
+// =============================================
+// SISTEMA DE FILTROS STICKY
+// =============================================
+class StickyFilters {
+    constructor() {
+        this.filtrosDesktop = document.querySelector('.filtros-desktop');
+        this.filtrosMobile = document.querySelector('.filtros-mobile');
+        this.init();
+    }
+
+    init() {
+        if (!this.filtrosDesktop && !this.filtrosMobile) return;
+
+        // Detectar scroll e aplicar efeito sticky
+        window.addEventListener('scroll', () => {
+            this.handleScroll();
+        });
+
+        console.log('🔧 Sistema de filtros sticky inicializado');
+    }
+
+    handleScroll() {
+        const scrollY = window.scrollY;
+        const threshold = 100; // Pixels para ativar o efeito
+
+        // Desktop
+        if (this.filtrosDesktop) {
+            if (scrollY > threshold) {
+                this.filtrosDesktop.classList.add('sticky-active');
+            } else {
+                this.filtrosDesktop.classList.remove('sticky-active');
+            }
+        }
+
+        // Mobile
+        if (this.filtrosMobile) {
+            if (scrollY > threshold) {
+                this.filtrosMobile.classList.add('sticky-active');
+            } else {
+                this.filtrosMobile.classList.remove('sticky-active');
+            }
+        }
     }
 }
 
@@ -1560,4 +1678,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Inicializar gerenciador principal de produtos
     window.produtosManager = new ProdutosManager();
+
+    // Inicializar filtros sticky
+    window.stickyFilters = new StickyFilters();
 });

@@ -261,12 +261,14 @@
     margin-bottom: var(--espacamento-md);
     color: white;
     font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .secao-redes-mobile p {
     color: white;
     margin-bottom: var(--espacamento-lg);
     opacity: 0.9;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .redes-icons-mobile {
@@ -594,6 +596,7 @@
     line-height: 1.2;
     position: relative;
     z-index: 1;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .hero-mobile p {
@@ -602,6 +605,7 @@
     opacity: 0.95;
     position: relative;
     z-index: 1;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .hero-produto-mobile {
@@ -649,6 +653,16 @@
     border-radius: 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     border: 1px solid rgba(0, 183, 255, 0.1);
+    position: sticky;
+    top: 120px;
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+.filtros-mobile.sticky-active {
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid var(--cor-primaria);
 }
 
 .filtros-row {

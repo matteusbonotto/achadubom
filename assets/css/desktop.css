@@ -173,12 +173,14 @@ body>li {
     font-size: 3.5rem;
     margin-bottom: var(--espacamento-lg);
     line-height: 1.2;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .hero-text p {
     font-size: 1.2rem;
     margin-bottom: var(--espacamento-xl);
     opacity: 0.9;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .hero-produto {
@@ -224,6 +226,16 @@ body>li {
     align-items: center;
     flex-wrap: wrap;
     gap: var(--espacamento-lg);
+    position: sticky;
+    top: 80px;
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+.filtros-desktop.sticky-active {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid var(--cor-primaria);
 }
 
 .filtros-grupo {
@@ -672,6 +684,11 @@ body>li {
 
 .secao-redes h2 {
     margin-bottom: var(--espacamento-xl);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.secao-redes p {
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .redes-icons {
