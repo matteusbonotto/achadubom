@@ -348,7 +348,7 @@ class ProdutosManager {
 
                 // Usar dados do banco de lojas
                 this.lojas.forEach(loja => {
-                    filtroLoja.innerHTML += `<option value="${loja.id}">${loja.loja}</option>`;
+                    filtroLoja.innerHTML += `<option value="${loja.loja}">${loja.loja}</option>`;
                 });
             }
         });

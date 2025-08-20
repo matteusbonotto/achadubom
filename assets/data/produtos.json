@@ -6363,5 +6363,105 @@
         "loja": "Movelaria Tonsom",
         "preco": 0.01,
         "vendas": "0"
+    },
+    {
+        "ativo": true,
+        "categorias": 
+        [
+            "fotografia",
+            "acessorios-camera"
+        ],
+        "codigo": "1005004182634790",
+        "descricao": "Smallrig nato alça superior lite com sapata fria alça de câmera portátil para atirar apto para sony para canon para nikon câmera gaiola 3766. Vendas: 554+. Vendido por: Smallrig.",
+        "favorito": false,
+        "imagem": 
+        [
+            "https://ae-pic-a1.aliexpress-media.com/kf/S8439cf057e20453cb67ea7ec382be151p.jpg"
+        ],
+        "loja": "AliExpress",
+        "preco": 157.59,
+        "titulo": "Smallrig Alça Superior Lite com Sapata Fria para Câmera",
+        "url": "https://s.click.aliexpress.com/e/_oCyGAh9",
+        "vendas": "554+"
+    },
+    {
+        "ativo": true,
+        "categorias": 
+        [
+            "automotivo",
+            "tecnologia"
+        ],
+        "codigo": "1005005974980297",
+        "descricao": "Carlinkit ai box android 13 led sem fio android auto & carplay caixa de tv inteligente qcm6225 suporte youtube netflix acessórios do carro. Vendas: 773+. Vendido por: Carlinkit.",
+        "favorito": false,
+        "imagem": 
+        [
+            "https://ae-pic-a1.aliexpress-media.com/kf/S5c899c8d0b1447399a46fa0a4d5436b3Q.jpg"
+        ],
+        "loja": "AliExpress",
+        "preco": 538.18,
+        "titulo": "Carlinkit AI Box Android 13 para Carro",
+        "url": "https://s.click.aliexpress.com/e/_oCh7ohl",
+        "vendas": "773+"
+    },
+    {
+        "ativo": true,
+        "categorias": 
+        [
+            "eletronicos",
+            "carregadores"
+        ],
+        "codigo": "1005007522626155",
+        "descricao": "Essager 100W USB C GaN Carregador Desktop Carga Rápida QC 4.0 3.0 Tipo C Carregamento Rápido Para iPhone 15 Laptop MacBook Samsung POPC. Vendas: 1002+. Vendido por: Essager.",
+        "favorito": false,
+        "imagem": 
+        [
+            "https://ae-pic-a1.aliexpress-media.com/kf/S8754615ab5e94b92afca7155a767e3afX.jpg"
+        ],
+        "loja": "AliExpress",
+        "preco": 106.2,
+        "titulo": "Essager 100W USB C GaN Carregador Desktop",
+        "url": "https://s.click.aliexpress.com/e/_oD5wsP1",
+        "vendas": "1002+"
+    },
+    {
+        "ativo": true,
+        "categorias": 
+        [
+            "tecnologia",
+            "tablet"
+        ],
+        "codigo": "1005007382212681",
+        "descricao": "Xppen deco 640 gráficos tablet 16k níveis de pressão 16x9cm área de desenho com 8 teclas 60 inclinação para jogo osu android windows mac. Vendas: 810+. Vendido por: Xppen.",
+        "favorito": false,
+        "imagem": 
+        [
+            "https://ae-pic-a1.aliexpress-media.com/kf/S9c678c2f5a1d40cd82172e1a6b90cd79u.jpg"
+        ],
+        "loja": "AliExpress",
+        "preco": 128.22,
+        "titulo": "Xppen Deco 640 Tablet Gráfico",
+        "url": "https://s.click.aliexpress.com/e/_oDkheir",
+        "vendas": "810+"
+    },
+    {
+        "ativo": true,
+        "categorias": 
+        [
+            "audio",
+            "microfones"
+        ],
+        "codigo": "1005007139598628",
+        "descricao": "Microfone sem fio de lapela para telefone microfone de lapela magnética profissional com caixa de carregamento redução de ruído para gravação. Vendas: 375+. Vendido por: AudioPro.",
+        "favorito": false,
+        "imagem": 
+        [
+            "https://ae-pic-a1.aliexpress-media.com/kf/Sa55cf9cee38a4aa49b34a08afa499bfak.jpg"
+        ],
+        "loja": "AliExpress",
+        "preco": 127.92,
+        "titulo": "Microfone Sem Fio de Lapela Profissional",
+        "url": "https://s.click.aliexpress.com/e/_oC6zIqR",
+        "vendas": "375+"
     }
 ]
