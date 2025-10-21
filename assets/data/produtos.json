@@ -11,7 +11,7 @@
         ],
         "categorias": 
         [
-            "moda"
+            "moda", "feminino", "coleteregata"
         ],
         "favorito": false,
         "loja": "Shopee",
@@ -30,7 +30,7 @@
         ],
         "categorias": 
         [
-            "kits"
+            "kits", "casa", "cozinha"
         ],
         "favorito": false,
         "loja": "Shopee",
@@ -49,7 +49,7 @@
         ],
         "categorias": 
         [
-            "casa"
+            "casa", "organizacao", "cozinha", "utilidades"
         ],
         "favorito": false,
         "loja": "Shopee",
@@ -206,25 +206,6 @@
         "favorito": false,
         "loja": "Shopee",
         "preco": 27.9,
-        "vendas": "10mil+"
-    },
-    {
-        "codigo": "3LGn2O78RR",
-        "ativo": true,
-        "titulo": "Aparelho de Jantar Rústico Marrom Tramontina Jogo de Pratos Rasos, Fundos e Sobremesa Opções de Kits",
-        "descricao": "Aparelho de Jantar Rústico Marrom Tramontina Jogo de Pratos Rasos, Fundos e Sobremesa Opções de Kits. Vendas: 10mil+. vendido por: Tudo Barato Brasil_.",
-        "url": "https://s.shopee.com.br/3LGn2O78RR",
-        "imagem": 
-        [
-            "https://a-static.mlcdn.com.br/800x600/aparelho-de-jantar-rustico-marrom-tramontina-jogo-de-pratos-rasos-fundos-e-sobremesa-opcoes-de-kits/tudobaratobrasil/kit6pratosrrustico25cmtrmtdb/d244179087ad5d8e49652b4486cc1133.jpeg"
-        ],
-        "categorias": 
-        [
-            "kits"
-        ],
-        "favorito": false,
-        "loja": "Shopee",
-        "preco": 49.9,
         "vendas": "10mil+"
     },
     {
@@ -2755,28 +2736,9 @@
         "vendas": "60mil+"
     },
     {
-        "codigo": "/qZS3ivihS",
-        "ativo": true,
-        "titulo": "6 Peças/Conjunto  A Melhor Forma Silicone P/ Fritadeira Air Fryer forno Micro-ondas C Alça cesto 80g Grossa + Resistente",
-        "descricao": "6 Peças/Conjunto  A Melhor Forma Silicone P/ Fritadeira Air Fryer forno Micro-ondas C Alça cesto 80g Grossa + Resistente. Vendas: 20mil+. vendido por: Loja_Yumi_Oficial.",
-        "url": "https://s.shopee.com.br/qZS3ivihS",
-        "imagem": 
-        [
-            "https://d1o6h00a1h5k7q.cloudfront.net/imagens/img_m/43793/21551456.jpg"
-        ],
-        "categorias": 
-        [
-            "kits"
-        ],
-        "favorito": false,
-        "loja": "Shopee",
-        "preco": 19.53,
-        "vendas": "20mil+"
-    },
-    {
         "codigo": "/gG1rPwM2R",
         "ativo": true,
-        "titulo": "Capa de Almofada Corda Trançada Decorativa Rustica Boho Cru Areia Chocolate Terracota 43x43",
+        "titulo": "Capa de Almofada 3LGn2O78RRCorda Trançada Decorativa Rustica Boho Cru Areia Chocolate Terracota 43x43",
         "descricao": "Capa de Almofada Corda Trançada Decorativa Rustica Boho Cru Areia Chocolate Terracota 43x43. Vendas: 934. vendido por: Tok & Decor.",
         "url": "https://s.shopee.com.br/gG1rPwM2R",
         "imagem": 
@@ -3385,25 +3347,6 @@
         "ativo": true,
         "categorias": 
         [
-            "kits"
-        ],
-        "codigo": "3LGn2O78RR",
-        "descricao": "Aparelho de Jantar Rústico Marrom Tramontina Jogo de Pratos Rasos, Fundos e Sobremesa Opções de Kits. Vendas: 10mil+. vendido por: Tudo Barato Brasil_.",
-        "favorito": false,
-        "imagem": 
-        [
-            "https://a-static.mlcdn.com.br/800x600/aparelho-de-jantar-rustico-marrom-tramontina-jogo-de-pratos-rasos-fundos-e-sobremesa-opcoes-de-kits/tudobaratobrasil/kit6pratosrrustico25cmtrmtdb/d244179087ad5d8e49652b4486cc1133.jpeg"
-        ],
-        "loja": "Shopee",
-        "preco": 49.9,
-        "titulo": "Aparelho de Jantar Rústico Marrom Tramontina Jogo de Pratos Rasos, Fundos e Sobremesa Opções de Kits",
-        "url": "https://s.shopee.com.br/3LGn2O78RR",
-        "vendas": "10mil+"
-    },
-    {
-        "ativo": true,
-        "categorias": 
-        [
             "eletronicos"
         ],
         "codigo": "3qD3dJ5EQY",
@@ -5926,25 +5869,6 @@
         "titulo": "Pano de prato estampado com bainha",
         "url": "https://s.shopee.com.br/10ssG1v5MT",
         "vendas": "60mil+"
-    },
-    {
-        "ativo": true,
-        "categorias": 
-        [
-            "kits"
-        ],
-        "codigo": "/qZS3ivihS",
-        "descricao": "6 Peças/Conjunto  A Melhor Forma Silicone P/ Fritadeira Air Fryer forno Micro-ondas C Alça cesto 80g Grossa + Resistente. Vendas: 20mil+. vendido por: Loja_Yumi_Oficial.",
-        "favorito": false,
-        "imagem": 
-        [
-            "https://d1o6h00a1h5k7q.cloudfront.net/imagens/img_m/43793/21551456.jpg"
-        ],
-        "loja": "Shopee",
-        "preco": 19.53,
-        "titulo": "6 Peças/Conjunto  A Melhor Forma Silicone P/ Fritadeira Air Fryer forno Micro-ondas C Alça cesto 80g Grossa + Resistente",
-        "url": "https://s.shopee.com.br/qZS3ivihS",
-        "vendas": "20mil+"
     },
     {
         "ativo": true,

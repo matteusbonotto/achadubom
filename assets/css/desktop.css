@@ -9,8 +9,21 @@
 /* Esconder elementos mobile que podem vazar no desktop */
 .menu-mobile,
 .nav-mobile,
-.links-extra {
+.links-extra,
+.btn-filtros-search,
+.badge-filtros-count-search,
+.filtros-mobile-novo,
+.produtos-header-mobile,
+.filtros-ativos-bar,
+.drawer-overlay,
+.drawer-filtros {
     display: none !important;
+}
+
+/* Garantir que drawer desktop seja visível apenas em desktop */
+.drawer-overlay-desktop,
+.drawer-categorias-desktop {
+    display: block;
 }
 
 /* Esconder listas fora do contexto do header desktop */
@@ -29,15 +42,18 @@ body>li {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--espacamento-md) var(--espacamento-xl);
+    padding: 0 max(24px, calc((100vw - 1400px) / 2));
     background: var(--cor-primaria);
     box-shadow: var(--sombra-suave);
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
+    width: 100vw;
     z-index: 1000;
     height: 80px;
+    border-radius: 0 !important;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 .logo-desktop {
@@ -49,6 +65,7 @@ body>li {
     display: flex;
     align-items: center;
     gap: var(--espacamento-sm);
+    flex-shrink: 0;
 }
 
 .logo-desktop i {
@@ -106,7 +123,7 @@ body>li {
     padding: var(--espacamento-md) var(--espacamento-lg);
     padding-right: 50px;
     border: 2px solid rgba(255, 234, 0, 0.3);
-    border-radius: 25px;
+    border-radius: 50px;
     font-size: 1rem;
     transition: all var(--transicao-media);
     background: rgba(255, 255, 255, 0.9);
@@ -146,27 +163,49 @@ body>li {
    ============================================= */
 .hero-desktop {
     margin-top: 80px;
-    height: 500px;
+    min-height: 600px;
     background: var(--gradiente-hero);
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
     position: relative;
     overflow: hidden;
+    padding: var(--espacamento-xxl) 0;
+    border: none;
+    border-radius: 0;
+}
+
+/* Gradiente fade-out no bottom - TRANSLÚCIDO para mesclar com próxima seção */
+.hero-desktop::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 1) 100%);
+    pointer-events: none;
+    z-index: 1;
 }
 
 .hero-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: var(--espacamento-xxl);
     align-items: center;
     width: 100%;
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 0 var(--espacamento-xl);
+    padding: 0;
+    position: relative;
+    z-index: 2;
 }
 
 .hero-text {
     color: white;
+    text-align: center;
+    padding: 0;
+    margin: 0;
 }
 
 .hero-text h1 {
@@ -178,38 +217,312 @@ body>li {
 
 .hero-text p {
     font-size: 1.2rem;
-    margin-bottom: var(--espacamento-xl);
+    margin-bottom: var(--espacamento-md);
     opacity: 0.9;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
 }
 
-.hero-produto {
-    background: white;
-    border-radius: 20px;
-    padding: var(--espacamento-xl);
-    box-shadow: var(--sombra-forte);
-    transform: translateY(20px);
-    animation: fadeInUp 1s ease-out 0.5s both;
+/* Botões de Redes Sociais Desktop */
+.hero-social-links-desktop {
+    display: flex;
+    gap: var(--espacamento-md);
+    justify-content: center;
+    margin-bottom: var(--espacamento-xl);
 }
 
-.hero-produto img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    border-radius: 15px;
-    margin-bottom: var(--espacamento-lg);
+.hero-social-btn-desktop {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    transition: all var(--transicao-rapida);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    text-decoration: none;
 }
 
-.hero-produto h3 {
-    color: var(--cor-texto);
-    margin-bottom: var(--espacamento-sm);
+.hero-social-btn-desktop:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-3px) scale(1.1);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
-.hero-produto .preco {
+.hero-social-btn-desktop i {
+    color: white;
+}
+
+/* Título do Carrossel Desktop */
+.hero-carrossel-title {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--cor-urgente);
-    margin-bottom: var(--espacamento-lg);
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Carrossel de produtos no banner - 1 LINHA, 4 COLUNAS */
+.hero-carrossel {
+    width: 100%;
+    position: relative;
+    padding: 0 80px;
+    overflow: hidden;
+}
+
+.hero-carrossel-container {
+    overflow: hidden;
+    width: 100%;
+}
+
+.hero-carrossel-track {
+    display: flex;
+    gap: var(--espacamento-lg);
+    transition: transform 0.5s ease;
+    will-change: transform;
+}
+
+.hero-produto {
+    flex: 0 0 calc(25% - (var(--espacamento-lg) * 3 / 4));
+    min-width: 0;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: none;
+    transition: all var(--transicao-media);
+    position: relative;
+}
+
+.hero-produto:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos dos cards hero - baseados no mobile */
+.hero-produto .card-header-mobile {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: var(--espacamento-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 3;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+    border-radius: 20px 20px 0 0;
+    pointer-events: none;
+}
+
+.hero-produto .card-header-mobile > * {
+    pointer-events: auto;
+}
+
+.hero-produto .loja-badge-mobile {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 2px solid white;
+}
+
+.hero-produto .loja-badge-mobile img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.hero-produto .categoria-badge-hero {
+    background: rgba(243, 156, 18, 0.95);
+    color: white;
+    padding: var(--espacamento-xs) var(--espacamento-sm);
+    border-radius: 15px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hero-produto .card-imagem-mobile {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    background: var(--cor-fundo);
+    border-radius: 20px;
+}
+
+.hero-produto .card-imagem-mobile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transicao-lenta);
+}
+
+.hero-produto:hover .card-imagem-mobile img {
+    transform: scale(1.05);
+}
+
+.hero-produto .card-body-mobile {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--espacamento-md);
+    padding-bottom: var(--espacamento-lg);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 70%, transparent 100%);
+    z-index: 3;
+}
+
+.hero-produto .card-titulo-hero {
+    font-size: 0.9rem;
+    margin-bottom: var(--espacamento-sm);
+    color: white;
+    line-height: 1.3;
+    font-weight: 600;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    text-align: left;
+}
+
+.hero-produto .card-body-mobile h3 {
+    font-size: 1.05rem;
+    margin-bottom: var(--espacamento-sm);
+    color: white;
+    line-height: 1.3;
+    font-weight: 600;
+    min-height: 2.6em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.hero-produto .card-preco-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: var(--espacamento-md);
+}
+
+.hero-produto .card-preco-mobile .preco-valor {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: white;
+}
+
+.hero-produto .card-preco-mobile .vendas-info {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.hero-produto .card-preco-mobile .vendas-info i {
+    color: var(--cor-destaque);
+}
+
+.hero-produto .card-footer-mobile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--espacamento-md);
+}
+
+.hero-produto .produto-codigo-mobile {
+    font-size: 0.7rem;
+    color: white;
+    font-weight: 600;
+    padding: var(--espacamento-xs) var(--espacamento-sm);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: 'Courier New', monospace;
+}
+
+.hero-produto .btn-quero-mobile {
+    background: var(--cor-urgente);
+    color: white;
+    border: none;
+    padding: var(--espacamento-sm) var(--espacamento-md);
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    transition: all var(--transicao-media);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+    flex-shrink: 0;
+}
+
+.hero-produto .btn-quero-mobile:hover {
+    background: var(--cor-secundaria);
+    color: var(--cor-primaria);
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 234, 0, 0.4);
+}
+
+/* Botões de navegação do carrossel */
+.hero-carrossel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transicao-media);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    color: var(--cor-primaria);
+    font-size: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.hero-carrossel-btn:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+}
+
+.hero-carrossel-btn.prev {
+    left: 10px;
+}
+
+.hero-carrossel-btn.next {
+    right: 10px;
 }
 
 /* =============================================
@@ -217,10 +530,12 @@ body>li {
    ============================================= */
 .filtros-desktop {
     background: white;
-    padding: var(--espacamento-xl);
-    margin: var(--espacamento-xl) 0;
-    border-radius: 15px;
-    box-shadow: var(--sombra-suave);
+    padding: 0 max(24px, calc((100vw - 1400px) / 2));
+    margin: 0 !important;
+    margin-left: calc(-50vw + 50%) !important;
+    margin-right: calc(-50vw + 50%) !important;
+    border-radius: 0 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -228,8 +543,13 @@ body>li {
     gap: var(--espacamento-lg);
     position: sticky;
     top: 80px;
+    margin-bottom: 40px !important;
+    left: 0;
+    width: 100vw;
+    height: 80px;
     z-index: 100;
     transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
 .filtros-desktop.sticky-active {
@@ -308,6 +628,307 @@ body>li {
     margin: 0;
 }
 
+/* === Toggle Buttons Desktop === */
+.filtros-toggle-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.filtro-toggle-btn-desktop {
+    height: 42px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 2px solid #00b7ff;
+    background: white;
+    color: #00b7ff;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filtro-toggle-btn-desktop i {
+    font-size: 18px;
+}
+
+.filtro-toggle-btn-desktop.active {
+    background: #00b7ff;
+    color: white;
+}
+
+.filtro-toggle-btn-desktop:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 183, 255, 0.3);
+}
+
+.filtro-toggle-btn-desktop:active {
+    transform: scale(0.98);
+}
+
+/* Botão Ver Categorias */
+.btn-ver-categorias-desktop {
+    height: 42px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 2px solid #6c757d;
+    background: white;
+    color: #6c757d;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-ver-categorias-desktop i {
+    font-size: 18px;
+}
+
+.btn-ver-categorias-desktop:hover {
+    background: #6c757d;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+.btn-ver-categorias-desktop:active {
+    transform: scale(0.98);
+}
+
+/* === Drawer Categorias Desktop (Lateral Direito) === */
+.drawer-overlay-desktop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.drawer-overlay-desktop.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.drawer-categorias-desktop {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background: white;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.2);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.3s ease;
+}
+
+.drawer-categorias-desktop.active {
+    right: 0;
+}
+
+.drawer-header-desktop {
+    padding: 24px;
+    background: linear-gradient(135deg, #00b7ff 0%, #0099dd 100%);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.drawer-header-desktop h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.drawer-header-desktop h3 i {
+    font-size: 22px;
+}
+
+.btn-fechar-drawer-desktop {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-fechar-drawer-desktop:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.btn-fechar-drawer-desktop i {
+    font-size: 20px;
+}
+
+.drawer-body-desktop {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.categorias-lista-container-desktop {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* === Checkbox Items Desktop === */
+.categorias-lista-container-desktop .categoria-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.categorias-lista-container-desktop .categoria-checkbox-item:hover {
+    background: rgba(0, 183, 255, 0.03);
+    border-color: #00b7ff;
+}
+
+.categorias-lista-container-desktop .categoria-checkbox-item:active {
+    transform: scale(0.98);
+}
+
+.categorias-lista-container-desktop .categoria-checkbox-item.active {
+    background: rgba(0, 183, 255, 0.05);
+    border-color: #00b7ff;
+}
+
+.categorias-lista-container-desktop .categoria-checkbox {
+    width: 24px;
+    height: 24px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.categorias-lista-container-desktop .categoria-checkbox i {
+    font-size: 16px;
+    color: transparent;
+    transition: color 0.2s ease;
+}
+
+.categorias-lista-container-desktop .categoria-checkbox-item.active .categoria-checkbox {
+    background: #00b7ff;
+    border-color: #00b7ff;
+}
+
+.categorias-lista-container-desktop .categoria-checkbox-item.active .categoria-checkbox i {
+    color: white;
+}
+
+.categorias-lista-container-desktop .categoria-checkbox-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.categorias-lista-container-desktop .categoria-checkbox-content > i {
+    font-size: 20px;
+    color: #666;
+    flex-shrink: 0;
+}
+
+.categorias-lista-container-desktop .categoria-checkbox-item.active .categoria-checkbox-content > i {
+    color: #00b7ff;
+}
+
+.categorias-lista-container-desktop .categoria-checkbox-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.categorias-lista-container-desktop .categoria-checkbox-nome {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+}
+
+.categorias-lista-container-desktop .categoria-checkbox-count {
+    font-size: 13px;
+    color: #999;
+}
+
+.drawer-footer-desktop {
+    padding: 20px;
+    border-top: 2px solid #f0f0f0;
+    display: flex;
+    gap: 12px;
+}
+
+.btn-limpar-categorias-desktop,
+.btn-aplicar-categorias-desktop {
+    flex: 1;
+    height: 48px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-limpar-categorias-desktop {
+    background: #f0f0f0;
+    color: #666;
+}
+
+.btn-limpar-categorias-desktop:hover {
+    background: #e0e0e0;
+}
+
+.btn-aplicar-categorias-desktop {
+    background: #00b7ff;
+    color: white;
+}
+
+.btn-aplicar-categorias-desktop:hover {
+    background: #0099dd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 183, 255, 0.4);
+}
+
 /* =============================================
    GRID DE PRODUTOS DESKTOP
    ============================================= */
@@ -376,7 +997,7 @@ body>li {
 }
 
 .produto-codigo {
-    font-size: 0.9rem;
+    font-size: 0.7rem;
     color: var(--cor-texto-claro);
     font-weight: 500;
 }
@@ -414,24 +1035,52 @@ body>li {
     font-size: 0.8rem;
     font-weight: 600;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.categoria-badge-lista i {
+    font-size: 0.7rem;
+}
+
+/* Wrapper para múltiplas badges no modo lista */
+.produto-badges .categorias-badges-wrapper {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.produto-badges .categoria-badge {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 8px;
+}
+
+.produto-badges .categoria-badge-mais {
+    min-width: 30px;
+    padding: 4px 8px;
 }
 
 .btn-quero-lista {
     background: var(--cor-urgente);
     color: white;
     border: none;
-    padding: var(--espacamento-md) var(--espacamento-lg);
+    padding: 10px 20px;
     border-radius: 8px;
     font-weight: 600;
+    font-size: 0.9rem;
     text-decoration: none;
     transition: all var(--transicao-media);
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .btn-quero-lista:hover {
-    background: #c0392b;
-    color: white;
+    background: var(--cor-secundaria);
+    color: var(--cor-primaria);
     transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(255, 234, 0, 0.4);
 }
 
 /* =============================================
@@ -461,8 +1110,14 @@ body>li {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    z-index: 2;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
+    z-index: 3;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
+    border-radius: 20px 20px 0 0;
+    pointer-events: none;
+}
+
+.card-header > * {
+    pointer-events: auto;
 }
 
 .loja-badge {
@@ -483,6 +1138,14 @@ body>li {
     object-fit: contain;
 }
 
+/* ===== BADGES DE CATEGORIAS - MÚLTIPLAS ===== */
+.categorias-badges-wrapper {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
 .categoria-badge {
     background: var(--cor-destaque);
     color: white;
@@ -490,12 +1153,84 @@ body>li {
     border-radius: 15px;
     font-size: 0.8rem;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    transition: all var(--transicao-rapida);
+}
+
+.categoria-badge i {
+    font-size: 0.7rem;
+}
+
+/* Tooltip para categorias adicionais - solução simples e funcional */
+.categoria-badge-mais {
+    background: var(--cor-primaria);
+    cursor: pointer;
+    position: relative;
+    min-width: 35px;
+    justify-content: center;
+}
+
+.categoria-badge-mais:hover {
+    background: #1a5f7a;
+    transform: scale(1.05);
+}
+
+/* Tooltip com elemento real criado via JavaScript */
+.tooltip-categorias {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.95);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+    z-index: 999999 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    max-width: 300px;
+    text-align: center;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.tooltip-categorias::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-bottom-color: rgba(0, 0, 0, 0.95);
+}
+
+/* Garantir que o wrapper não corte o tooltip */
+.categorias-badges-wrapper {
+    position: relative;
+    z-index: 4;
 }
 
 .card-imagem {
     position: relative;
     height: 250px;
     overflow: hidden;
+    border-radius: 20px 20px 0 0;
+    z-index: 1;
+}
+
+/* Garantir que a imagem respeite as bordas arredondadas */
+.card-imagem::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 20px 20px 0 0;
+    pointer-events: none;
+    z-index: 2;
 }
 
 .card-imagem img {
@@ -574,6 +1309,11 @@ body>li {
 
 .card-body {
     padding: var(--espacamento-lg);
+    border-radius: 0 0 20px 20px;
+    overflow: hidden;
+    background: white;
+    position: relative;
+    z-index: 2;
 }
 
 .card-body h3 {
@@ -619,34 +1359,46 @@ body>li {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: var(--espacamento-md);
+}
+
+.card-footer .produto-codigo {
+    flex: 1;
+    min-width: 0;
 }
 
 .produto-codigo {
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     color: var(--cor-texto-claro);
-    font-weight: 500;
+    font-weight: 600;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: 'Courier New', monospace;
 }
 
 .btn-quero {
     background: var(--cor-urgente);
     color: white;
     border: none;
-    padding: var(--espacamento-sm) var(--espacamento-lg);
+    padding: 8px 16px;
     border-radius: 25px;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: all var(--transicao-media);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     text-decoration: none;
+    flex-shrink: 0;
 }
 
 .btn-quero:hover {
-    background: #c0392b;
-    color: white;
+    background: var(--cor-secundaria);
+    color: var(--cor-primaria);
     transform: translateY(-2px);
-    box-shadow: var(--sombra-media);
+    box-shadow: 0 4px 20px rgba(255, 234, 0, 0.4);
     text-decoration: none;
 }
 
@@ -845,6 +1597,153 @@ body>li {
 
 .card-produto-lista .vendas-info {
     font-size: 0.8rem;
+}
+
+/* =============================================
+   PAGINAÇÃO DESKTOP
+   ============================================= */
+.paginacao-desktop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--espacamento-xl) 0;
+    margin-top: var(--espacamento-xxl);
+    border-top: 2px solid var(--cor-fundo);
+    gap: var(--espacamento-lg);
+    flex-wrap: nowrap;
+}
+
+.paginacao-left,
+.paginacao-center,
+.paginacao-right {
+    display: flex;
+    align-items: center;
+    gap: var(--espacamento-md);
+}
+
+.paginacao-left {
+    flex-shrink: 0;
+}
+
+.paginacao-center {
+    flex: 1;
+    justify-content: center;
+    gap: var(--espacamento-sm);
+}
+
+.paginacao-right {
+    flex-shrink: 0;
+}
+
+.paginacao-left label {
+    font-weight: 600;
+    color: var(--cor-texto);
+    white-space: nowrap;
+}
+
+.select-qtde-pagina {
+    padding: var(--espacamento-sm) var(--espacamento-md);
+    border: 2px solid var(--cor-borda);
+    border-radius: 8px;
+    background: white;
+    color: var(--cor-texto);
+    font-weight: 500;
+    min-width: 80px;
+    cursor: pointer;
+    transition: all var(--transicao-media);
+}
+
+.select-qtde-pagina:focus {
+    border-color: var(--cor-primaria);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 183, 255, 0.1);
+}
+
+.select-qtde-pagina:hover {
+    border-color: var(--cor-primaria);
+}
+
+.btn-pagina-nav {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--cor-borda);
+    border-radius: 8px;
+    background: white;
+    color: var(--cor-primaria);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transicao-media);
+    font-size: 1.2rem;
+}
+
+.btn-pagina-nav:hover:not(:disabled) {
+    background: var(--cor-primaria);
+    color: white;
+    border-color: var(--cor-primaria);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 183, 255, 0.3);
+}
+
+.btn-pagina-nav:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.btn-pagina-nav:disabled {
+    background: var(--cor-fundo);
+    color: var(--cor-texto-claro);
+    border-color: var(--cor-fundo);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.paginas-numeros {
+    display: flex;
+    gap: var(--espacamento-xs);
+    align-items: center;
+}
+
+.btn-numero-pagina {
+    min-width: 40px;
+    height: 40px;
+    padding: 0 var(--espacamento-sm);
+    border: 2px solid var(--cor-borda);
+    border-radius: 8px;
+    background: white;
+    color: var(--cor-texto);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transicao-media);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-numero-pagina:hover {
+    background: rgba(0, 183, 255, 0.1);
+    border-color: var(--cor-primaria);
+    color: var(--cor-primaria);
+}
+
+.btn-numero-pagina.active {
+    background: var(--cor-primaria);
+    color: white;
+    border-color: var(--cor-primaria);
+}
+
+.pagina-ellipsis {
+    padding: 0 var(--espacamento-xs);
+    color: var(--cor-texto-claro);
+    font-weight: 600;
+    user-select: none;
+}
+
+.contador-produtos {
+    font-size: 0.95rem;
+    color: var(--cor-texto-claro);
+    font-weight: 500;
+    white-space: nowrap;
 }
 
 /* =============================================

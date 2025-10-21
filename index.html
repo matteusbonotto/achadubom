@@ -217,14 +217,20 @@
                 </button>
             </div>
 
-            <!-- Busca Mobile -->
+            <!-- Busca Mobile com Botão de Filtros -->
             <div class="busca-mobile">
-                <input type="text" id="campo-busca-mobile"
-                    placeholder="Buscar produtos ou código..."
-                    autocomplete="off">
-                <button type="button" aria-label="Buscar">
-                    <i class="bi bi-search"></i>
+                <button class="btn-filtros-search" id="btn-filtros-inline" aria-label="Filtrar">
+                    <i class="bi bi-funnel-fill"></i>
+                    <span class="badge-filtros-count-search" id="badge-filtros-count-inline" style="display: none;">0</span>
                 </button>
+                <div>
+                    <input type="text" id="campo-busca-mobile"
+                        placeholder="Buscar produtos ou código..."
+                        autocomplete="off">
+                    <button type="button" aria-label="Buscar">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -263,155 +269,265 @@
 
             <!-- Banner Hero com Slider dos Top 10 -->
             <section id="hero" class="hero-desktop d-none d-lg-block">
-                <div class="hero-slider-container">
-                    <div class="hero-content">
-                        <div class="hero-text fade-in-up">
-                            <h1>Achadinhos <span
-                                    class="text-gradient">Imperdíveis</span></h1>
-                            <p>Descubra os melhores produtos com preços
-                                incríveis das principais lojas online.
-                                Achadinhos selecionados especialmente para
-                                você!</p>
-                            <a href="#produtos"
-                                class="btn-custom btn-urgente btn-lg pulsing">
-                                <i class="bi bi-star-fill"></i> Ver achadinhos
+                <div class="hero-content">
+                    <div class="hero-text fade-in-up">
+                        <h1>Achadinhos <span class="text-gradient">Imperdíveis</span></h1>
+                        <p>Descubra os melhores produtos com preços incríveis das principais lojas online.</p>
+                        
+                        <span class="text-uppercase">Siga a gente nas redes sociais</span>
+                        <!-- Botões de Redes Sociais Desktop -->
+                        <div class="hero-social-links-desktop">
+                            <a href="https://www.instagram.com/lojaachadubom/" target="_blank" class="hero-social-btn-desktop" aria-label="Instagram">
+                                <i class="bi bi-instagram"></i>
+                            </a>
+                            <a href="https://www.tiktok.com/@achadubom" target="_blank" class="hero-social-btn-desktop" aria-label="TikTok">
+                                <i class="bi bi-tiktok"></i>
+                            </a>
+                            <a href="https://shopee.com.br/?uls_trackid=53fv87jg01ho&utm_campaign=id_KIJBEWrhrC&utm_content=----&utm_medium=affiliates&utm_source=an_18305100467&utm_term=di6jgr9qmum9" target="_blank" class="hero-social-btn-desktop" aria-label="Shopee">
+                                <i class="bi bi-bag"></i>
+                            </a>
+                            <a href="https://www.amazon.com.br/s?k=achadubom" target="_blank" class="hero-social-btn-desktop" aria-label="Amazon">
+                                <i class="bi bi-amazon"></i>
                             </a>
                         </div>
-
-                        <!-- Slider Top 10 Produtos -->
-                        <div class="top-produtos-slider">
-                            <h3><i class="bi bi-fire"></i> Top 10 Mais
-                                Vendidos</h3>
-                            <div class="slider-wrapper">
-                                <button class="slider-btn prev"
-                                    id="slider-prev">
-                                    <i class="bi bi-chevron-left"></i>
-                                </button>
-
-                                <div class="slider-track" id="slider-track">
-                                    <!-- Produtos serão carregados via JavaScript -->
-                                </div>
-
-                                <button class="slider-btn next"
-                                    id="slider-next">
-                                    <i class="bi bi-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
                     </div>
-                </div>
-            </section>
+                    <!-- Carrossel de Produtos -->
+                    <div class="hero-carrossel">
+                                            <!-- Título do Carrossel Desktop -->
+                    <h2 class="hero-carrossel-title">Produtos em Alta!</h2>
 
-            <!-- Banner Hero Mobile -->
-            <section id="hero-mobile" class="hero-mobile d-lg-none">
-                <h1>Achadinhos <span
-                        class="text-gradient">Imperdíveis</span></h1>
-                <p>Encontre os melhores achadinhos da internet!</p>
-
-                <!-- Slider Top 10 Produtos Mobile -->
-                <div class="top-produtos-slider-mobile">
-                    <h3><i class="bi bi-fire"></i> Top 10 Mais Vendidos</h3>
-                    <div class="slider-wrapper-mobile">
-                        <button class="slider-btn-mobile prev"
-                            id="slider-prev-mobile">
+                        <button class="hero-carrossel-btn prev" id="hero-prev">
                             <i class="bi bi-chevron-left"></i>
                         </button>
 
-                        <div class="slider-track-mobile"
-                            id="slider-track-mobile">
-                            <!-- Produtos serão carregados via JavaScript -->
+                        <div class="hero-carrossel-container">
+                            <div class="hero-carrossel-track" id="hero-carrossel-track">
+                                <!-- Produtos serão carregados via JavaScript -->
+                            </div>
                         </div>
 
-                        <button class="slider-btn-mobile next"
-                            id="slider-next-mobile">
+                        <button class="hero-carrossel-btn next" id="hero-next">
                             <i class="bi bi-chevron-right"></i>
                         </button>
                     </div>
                 </div>
             </section>
 
+            <!-- Banner Hero Mobile -->
+            <section id="hero-mobile" class="hero-mobile d-lg-none">
+                <h1>Achadinhos <span class="text-gradient">Imperdíveis</span></h1>
+                <p>Encontre os melhores achadinhos da internet!</p>
+                <span class="text-uppercase">Siga a gente nas redes sociais</span>
+
+
+                <!-- Botões de Redes Sociais Mobile -->
+                <div class="hero-social-links">
+                    <a href="https://www.instagram.com/lojaachadubom/" target="_blank" class="hero-social-btn" aria-label="Instagram">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com/@achadubom" target="_blank" class="hero-social-btn" aria-label="TikTok">
+                        <i class="bi bi-tiktok"></i>
+                    </a>
+                    <a href="https://shopee.com.br/?uls_trackid=53fv87jg01ho&utm_campaign=id_KIJBEWrhrC&utm_content=----&utm_medium=affiliates&utm_source=an_18305100467&utm_term=di6jgr9qmum9" target="_blank" class="hero-social-btn" aria-label="Shopee">
+                        <i class="bi bi-bag"></i>
+                    </a>
+                    <a href="https://www.amazon.com.br/s?k=achadubom" target="_blank" class="hero-social-btn" aria-label="Amazon">
+                        <i class="bi bi-amazon"></i>
+                    </a>
+                </div>
+
+                <!-- Carrossel de Produtos Mobile -->
+                <div class="hero-carrossel-mobile">
+                <!-- Título do Carrossel Mobile -->
+                <h2 class="hero-carrossel-title-mobile">Produtos em Alta!</h2>                    
+                    <button class="hero-carrossel-btn-mobile prev" id="hero-prev-mobile">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                    
+                    <div class="hero-carrossel-container-mobile">
+                        <div class="hero-carrossel-track-mobile" id="hero-carrossel-track-mobile">
+                            <!-- Produtos serão carregados via JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <button class="hero-carrossel-btn-mobile next" id="hero-next-mobile">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Filtros Desktop (FORA do container para ocupar 100vw) -->
+            <section class="filtros-desktop d-none d-lg-flex">
+                <div class="filtros-grupo">
+                    <label for="filtro-loja">Loja:</label>
+                    <select id="filtro-loja">
+                        <option value="todas">Todas as Lojas</option>
+                    </select>
+                </div>
+
+                <div class="filtros-grupo">
+                    <label for="filtro-ordenacao">Ordenar por:</label>
+                    <select id="filtro-ordenacao">
+                        <option value="az">A-Z</option>
+                        <option value="za">Z-A</option>
+                        <option value="preco_asc">Menor Preço</option>
+                        <option value="preco_desc">Maior Preço</option>
+                    </select>
+                </div>
+
+                <div class="view-toggle">
+                    <button data-view="grade" class="active">
+                        <i class="bi bi-grid"></i> Grade
+                    </button>
+                    <button data-view="lista">
+                        <i class="bi bi-list"></i> Lista
+                    </button>
+                </div>
+
+                <!-- Toggle Buttons Desktop -->
+                <div class="filtros-toggle-group">
+                    <button type="button" class="filtro-toggle-btn-desktop" id="filtro-favoritos-desktop" data-filtro="favoritos">
+                        <i class="bi bi-heart-fill"></i>
+                        <span>Favoritos</span>
+                    </button>
+                    <button type="button" class="filtro-toggle-btn-desktop" id="filtro-categorias-desktop" data-filtro="categorias">
+                        <i class="bi bi-tags-fill"></i>
+                        <span>Categorias</span>
+                    </button>
+                    <button type="button" class="btn-ver-categorias-desktop" id="btn-ver-categorias-desktop">
+                        <i class="bi bi-list-ul"></i>
+                        <span>Ver Categorias</span>
+                    </button>
+                </div>
+
+                <!-- Manter os checkboxes originais escondidos para compatibilidade -->
+                <input type="checkbox" id="filtro-favoritos" style="display: none;">
+                <input type="checkbox" id="filtro-categorias" style="display: none;">
+            </section>
+
             <!-- Main Content -->
             <main class="container-custom">
-                <!-- Filtros Desktop -->
-                <section class="filtros-desktop d-none d-lg-flex">
-                    <div class="filtros-grupo">
-                        <label for="filtro-loja">Loja:</label>
-                        <select id="filtro-loja">
-                            <option value="todas">Todas as Lojas</option>
-                        </select>
+
+                <!-- Filtros Mobile - Novo Sistema com Drawer -->
+                <section class="filtros-mobile-novo d-lg-none">
+                    <!-- Header com Título (ancorado abaixo do header) -->
+                    <div class="produtos-header-mobile">
+                        <h2 class="produtos-titulo-mobile">Achadinhos</h2>
                     </div>
 
-                    <div class="filtros-grupo">
-                        <label for="filtro-ordenacao">Ordenar por:</label>
-                        <select id="filtro-ordenacao">
-                            <option value="az">A-Z</option>
-                            <option value="za">Z-A</option>
-                            <option value="preco_asc">Menor Preço</option>
-                            <option value="preco_desc">Maior Preço</option>
-                        </select>
-                    </div>
-
-                    <div class="view-toggle">
-                        <button data-view="grade" class="active">
-                            <i class="bi bi-grid"></i> Grade
-                        </button>
-                        <button data-view="lista">
-                            <i class="bi bi-list"></i> Lista
+                    <!-- Barra de Filtros Ativos -->
+                    <div class="filtros-ativos-bar" id="filtros-ativos-bar">
+                        <div class="filtros-ativos-container" id="filtros-ativos-container">
+                            <!-- Badges de filtros ativos serão inseridos aqui via JS -->
+                        </div>
+                        <button class="btn-ver-todos-filtros" id="btn-ver-todos-filtros" style="display: none;">
+                            <i class="bi bi-plus-circle"></i> Ver mais
                         </button>
                     </div>
-
-                    <label class="filtro-favoritos">
-                        <input type="checkbox" id="filtro-favoritos">
-                        <i class="bi bi-heart"></i> Favoritos
-                    </label>
-
-                    <label class="filtro-categorias">
-                        <input type="checkbox" id="filtro-categorias">
-                        <i class="bi bi-tags"></i> Por Categorias
-                    </label>
                 </section>
 
-                <!-- Filtros Mobile -->
-                <section class="filtros-mobile d-lg-none">
-                    <div class="filtros-row">
-                        <div class="filtro-item">
-                            <label for="filtro-loja-mobile">Loja:</label>
-                            <select id="filtro-loja-mobile">
-                                <option value="todas">Todas</option>
+                <!-- Drawer de Filtros Mobile -->
+                <div class="drawer-overlay" id="drawer-filtros-overlay"></div>
+                <div class="drawer-filtros" id="drawer-filtros">
+                    <div class="drawer-header">
+                        <h3><i class="bi bi-funnel-fill"></i> Filtros</h3>
+                        <button class="btn-fechar-drawer" id="btn-fechar-drawer">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+
+                    <div class="drawer-content">
+                        <!-- Filtro de Loja -->
+                        <div class="filtro-group">
+                            <label class="filtro-label">
+                                <i class="bi bi-shop"></i> Loja
+                            </label>
+                            <select id="drawer-filtro-loja" class="drawer-select">
+                                <option value="todas">Todas as Lojas</option>
                             </select>
                         </div>
 
-                        <div class="filtro-item">
-                            <label
-                                for="filtro-ordenacao-mobile">Ordenar:</label>
-                            <select id="filtro-ordenacao-mobile">
+                        <!-- Filtro de Ordenação -->
+                        <div class="filtro-group">
+                            <label class="filtro-label">
+                                <i class="bi bi-sort-down"></i> Ordenar por
+                            </label>
+                            <select id="drawer-filtro-ordenacao" class="drawer-select">
                                 <option value="az">A-Z</option>
                                 <option value="za">Z-A</option>
-                                <option value="preco_asc">↑ Preço</option>
-                                <option value="preco_desc">↓ Preço</option>
+                                <option value="preco_asc">Menor Preço</option>
+                                <option value="preco_desc">Maior Preço</option>
                             </select>
+                        </div>
+
+                        <!-- Filtrar por -->
+                        <div class="filtro-group">
+                            <h3 class="filtro-section-title">Filtrar por</h3>
+                            <div class="filtros-buttons-group">
+                                <button type="button" class="filtro-toggle-btn" id="drawer-filtro-favoritos" data-filtro="favoritos">
+                                    <i class="bi bi-heart-fill"></i>
+                                    <span>Favoritos</span>
+                                </button>
+                                <button type="button" class="filtro-toggle-btn" id="drawer-filtro-categorias" data-filtro="categorias">
+                                    <i class="bi bi-tags-fill"></i>
+                                    <span>Categorias</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Categorias Disponíveis -->
+                        <div class="filtro-group">
+                            <h3 class="filtro-section-title">Categorias disponíveis</h3>
+                            <div id="drawer-categorias-lista" class="categorias-lista-container">
+                                <!-- Lista de categorias com checkboxes será carregada dinamicamente -->
+                            </div>
                         </div>
                     </div>
 
-                    <div class="filtros-row">
-                        <label class="filtro-favoritos-mobile">
-                            <input type="checkbox" id="filtro-favoritos-mobile">
-                            <i class="bi bi-heart"></i> Favoritos
-                        </label>
-
-                        <label class="filtro-categorias-mobile">
-                            <input type="checkbox"
-                                id="filtro-categorias-mobile">
-                            <i class="bi bi-tags"></i> Por Categorias
-                        </label>
+                    <div class="drawer-footer">
+                        <button class="btn-limpar-filtros" id="btn-limpar-filtros">
+                            <i class="bi bi-x-circle"></i> Limpar
+                        </button>
+                        <button class="btn-aplicar-filtros" id="btn-aplicar-filtros">
+                            <i class="bi bi-check-circle-fill"></i> Aplicar
+                        </button>
                     </div>
-                </section>
+                </div>
 
                 <!-- Lista de Produtos -->
                 <section id="produtos"
                     class="produtos-container-desktop d-none d-lg-block">
                     <div id="produtos-container" class="produtos-grid">
                         <!-- Produtos serão carregados via JavaScript -->
+                    </div>
+                    
+                    <!-- Paginação Desktop -->
+                    <div class="paginacao-desktop" id="paginacao-desktop">
+                        <div class="paginacao-left">
+                            <label>Qtde por página:</label>
+                            <select id="qtde-por-pagina-desktop" class="select-qtde-pagina">
+                                <option value="10" selected>10</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="todos">Todos</option>
+                            </select>
+                        </div>
+                        
+                        <div class="paginacao-center">
+                            <button class="btn-pagina-nav" id="btn-prev-desktop" disabled>
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <div class="paginas-numeros" id="paginas-numeros-desktop">
+                                <!-- Números de página serão gerados via JS -->
+                            </div>
+                            <button class="btn-pagina-nav" id="btn-next-desktop">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="paginacao-right">
+                            <span id="contador-produtos-desktop" class="contador-produtos">1 de 240 produtos</span>
+                        </div>
                     </div>
                 </section>
 
@@ -422,7 +538,65 @@
                         class="produtos-grid-mobile">
                         <!-- Produtos serão carregados via JavaScript -->
                     </div>
+                    
+                    <!-- Paginação Mobile -->
+                    <div class="paginacao-mobile" id="paginacao-mobile">
+                        <div class="paginacao-mobile-top">
+                            <label>Qtde:</label>
+                            <select id="qtde-por-pagina-mobile" class="select-qtde-pagina-mobile">
+                                <option value="10" selected>10</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="todos">Todos</option>
+                            </select>
+                        </div>
+                        
+                        <div class="paginacao-mobile-nav">
+                            <button class="btn-pagina-nav-mobile" id="btn-prev-mobile" disabled>
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <div class="paginas-numeros-mobile" id="paginas-numeros-mobile">
+                                <!-- Números de página serão gerados via JS -->
+                            </div>
+                            <button class="btn-pagina-nav-mobile" id="btn-next-mobile">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="paginacao-mobile-bottom">
+                            <span id="contador-produtos-mobile" class="contador-produtos-mobile">1 de 240 produtos</span>
+                        </div>
+                    </div>
                 </section>
+
+                <!-- Drawer Categorias Desktop (Lateral Direito) -->
+                <div class="drawer-overlay-desktop" id="drawer-categorias-overlay-desktop"></div>
+                <div class="drawer-categorias-desktop" id="drawer-categorias-desktop">
+                    <div class="drawer-header-desktop">
+                        <h3>
+                            <i class="bi bi-funnel-fill"></i>
+                            Filtrar Categorias
+                        </h3>
+                        <button class="btn-fechar-drawer-desktop" id="btn-fechar-drawer-categorias-desktop">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="drawer-body-desktop">
+                        <div id="drawer-categorias-lista-desktop" class="categorias-lista-container-desktop">
+                            <!-- Categorias serão inseridas dinamicamente aqui -->
+                        </div>
+                    </div>
+
+                    <div class="drawer-footer-desktop">
+                        <button class="btn-limpar-categorias-desktop" id="btn-limpar-categorias-desktop">
+                            <i class="bi bi-x-circle"></i> Limpar
+                        </button>
+                        <button class="btn-aplicar-categorias-desktop" id="btn-aplicar-categorias-desktop">
+                            <i class="bi bi-check-circle-fill"></i> Aplicar
+                        </button>
+                    </div>
+                </div>
             </main>
 
             <!-- Seção Sobre -->
@@ -453,7 +627,7 @@
                 <!-- Seção Sobre Mobile -->
                 <section id="secao-sobre-mobile"
                     class="secao-sobre-mobile d-lg-none">
-                    < <h2>Sobre o AchaduBom</h2>
+                     <h2>Sobre o AchaduBom</h2>
                     <p><span>A AchaduBom</span> é seu guia
                         definitivo para encontrar <strong>Achadinhos
                             incríveis</strong>!</p>
@@ -571,6 +745,8 @@
                         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
                         crossorigin="anonymous"></script>
                     <script src="./assets/js/config.js"></script>
+                    <script src="./assets/js/filtros-mobile.js?v=1.0"></script>
+                    <script src="./assets/js/filtros-desktop.js?v=1.0"></script>
                     <script src="./assets/js/main.js?v=1.3" defer></script>
 
                     <!-- PWA Install Prompt -->

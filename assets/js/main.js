@@ -30,6 +30,11 @@ class ProdutosManager {
     async init() {
         try {
             this.mostrarLoading();
+            
+            // Inicializar paginação ANTES de carregar produtos
+            this.paginacao = new PaginacaoManager(this);
+            console.log('✅ PaginacaoManager inicializado');
+            
             await this.carregarLojas(); // Carregar lojas primeiro
             await this.carregarProdutos();
             this.configurarEventListeners();
@@ -70,7 +75,7 @@ class ProdutosManager {
                     console.error('❌ TopProdutosSlider não definido');
                 }
             } catch (error) {
-                console.error('❌ Erro ao inicializar slider:', error);
+                console.error('❌ Erro ao inicializar componentes:', error);
             }
         }, 100);
     }
@@ -115,7 +120,24 @@ class ProdutosManager {
             }
 
             const dados = await response.json();
-            this.produtos = dados.filter(produto => produto.ativo === true);
+            
+            // Filtrar produtos ativos
+            const produtosAtivos = dados.filter(produto => produto.ativo === true);
+            
+            // Remover produtos duplicados por código
+            const produtosUnicos = [];
+            const codigosVistos = new Set();
+            
+            produtosAtivos.forEach(produto => {
+                if (!codigosVistos.has(produto.codigo)) {
+                    codigosVistos.add(produto.codigo);
+                    produtosUnicos.push(produto);
+                } else {
+                    console.warn(`⚠️ Produto duplicado removido: ${produto.codigo} - ${produto.titulo}`);
+                }
+            });
+            
+            this.produtos = produtosUnicos;
             this.produtosFiltrados = [...this.produtos];
 
             // Seleciona produto destaque (primeiro com categoria "destaque")
@@ -123,7 +145,12 @@ class ProdutosManager {
                 p.categorias.includes('destaque')
             ) || this.produtos[0];
 
-            console.log(`✅ ${this.produtos.length} produtos carregados com sucesso`);
+            console.log(`✅ ${this.produtos.length} produtos únicos carregados com sucesso`);
+
+            // Disparar evento para informar que os produtos foram carregados
+            document.dispatchEvent(new CustomEvent('produtos-carregados', {
+                detail: { produtos: this.produtos }
+            }));
 
         } catch (error) {
             console.error('❌ Erro ao carregar produtos:', error);
@@ -249,6 +276,17 @@ class ProdutosManager {
 
         // Menu mobile
         this.configurarMenuMobile();
+
+        // Listener para filtros mobile
+        document.addEventListener('filtros-atualizados', (e) => {
+            console.log('📱 Evento filtros-atualizados recebido:', e.detail);
+            this.filtroAtual = {
+                ...this.filtroAtual,
+                ...e.detail
+            };
+            console.log('📱 filtroAtual atualizado:', this.filtroAtual);
+            this.aplicarFiltros();
+        });
     }
 
     /**
@@ -392,10 +430,28 @@ class ProdutosManager {
             );
         }
 
+        // Filtro por categorias específicas
+        if (this.filtroAtual.categoriasEspecificas && this.filtroAtual.categoriasEspecificas.length > 0) {
+            console.log('🔍 Filtrando por categorias específicas:', this.filtroAtual.categoriasEspecificas);
+            produtosFiltrados = produtosFiltrados.filter(produto => {
+                // Verifica se o produto tem pelo menos uma categoria que está na lista de filtro
+                return produto.categorias.some(categoria => 
+                    this.filtroAtual.categoriasEspecificas.includes(categoria.toLowerCase())
+                );
+            });
+            console.log('✅ Produtos após filtro de categorias:', produtosFiltrados.length);
+        }
+
         // Ordenação
         this.ordenarProdutos(produtosFiltrados);
 
         this.produtosFiltrados = produtosFiltrados;
+        
+        // Resetar paginação quando filtros mudarem
+        if (this.paginacao) {
+            this.paginacao.resetar();
+        }
+        
         this.renderizarProdutos();
     }
 
@@ -431,14 +487,26 @@ class ProdutosManager {
 
             if (this.produtosFiltrados.length === 0) {
                 container.innerHTML = this.templateNenhumProduto();
+                // Ocultar paginação quando não há produtos
+                if (this.paginacao) {
+                    this.paginacao.ocultar();
+                }
                 return;
             }
 
             // Verificar se deve mostrar por categorias
             if (this.filtroAtual.categorias) {
                 this.renderizarProdutosPorCategoria(container, containerId);
+                // Ocultar paginação no modo categorias
+                if (this.paginacao) {
+                    this.paginacao.ocultar();
+                }
             } else {
                 this.renderizarProdutosNormal(container, containerId);
+                // Mostrar paginação no modo normal
+                if (this.paginacao) {
+                    this.paginacao.mostrar();
+                }
             }
         });
 
@@ -455,8 +523,8 @@ class ProdutosManager {
         // Agrupar produtos por categoria
         const produtosPorCategoria = this.agruparProdutosPorCategoria();
 
-        // Criar índice de navegação
-        const indiceNavegacao = this.criarIndiceNavegacao(Object.keys(produtosPorCategoria).filter(cat => produtosPorCategoria[cat].length > 0));
+        // Criar índice de navegação APENAS para desktop
+        const indiceNavegacao = isMobile ? '' : this.criarIndiceNavegacao(Object.keys(produtosPorCategoria).filter(cat => produtosPorCategoria[cat].length > 0));
 
         const html = Object.entries(produtosPorCategoria)
             .filter(([categoria, produtos]) => produtos.length > 0)
@@ -535,17 +603,74 @@ class ProdutosManager {
         const isLista = this.filtroAtual.visualizacao === 'lista';
         const isMobile = containerId.includes('mobile');
 
+        // Criar array único de produtos (sem duplicatas)
+        // Usar Map para garantir que cada produto apareça apenas uma vez pelo código
+        const produtosUnicos = [];
+        const produtosVistos = new Set();
+
+        this.produtosFiltrados.forEach(produto => {
+            if (!produtosVistos.has(produto.codigo)) {
+                produtosVistos.add(produto.codigo);
+                produtosUnicos.push(produto);
+            }
+        });
+
+        // Aplicar paginação se existir
+        let produtosParaRenderizar = produtosUnicos;
+        if (this.paginacao && !this.filtroAtual.categorias) {
+            produtosParaRenderizar = this.paginacao.obterProdutosPaginados(produtosUnicos);
+            this.paginacao.atualizarUI();
+        }
+
         if (isMobile) {
             container.className = isLista ? 'produtos-lista-mobile' : 'produtos-grid-mobile';
-            container.innerHTML = this.produtosFiltrados
+            container.innerHTML = produtosParaRenderizar
                 .map(produto => this.templateProdutoMobile(produto, isLista))
                 .join('');
         } else {
             container.className = isLista ? 'produtos-lista' : 'produtos-grid';
-            container.innerHTML = this.produtosFiltrados
+            container.innerHTML = produtosParaRenderizar
                 .map(produto => this.templateProduto(produto, isLista))
                 .join('');
         }
+    }
+
+    /**
+     * Gera badges de categorias com suporte a múltiplas categorias
+     */
+    gerarBadgesCategorias(produto, maxVisible = 2, isMobile = false) {
+        if (!produto.categorias || produto.categorias.length === 0) {
+            const badgeClass = isMobile ? 'categoria-badge-mobile' : 'categoria-badge';
+            return `<div class="${badgeClass}"><i class="bi bi-tag-fill"></i> outros</div>`;
+        }
+
+        const categorias = produto.categorias;
+        const badges = [];
+        const badgeClass = isMobile ? 'categoria-badge-mobile' : 'categoria-badge';
+
+        console.log(`🏷️ Produto: ${produto.titulo} | Categorias: ${categorias.join(', ')}`);
+
+        // Adicionar as primeiras categorias visíveis
+        const categoriasVisiveis = categorias.slice(0, maxVisible);
+        categoriasVisiveis.forEach(cat => {
+            badges.push(`<div class="${badgeClass}"><i class="bi bi-tag-fill"></i> ${cat}</div>`);
+        });
+
+        // Se houver mais categorias, adicionar badge "..."
+        if (categorias.length > maxVisible) {
+            const categoriasRestantes = categorias.slice(maxVisible).join(', ');
+            console.log(`   ➕ Categorias extras: ${categoriasRestantes}`);
+            badges.push(`
+                <div class="${badgeClass} categoria-badge-mais" 
+                     data-tooltip="${categoriasRestantes}">
+                    <i class="bi bi-three-dots"></i>
+                </div>
+            `);
+        }
+
+        const html = `<div class="categorias-badges-wrapper">${badges.join('')}</div>`;
+        console.log(`   📦 HTML gerado:`, html.substring(0, 150) + '...');
+        return html;
     }
 
     /**
@@ -554,7 +679,7 @@ class ProdutosManager {
     templateProduto(produto, isLista = false) {
         const isFavorito = this.favoritos.includes(produto.codigo);
         const logoLoja = this.getLogoLoja(produto.loja);
-        const categoriaAtual = produto.categoriaAtual || produto.categorias?.[0] || 'outros';
+        const badgesCategorias = this.gerarBadgesCategorias(produto, 2, false);
         const precoFormatado = window.formatarPreco ? window.formatarPreco(produto.preco) : `R$ ${produto.preco?.toFixed(2) || '0,00'}`;
         const vendas = produto.vendas || '0 vendas';
 
@@ -579,7 +704,7 @@ class ProdutosManager {
                     <div class="loja-badge-lista">
                       <img src="${logoLoja}" alt="${produto.loja}" />
                     </div>
-                    <div class="categoria-badge-lista"><i class="bi bi-tag-fill"></i> ${categoriaAtual}</div>
+                    ${badgesCategorias}
                   </div>
                   <span class="produto-codigo">#${produto.codigo}</span>
                 </div>
@@ -596,10 +721,7 @@ class ProdutosManager {
               <div class="loja-badge">
                 <img src="${logoLoja}" alt="${produto.loja}" />
               </div>
-              <div class="categoria-badge">
-              <i class="bi bi-tag-fill"></i>
-                ${categoriaAtual}
-              </div>
+              ${badgesCategorias}
             </div>
             
             <div class="card-imagem">
@@ -642,7 +764,7 @@ class ProdutosManager {
     templateProdutoMobile(produto, isLista = false) {
         const isFavorito = this.favoritos.includes(produto.codigo);
         const logoLoja = this.getLogoLoja(produto.loja);
-        const categoriaAtual = produto.categoriaAtual || produto.categorias?.[0] || 'outros';
+        const badgesCategorias = this.gerarBadgesCategorias(produto, 2, true);
         const precoFormatado = window.formatarPreco ? window.formatarPreco(produto.preco) : `R$ ${produto.preco?.toFixed(2) || '0,00'}`;
         const vendas = produto.vendas || '0 vendas';
 
@@ -667,7 +789,7 @@ class ProdutosManager {
                     <div class="loja-badge-mobile-lista">
                       <img src="${logoLoja}" alt="${produto.loja}" />
                     </div>
-                    <div class="categoria-badge-mobile-lista"><i class="bi bi-tag-fill"></i>${categoriaAtual}</div>
+                    ${badgesCategorias}
                   </div>
                   <span class="produto-codigo-mobile">#${produto.codigo}</span>
                 </div>
@@ -684,9 +806,7 @@ class ProdutosManager {
               <div class="loja-badge-mobile">
                 <img src="${logoLoja}" alt="${produto.loja}" />
               </div>
-              <div class="categoria-badge-mobile">
-                <i class="bi bi-tag-fill"></i>${categoriaAtual}
-              </div>
+              ${badgesCategorias}
             </div>
             
             <div class="card-imagem-mobile">
@@ -766,6 +886,40 @@ class ProdutosManager {
                 const codigo = e.currentTarget.dataset.codigo;
                 console.log('[MOBILE] Botão favorito clicado:', codigo);
                 this.toggleFavorito(codigo);
+            });
+        });
+
+        // Badge "..." mobile - toggle tooltip
+        document.querySelectorAll('.categoria-badge-mais').forEach(badge => {
+            badge.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Verificar se é mobile (touch device)
+                if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+                    // Remover outros tooltips ativos
+                    document.querySelectorAll('.categoria-badge-mais.show-tooltip').forEach(other => {
+                        if (other !== badge) {
+                            other.classList.remove('show-tooltip');
+                        }
+                    });
+                    
+                    // Toggle tooltip
+                    badge.classList.toggle('show-tooltip');
+                    
+                    // Fechar ao clicar fora (no backdrop)
+                    if (badge.classList.contains('show-tooltip')) {
+                        setTimeout(() => {
+                            const closeTooltip = (event) => {
+                                if (!badge.contains(event.target)) {
+                                    badge.classList.remove('show-tooltip');
+                                    document.removeEventListener('click', closeTooltip);
+                                }
+                            };
+                            document.addEventListener('click', closeTooltip);
+                        }, 100);
+                    }
+                }
             });
         });
 
@@ -1669,6 +1823,649 @@ class StickyFilters {
 }
 
 // =============================================
+// TOOLTIP REAL PARA BADGES (DESKTOP)
+// =============================================
+let tooltipElement = null;
+
+function criarTooltip() {
+    if (!tooltipElement) {
+        tooltipElement = document.createElement('div');
+        tooltipElement.className = 'tooltip-categorias';
+        document.body.appendChild(tooltipElement);
+    }
+    return tooltipElement;
+}
+
+function mostrarTooltip(badge) {
+    const tooltip = criarTooltip();
+    const texto = badge.getAttribute('data-tooltip');
+    const rect = badge.getBoundingClientRect();
+    
+    tooltip.textContent = texto;
+    tooltip.style.opacity = '1';
+    tooltip.style.top = `${rect.bottom + 10}px`;
+    tooltip.style.left = `${rect.left + rect.width / 2}px`;
+    tooltip.style.transform = 'translateX(-50%)';
+}
+
+function esconderTooltip() {
+    if (tooltipElement) {
+        tooltipElement.style.opacity = '0';
+    }
+}
+
+// Event listeners
+document.addEventListener('mouseover', (e) => {
+    if (e.target.classList.contains('categoria-badge-mais') && !e.target.closest('.card-produto-mobile')) {
+        mostrarTooltip(e.target);
+    }
+});
+
+document.addEventListener('mouseout', (e) => {
+    if (e.target.classList.contains('categoria-badge-mais')) {
+        esconderTooltip();
+    }
+});
+
+// =============================================
+// CARROSSEL DE PRODUTOS NO BANNER HERO
+// =============================================
+class HeroCarrossel {
+    constructor() {
+        this.track = document.getElementById('hero-carrossel-track');
+        this.btnPrev = document.getElementById('hero-prev');
+        this.btnNext = document.getElementById('hero-next');
+        this.currentIndex = 0;
+        this.itemsPerPage = 4;
+        this.produtos = [];
+        
+        if (this.track) {
+            this.init();
+        }
+    }
+
+    async init() {
+        await this.carregarProdutos();
+        this.renderizarProdutos();
+        this.configurarEventos();
+        console.log('🎠 Carrossel Hero inicializado');
+    }
+
+    async carregarProdutos() {
+        try {
+            const response = await fetch('./assets/data/produtos.json');
+            const dados = await response.json();
+            
+            // Pegar produtos ativos ordenados por vendas
+            this.produtos = dados
+                .filter(p => p.ativo)
+                .sort((a, b) => this.parseVendas(b.vendas) - this.parseVendas(a.vendas))
+                .slice(0, 12); // Top 12 produtos
+                
+        } catch (error) {
+            console.error('Erro ao carregar produtos do hero:', error);
+        }
+    }
+
+    parseVendas(vendas) {
+        if (!vendas) return 0;
+        const numero = vendas.toString().replace(/[^\d]/g, '');
+        return parseInt(numero) || 0;
+    }
+
+    renderizarProdutos() {
+        const html = this.produtos.map(produto => this.templateProduto(produto)).join('');
+        this.track.innerHTML = html;
+    }
+
+    templateProduto(produto) {
+        const categoria = Array.isArray(produto.categorias) ? produto.categorias[0] : produto.categoria || 'Geral';
+        
+        // Truncar título para 20 caracteres
+        const tituloTruncado = produto.titulo.length > 20 
+            ? produto.titulo.substring(0, 20) + '...' 
+            : produto.titulo;
+        
+        // Buscar logo da loja usando o método do ProdutosManager
+        let logoLoja = '';
+        if (window.produtosManager && typeof window.produtosManager.getLogoLoja === 'function') {
+            logoLoja = window.produtosManager.getLogoLoja(produto.loja);
+        } else {
+            // Fallback para logos padrão
+            const logos = {
+                'Shopee': './assets/images/logo/shopee.png',
+                'Mercado Livre': './assets/images/logo/mercadolivre.png',
+                'Amazon': './assets/images/logo/amazon.png',
+                'AliExpress': './assets/images/logo/aliexpress.png'
+            };
+            logoLoja = logos[produto.loja] || `https://via.placeholder.com/40x40/666666/FFFFFF?text=${produto.loja?.charAt(0) || 'L'}`;
+        }
+        
+        return `
+            <div class="hero-produto">
+                <div class="card-header-mobile">
+                    <div class="loja-badge-mobile">
+                        <img src="${logoLoja}" alt="${produto.loja}" onerror="this.src='https://via.placeholder.com/40x40/666666/FFFFFF?text=L'" />
+                    </div>
+                    <span class="categoria-badge-hero">${categoria}</span>
+                </div>
+                
+                <div class="card-imagem-mobile">
+                    <img src="${produto.imagem[0]}" alt="${produto.titulo}" loading="lazy">
+                </div>
+                
+                <div class="card-body-mobile">
+                    <h3 class="card-titulo-hero">${tituloTruncado}</h3>
+                    <div class="card-footer-mobile">
+                        <span class="produto-codigo-mobile">#${produto.codigo}</span>
+                        <a href="${produto.url}" target="_blank" class="btn-quero-mobile" rel="noopener">
+                            <i class="bi bi-link-45deg"></i> QUERO!
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    configurarEventos() {
+        this.btnPrev?.addEventListener('click', () => this.anterior());
+        this.btnNext?.addEventListener('click', () => this.proximo());
+        
+        // Auto-play
+        setInterval(() => this.proximo(), 5000);
+    }
+
+    anterior() {
+        if (this.currentIndex > 0) {
+            this.currentIndex--;
+            this.atualizarPosicao();
+        }
+    }
+
+    proximo() {
+        const maxIndex = Math.max(0, this.produtos.length - this.itemsPerPage);
+        if (this.currentIndex < maxIndex) {
+            this.currentIndex++;
+        } else {
+            this.currentIndex = 0; // Volta pro início
+        }
+        this.atualizarPosicao();
+    }
+
+    atualizarPosicao() {
+        const larguraItem = 100 / this.itemsPerPage; // 25% cada item
+        const deslocamento = -(this.currentIndex * larguraItem);
+        this.track.style.transform = `translateX(${deslocamento}%)`;
+    }
+}
+
+// =============================================
+// CARROSSEL DE PRODUTOS NO BANNER HERO - MOBILE
+// =============================================
+class HeroCarrosselMobile {
+    constructor() {
+        this.track = document.getElementById('hero-carrossel-track-mobile');
+        this.btnPrev = document.getElementById('hero-prev-mobile');
+        this.btnNext = document.getElementById('hero-next-mobile');
+        this.currentIndex = 0;
+        this.produtos = [];
+        
+        if (this.track) {
+            this.init();
+        }
+    }
+
+    async init() {
+        await this.carregarProdutos();
+        this.renderizarProdutos();
+        this.configurarEventos();
+        console.log('🎠 Carrossel Hero Mobile inicializado');
+    }
+
+    async carregarProdutos() {
+        try {
+            const response = await fetch('./assets/data/produtos.json');
+            const dados = await response.json();
+            
+            // Pegar produtos ativos ordenados por vendas
+            this.produtos = dados
+                .filter(p => p.ativo)
+                .sort((a, b) => this.parseVendas(b.vendas) - this.parseVendas(a.vendas))
+                .slice(0, 12); // Top 12 produtos
+                
+        } catch (error) {
+            console.error('Erro ao carregar produtos do hero mobile:', error);
+        }
+    }
+
+    parseVendas(vendas) {
+        if (!vendas) return 0;
+        const numero = vendas.toString().replace(/[^\d]/g, '');
+        return parseInt(numero) || 0;
+    }
+
+    renderizarProdutos() {
+        const html = this.produtos.map(produto => this.templateProduto(produto)).join('');
+        this.track.innerHTML = html;
+    }
+
+    templateProduto(produto) {
+        const categoria = Array.isArray(produto.categorias) ? produto.categorias[0] : produto.categoria || 'Geral';
+        
+        // Truncar título para 20 caracteres
+        const tituloTruncado = produto.titulo.length > 20 
+            ? produto.titulo.substring(0, 20) + '...' 
+            : produto.titulo;
+        
+        // Buscar logo da loja usando o método do ProdutosManager
+        let logoLoja = '';
+        if (window.produtosManager && typeof window.produtosManager.getLogoLoja === 'function') {
+            logoLoja = window.produtosManager.getLogoLoja(produto.loja);
+        } else {
+            // Fallback para logos padrão
+            const logos = {
+                'Shopee': './assets/images/logo/shopee.png',
+                'Mercado Livre': './assets/images/logo/mercadolivre.png',
+                'Amazon': './assets/images/logo/amazon.png',
+                'AliExpress': './assets/images/logo/aliexpress.png'
+            };
+            logoLoja = logos[produto.loja] || `https://via.placeholder.com/40x40/666666/FFFFFF?text=${produto.loja?.charAt(0) || 'L'}`;
+        }
+        
+        return `
+            <div class="hero-produto">
+                <div class="card-header-mobile">
+                    <div class="loja-badge-mobile">
+                        <img src="${logoLoja}" alt="${produto.loja}" onerror="this.src='https://via.placeholder.com/40x40/666666/FFFFFF?text=L'" />
+                    </div>
+                    <span class="categoria-badge-hero">${categoria}</span>
+                </div>
+                
+                <div class="card-imagem-mobile">
+                    <img src="${produto.imagem[0]}" alt="${produto.titulo}" loading="lazy">
+                </div>
+                
+                <div class="card-body-mobile">
+                    <h3 class="card-titulo-hero">${tituloTruncado}</h3>
+                    <div class="card-footer-mobile">
+                        <span class="produto-codigo-mobile">#${produto.codigo}</span>
+                        <a href="${produto.url}" target="_blank" class="btn-quero-mobile" rel="noopener">
+                            <i class="bi bi-link-45deg"></i> QUERO!
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    configurarEventos() {
+        this.btnPrev?.addEventListener('click', () => this.anterior());
+        this.btnNext?.addEventListener('click', () => this.proximo());
+        
+        // Auto-play
+        setInterval(() => this.proximo(), 5000);
+    }
+
+    anterior() {
+        if (this.currentIndex > 0) {
+            this.currentIndex--;
+        } else {
+            this.currentIndex = this.produtos.length - 1; // Volta pro fim
+        }
+        this.atualizarPosicao();
+    }
+
+    proximo() {
+        if (this.currentIndex < this.produtos.length - 1) {
+            this.currentIndex++;
+        } else {
+            this.currentIndex = 0; // Volta pro início
+        }
+        this.atualizarPosicao();
+    }
+
+    atualizarPosicao() {
+        const deslocamento = -(this.currentIndex * 100);
+        this.track.style.transform = `translateX(${deslocamento}%)`;
+    }
+}
+
+// =============================================
+// SISTEMA DE PAGINAÇÃO
+// =============================================
+class PaginacaoManager {
+    constructor(produtosManager) {
+        this.produtosManager = produtosManager;
+        this.paginaAtual = 1;
+        this.itensPorPagina = 10;
+        this.totalPaginas = 1;
+        this.isMobile = window.innerWidth < 992;
+        
+        this.init();
+    }
+    
+    init() {
+        this.configurarEventos();
+        this.atualizarResponsividade();
+        
+        // Atualizar responsividade ao redimensionar
+        window.addEventListener('resize', () => {
+            const novoIsMobile = window.innerWidth < 992;
+            if (novoIsMobile !== this.isMobile) {
+                this.isMobile = novoIsMobile;
+                this.atualizarResponsividade();
+            }
+        });
+    }
+    
+    configurarEventos() {
+        // Desktop
+        const selectDesktop = document.getElementById('qtde-por-pagina-desktop');
+        const btnPrevDesktop = document.getElementById('btn-prev-desktop');
+        const btnNextDesktop = document.getElementById('btn-next-desktop');
+        
+        if (selectDesktop) {
+            selectDesktop.addEventListener('change', (e) => {
+                const valor = e.target.value;
+                this.itensPorPagina = valor === 'todos' ? -1 : parseInt(valor);
+                this.irParaPagina(1);
+            });
+        }
+        
+        if (btnPrevDesktop) {
+            btnPrevDesktop.addEventListener('click', () => this.paginaAnterior());
+        }
+        
+        if (btnNextDesktop) {
+            btnNextDesktop.addEventListener('click', () => this.proximaPagina());
+        }
+        
+        // Mobile
+        const selectMobile = document.getElementById('qtde-por-pagina-mobile');
+        const btnPrevMobile = document.getElementById('btn-prev-mobile');
+        const btnNextMobile = document.getElementById('btn-next-mobile');
+        
+        if (selectMobile) {
+            selectMobile.addEventListener('change', (e) => {
+                const valor = e.target.value;
+                this.itensPorPagina = valor === 'todos' ? -1 : parseInt(valor);
+                this.irParaPagina(1);
+            });
+        }
+        
+        if (btnPrevMobile) {
+            btnPrevMobile.addEventListener('click', () => this.paginaAnterior());
+        }
+        
+        if (btnNextMobile) {
+            btnNextMobile.addEventListener('click', () => this.proximaPagina());
+        }
+    }
+    
+    calcularPaginacao(totalItens) {
+        if (this.itensPorPagina === -1) {
+            this.totalPaginas = 1;
+            return {
+                inicio: 0,
+                fim: totalItens
+            };
+        }
+        
+        this.totalPaginas = Math.ceil(totalItens / this.itensPorPagina);
+        
+        // Garantir que a página atual não exceda o total
+        if (this.paginaAtual > this.totalPaginas) {
+            this.paginaAtual = Math.max(1, this.totalPaginas);
+        }
+        
+        const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
+        const fim = Math.min(inicio + this.itensPorPagina, totalItens);
+        
+        return { inicio, fim };
+    }
+    
+    obterProdutosPaginados(produtos) {
+        const totalItens = produtos.length;
+        const { inicio, fim } = this.calcularPaginacao(totalItens);
+        
+        return produtos.slice(inicio, fim);
+    }
+    
+    atualizarUI() {
+        const totalProdutos = this.produtosManager.produtosFiltrados.length;
+        const { inicio, fim } = this.calcularPaginacao(totalProdutos);
+        
+        // Atualizar contadores
+        this.atualizarContador('contador-produtos-desktop', inicio + 1, fim, totalProdutos);
+        this.atualizarContador('contador-produtos-mobile', inicio + 1, fim, totalProdutos);
+        
+        // Atualizar botões de navegação
+        this.atualizarBotoesNavegacao();
+        
+        // Renderizar números de páginas
+        this.renderizarNumerosPaginas();
+    }
+    
+    atualizarContador(elementoId, inicio, fim, total) {
+        const elemento = document.getElementById(elementoId);
+        if (elemento) {
+            if (this.itensPorPagina === -1 || total === 0) {
+                elemento.textContent = `${total} produto${total !== 1 ? 's' : ''}`;
+            } else {
+                elemento.textContent = `${inicio}-${fim} de ${total} produto${total !== 1 ? 's' : ''}`;
+            }
+        }
+    }
+    
+    atualizarBotoesNavegacao() {
+        // Desktop
+        const btnPrevDesktop = document.getElementById('btn-prev-desktop');
+        const btnNextDesktop = document.getElementById('btn-next-desktop');
+        
+        if (btnPrevDesktop) {
+            btnPrevDesktop.disabled = this.paginaAtual <= 1;
+        }
+        if (btnNextDesktop) {
+            btnNextDesktop.disabled = this.paginaAtual >= this.totalPaginas;
+        }
+        
+        // Mobile
+        const btnPrevMobile = document.getElementById('btn-prev-mobile');
+        const btnNextMobile = document.getElementById('btn-next-mobile');
+        
+        if (btnPrevMobile) {
+            btnPrevMobile.disabled = this.paginaAtual <= 1;
+        }
+        if (btnNextMobile) {
+            btnNextMobile.disabled = this.paginaAtual >= this.totalPaginas;
+        }
+    }
+    
+    renderizarNumerosPaginas() {
+        if (this.isMobile) {
+            this.renderizarNumerosPaginasMobile();
+        } else {
+            this.renderizarNumerosPaginasDesktop();
+        }
+    }
+    
+    renderizarNumerosPaginasDesktop() {
+        const container = document.getElementById('paginas-numeros-desktop');
+        if (!container) return;
+        
+        const numeros = this.gerarNumerosPaginasDesktop();
+        container.innerHTML = numeros.map(item => {
+            if (item === '...') {
+                return `<span class="pagina-ellipsis">...</span>`;
+            }
+            
+            const ativo = item === this.paginaAtual ? 'active' : '';
+            return `<button class="btn-numero-pagina ${ativo}" data-pagina="${item}">${item}</button>`;
+        }).join('');
+        
+        // Adicionar event listeners
+        container.querySelectorAll('.btn-numero-pagina').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const pagina = parseInt(e.target.dataset.pagina);
+                this.irParaPagina(pagina);
+            });
+        });
+    }
+    
+    renderizarNumerosPaginasMobile() {
+        const container = document.getElementById('paginas-numeros-mobile');
+        if (!container) return;
+        
+        const numeros = this.gerarNumerosPaginasMobile();
+        container.innerHTML = numeros.map(item => {
+            if (item === '...') {
+                return `<span class="pagina-ellipsis-mobile">...</span>`;
+            }
+            
+            const ativo = item === this.paginaAtual ? 'active' : '';
+            return `<button class="btn-numero-pagina-mobile ${ativo}" data-pagina="${item}">${item}</button>`;
+        }).join('');
+        
+        // Adicionar event listeners
+        container.querySelectorAll('.btn-numero-pagina-mobile').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const pagina = parseInt(e.target.dataset.pagina);
+                this.irParaPagina(pagina);
+            });
+        });
+    }
+    
+    gerarNumerosPaginasDesktop() {
+        const total = this.totalPaginas;
+        const atual = this.paginaAtual;
+        const numeros = [];
+        
+        if (total <= 7) {
+            // Mostrar todos
+            for (let i = 1; i <= total; i++) {
+                numeros.push(i);
+            }
+        } else {
+            // Lógica complexa: < 1 ... 9 10 11 ... 32 >
+            numeros.push(1);
+            
+            if (atual > 3) {
+                numeros.push('...');
+            }
+            
+            // Números ao redor da página atual
+            const inicio = Math.max(2, atual - 1);
+            const fim = Math.min(total - 1, atual + 1);
+            
+            for (let i = inicio; i <= fim; i++) {
+                if (i !== 1 && i !== total) {
+                    numeros.push(i);
+                }
+            }
+            
+            if (atual < total - 2) {
+                numeros.push('...');
+            }
+            
+            numeros.push(total);
+        }
+        
+        return numeros;
+    }
+    
+    gerarNumerosPaginasMobile() {
+        const total = this.totalPaginas;
+        const atual = this.paginaAtual;
+        const numeros = [];
+        
+        // Mobile simplificado: < 1 ... 3 ... 33 >
+        if (total <= 3) {
+            for (let i = 1; i <= total; i++) {
+                numeros.push(i);
+            }
+        } else {
+            numeros.push(1);
+            
+            if (atual !== 1 && atual !== total) {
+                if (atual > 2) {
+                    numeros.push('...');
+                }
+                numeros.push(atual);
+                if (atual < total - 1) {
+                    numeros.push('...');
+                }
+            } else if (atual === 1 && total > 2) {
+                numeros.push('...');
+            }
+            
+            numeros.push(total);
+        }
+        
+        return numeros;
+    }
+    
+    irParaPagina(pagina) {
+        this.paginaAtual = Math.max(1, Math.min(pagina, this.totalPaginas));
+        this.produtosManager.renderizarProdutos();
+        
+        // Scroll para o topo dos produtos
+        const containerDesktop = document.getElementById('produtos');
+        const containerMobile = document.getElementById('produtos-mobile');
+        
+        if (this.isMobile && containerMobile) {
+            containerMobile.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else if (containerDesktop) {
+            containerDesktop.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+    
+    paginaAnterior() {
+        if (this.paginaAtual > 1) {
+            this.irParaPagina(this.paginaAtual - 1);
+        }
+    }
+    
+    proximaPagina() {
+        if (this.paginaAtual < this.totalPaginas) {
+            this.irParaPagina(this.paginaAtual + 1);
+        }
+    }
+    
+    resetar() {
+        this.paginaAtual = 1;
+        this.atualizarUI();
+    }
+    
+    atualizarResponsividade() {
+        this.renderizarNumerosPaginas();
+    }
+    
+    mostrar() {
+        const paginacaoDesktop = document.getElementById('paginacao-desktop');
+        const paginacaoMobile = document.getElementById('paginacao-mobile');
+        
+        if (paginacaoDesktop) {
+            paginacaoDesktop.style.display = 'flex';
+        }
+        if (paginacaoMobile) {
+            paginacaoMobile.style.display = 'flex';
+        }
+    }
+    
+    ocultar() {
+        const paginacaoDesktop = document.getElementById('paginacao-desktop');
+        const paginacaoMobile = document.getElementById('paginacao-mobile');
+        
+        if (paginacaoDesktop) {
+            paginacaoDesktop.style.display = 'none';
+        }
+        if (paginacaoMobile) {
+            paginacaoMobile.style.display = 'none';
+        }
+    }
+}
+
+// =============================================
 // SISTEMA DE FILTROS POR CATEGORIAS
 // =============================================
 // Inicializar o sistema quando a página carregar
@@ -1681,4 +2478,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Inicializar filtros sticky
     window.stickyFilters = new StickyFilters();
+    
+    // Inicializar carrossel do hero desktop
+    window.heroCarrossel = new HeroCarrossel();
+    
+    // Inicializar carrossel do hero mobile
+    window.heroCarrosselMobile = new HeroCarrosselMobile();
 });
