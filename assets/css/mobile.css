@@ -15,19 +15,24 @@
    ============================================= */
 
 .hero-mobile {
-  padding: var(--espacamento-xl) var(--espacamento-lg);
+  padding: var(--espacamento-md) var(--espacamento-lg) var(--espacamento-xxl)
+    var(--espacamento-lg);
   background: var(--gradiente-hero);
   color: white;
   text-align: center;
-  min-height: 60vh;
+  min-height: 90vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .top-produtos-slider-mobile {
   margin-top: var(--espacamento-xl);
   width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .top-produtos-slider-mobile h3 {
@@ -39,6 +44,8 @@
   justify-content: center;
   gap: 0.5rem;
   font-size: 1.2rem;
+  position: relative;
+  z-index: 2;
 }
 
 .top-produtos-slider-mobile h3 i {
@@ -53,6 +60,7 @@
   box-shadow: var(--sombra-media);
   margin: 0 auto;
   max-width: 100%;
+  z-index: 2;
 }
 
 .slider-track-mobile {
@@ -341,33 +349,39 @@
   text-align: center;
 }
 
-.btn-busca-lojas-mobile {
-  background: #ff6b35;
-  color: white;
-  padding: var(--espacamento-md) var(--espacamento-lg);
-  border-radius: 25px;
-  font-size: 1rem;
-  font-weight: 700;
-  text-decoration: none;
-  display: inline-flex;
+/* Botões de Lojas com Logos Mobile */
+.lojas-buttons-container-mobile {
+  display: flex;
+  gap: var(--espacamento-md);
+  justify-content: center;
   align-items: center;
-  gap: var(--espacamento-sm);
-  transition: all var(--transicao-media);
-  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  flex-wrap: wrap;
 }
 
-.btn-busca-lojas-mobile:hover {
-  background: #ff5722;
-  color: white;
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(255, 107, 53, 0.6);
+.loja-btn-mobile {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all var(--transicao-media);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border: 3px solid white;
+  cursor: pointer;
   text-decoration: none;
 }
 
-.btn-busca-lojas-mobile i {
-  font-size: 1.2rem;
+.loja-btn-mobile:active {
+  transform: scale(0.55);
+}
+
+.loja-btn-mobile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .rodape-mobile {
@@ -723,7 +737,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 150px;
+  height: 300px;
   background: linear-gradient(
     to bottom,
     transparent 0%,
@@ -734,21 +748,73 @@
 }
 
 .hero-mobile h1 {
-  font-size: 2.2rem;
-  margin-bottom: var(--espacamento-md);
+  font-size: 2rem;
+  margin-bottom: var(--espacamento-sm);
   line-height: 1.2;
   position: relative;
-  z-index: 1;
+  z-index: 2;
   text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
 }
 
 .hero-mobile p {
-  font-size: 1.1rem;
-  margin-bottom: var(--espacamento-xl);
+  font-size: 1rem;
+  margin-bottom: var(--espacamento-md);
   opacity: 0.95;
   position: relative;
-  z-index: 1;
+  z-index: 2;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.hero-mobile > span {
+  display: block;
+  margin-top: var(--espacamento-sm);
+  margin-bottom: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  opacity: 0.9;
+  position: relative;
+  z-index: 2;
+}
+
+/* Botões de Lojas com Logos Mobile */
+.lojas-buttons-container-mobile {
+  display: flex;
+  gap: var(--espacamento-sm);
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--espacamento-sm);
+  position: relative;
+  z-index: 2;
+}
+
+.loja-btn-mobile {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all var(--transicao-media);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border: 3px solid white;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 2px;
+}
+
+.loja-btn-mobile:active {
+  transform: scale(0.95);
+}
+
+.loja-btn-mobile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 /* Botões de Redes Sociais no Hero Mobile */
@@ -756,14 +822,14 @@
   display: flex;
   gap: var(--espacamento-sm);
   justify-content: center;
-  margin-bottom: var(--espacamento-lg);
+  margin-bottom: var(--espacamento-md);
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .hero-social-btn {
-  width: 45px;
-  height: 45px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
@@ -771,7 +837,7 @@
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   transition: all var(--transicao-rapida);
   border: 2px solid rgba(255, 255, 255, 0.5);
   text-decoration: none;
@@ -797,6 +863,7 @@
   text-align: center;
   margin: 0;
   padding: 0;
+  margin-top: 4rem;
   text-transform: uppercase;
   letter-spacing: 1px;
   text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
@@ -843,8 +910,8 @@
    ============================================= */
 .hero-carrossel-mobile {
   position: relative;
-  padding: 0 var(--espacamento-md) var(--espacamento-xl);
-  margin-top: var(--espacamento-xl);
+  padding: 0 var(--espacamento-lg) var(--espacamento-xl);
+  margin-top: var(--espacamento-lg);
   z-index: 2;
 }
 
@@ -863,7 +930,7 @@
 .hero-carrossel-mobile .hero-produto {
   flex: 0 0 100%;
   min-width: 100%;
-  max-width: 75%;
+  max-width: 70%;
   margin: 0 auto;
   background: white;
   border-radius: 20px;
@@ -879,7 +946,7 @@
   top: 0;
   left: 0;
   right: 0;
-  padding: var(--espacamento-md);
+  padding: var(--espacamento-sm);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -894,8 +961,8 @@
 }
 
 .hero-carrossel-mobile .hero-produto .loja-badge-mobile {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -908,8 +975,8 @@
 }
 
 .hero-carrossel-mobile .hero-produto .loja-badge-mobile img {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   object-fit: contain;
 }
 
@@ -929,7 +996,7 @@
 .hero-carrossel-mobile .hero-produto .card-imagem-mobile {
   position: relative;
   width: 100%;
-  height: 280px;
+  height: 240px;
   overflow: hidden;
   background: var(--cor-fundo);
   border-radius: 20px;
@@ -947,8 +1014,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: var(--espacamento-md);
-  padding-bottom: var(--espacamento-lg);
+  padding: var(--espacamento-sm);
+  padding-bottom: var(--espacamento-md);
   background: linear-gradient(
     0deg,
     rgba(0, 0, 0, 0.8) 0%,
@@ -959,8 +1026,8 @@
 }
 
 .hero-carrossel-mobile .hero-produto .card-titulo-hero {
-  font-size: 0.95rem;
-  margin-bottom: var(--espacamento-sm);
+  font-size: 0.9rem;
+  margin-bottom: var(--espacamento-xs);
   color: white;
   line-height: 1.3;
   font-weight: 600;
@@ -1015,13 +1082,13 @@
 
 .hero-carrossel-btn-mobile {
   position: absolute;
-  top: 50%;
+  top: 60%;
   transform: translateY(-50%);
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border: none;
-  width: 44px;
-  height: 44px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
   cursor: pointer;
   transition: all var(--transicao-media);
