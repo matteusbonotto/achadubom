@@ -11,6 +11,14 @@
 }
 
 /* =============================================
+   PROTEÇÃO CONTRA TARJA BRANCA NO HERO
+   NUNCA usar margin-top no hero-mobile!
+   ============================================= */
+.hero-mobile {
+  margin-top: 0 !important;
+}
+
+/* =============================================
    HERO SLIDER MOBILE
    ============================================= */
 
@@ -706,11 +714,10 @@
    HERO MOBILE - ESTILO APP CARD
    ============================================= */
 .hero-mobile {
-  margin-top: 120px;
+  margin-top: 0 !important;
   /* Header + busca */
   background: var(--gradiente-hero);
-  padding: var(--espacamento-xl) var(--espacamento-lg);
-  padding-bottom: calc(var(--espacamento-xl) + 100px);
+  padding: calc(120px + var(--espacamento-xl)) var(--espacamento-lg) calc(var(--espacamento-xl) + 100px);
   color: white;
   text-align: center;
   border-radius: 0;
@@ -732,19 +739,7 @@
 
 /* Gradiente fade-out no bottom - TRANSLÚCIDO para mesclar com próxima seção */
 .hero-mobile::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 300px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(255, 255, 255, 1) 100%
-  );
-  pointer-events: none;
-  z-index: 1;
+  display: none;
 }
 
 .hero-mobile h1 {
@@ -942,18 +937,17 @@
 
 /* Estilos específicos para cards do hero mobile */
 .hero-carrossel-mobile .hero-produto .card-header-mobile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espacamento-sm);
+  padding: var(--espacamento-md);
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  padding: var(--espacamento-sm);
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  z-index: 3;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
-  border-radius: 20px 20px 0 0;
-  pointer-events: none;
+  z-index: 10;
+  background: transparent;
 }
 
 .hero-carrossel-mobile .hero-produto .card-header-mobile > * {
@@ -980,6 +974,13 @@
   object-fit: contain;
 }
 
+.hero-carrossel-mobile .hero-produto .categorias-badges {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 .hero-carrossel-mobile .hero-produto .categoria-badge-hero {
   background: rgba(255, 238, 0, 0.95);
   color: #0076a5;
@@ -991,6 +992,7 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .hero-carrossel-mobile .hero-produto .card-imagem-mobile {
@@ -1051,6 +1053,7 @@
   backdrop-filter: blur(10px);
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.3);
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .hero-carrossel-mobile .hero-produto .btn-quero-mobile {
@@ -1756,19 +1759,7 @@
 }
 
 .card-header-mobile {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: var(--espacamento-md);
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  z-index: 2;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
-  overflow: visible !important;
-  border-radius: 20px 20px 0 0;
-  pointer-events: none;
+  display: none;
 }
 
 .card-header-mobile > * {
@@ -1776,16 +1767,16 @@
 }
 
 .loja-badge-mobile {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border-radius: 18px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  min-width: 36px;
+  height: 36px;
   border: 2px solid white;
 }
 
@@ -1793,6 +1784,17 @@
   width: 24px;
   height: 24px;
   object-fit: contain;
+  flex-shrink: 0;
+}
+
+.loja-badge-mobile .loja-nome {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--cor-texto);
+  white-space: nowrap;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ===== BADGES DE CATEGORIAS MOBILE - MÚLTIPLAS ===== */
@@ -2022,6 +2024,7 @@
   padding: var(--espacamento-xs) var(--espacamento-sm);
   background: var(--cor-fundo);
   border-radius: 8px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .btn-quero-mobile {
@@ -2117,15 +2120,15 @@
 }
 
 .loja-badge-mobile-lista {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: white;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 14px;
+  background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  min-width: 28px;
+  height: 28px;
   border: 1px solid var(--cor-borda);
 }
 
@@ -2133,6 +2136,17 @@
   width: 20px;
   height: 20px;
   object-fit: contain;
+  flex-shrink: 0;
+}
+
+.loja-badge-mobile-lista .loja-nome {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--cor-texto);
+  white-space: nowrap;
+  max-width: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .categoria-badge-mobile-lista {
@@ -2388,7 +2402,8 @@
   }
 
   .hero-mobile {
-    padding: var(--espacamento-lg) var(--espacamento-md);
+    margin-top: 0 !important;
+    padding: calc(120px + var(--espacamento-lg)) var(--espacamento-md);
   }
 
   .hero-mobile h1 {
@@ -2419,8 +2434,8 @@
 /* Orientação landscape */
 @media (max-width: 991px) and (orientation: landscape) {
   .hero-mobile {
-    margin-top: 100px;
-    padding: var(--espacamento-lg);
+    margin-top: 0 !important;
+    padding: calc(120px + var(--espacamento-lg)) var(--espacamento-lg);
   }
 
   .hero-mobile h1 {

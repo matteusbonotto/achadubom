@@ -5,9 +5,9 @@
  * =============================================
  */
 
-const CACHE_NAME = 'achadubom-v1.0.0';
-const STATIC_CACHE_NAME = 'achadubom-static-v1.0.0';
-const DYNAMIC_CACHE_NAME = 'achadubom-dynamic-v1.0.0';
+const CACHE_NAME = 'achadubom-v1.0.1'; // Incrementado para forçar atualização
+const STATIC_CACHE_NAME = 'achadubom-static-v1.0.1';
+const DYNAMIC_CACHE_NAME = 'achadubom-dynamic-v1.0.1';
 
 // Recursos para cache inicial
 const STATIC_ASSETS = [
@@ -19,7 +19,10 @@ const STATIC_ASSETS = [
     './assets/css/desktop.css',
     './assets/css/mobile.css',
     './assets/js/main.js',
-    './assets/js/admin.js',
+    './assets/js/admin-api.js',
+    './assets/js/auth.js',
+    './assets/js/config.js',
+    './assets/js/supabase-client.js',
     './assets/data/produtos.json',
     // CDN assets (fallback para offline)
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
@@ -95,6 +98,12 @@ self.addEventListener('fetch', event => {
 
     // Ignora requisições não HTTP
     if (!event.request.url.startsWith('http')) {
+        return;
+    }
+
+    // IMPORTANTE: Ignora TODAS as requisições de API - nunca intercepta
+    if (requestUrl.pathname.includes('/api/')) {
+        // Não intercepta, deixa passar direto para a rede sem cache
         return;
     }
 

@@ -162,7 +162,7 @@
         </style>
 
         <!-- Preload Critical Resources -->
-        <link rel="preload" href="./assets/data/produtos.json" as="fetch"
+        <!-- Removido preload de produtos.json - agora carrega do Supabase -->
             crossorigin>
         <link rel="prefetch" href="./admin.html">
     </head>
@@ -855,6 +855,8 @@
                         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
                         crossorigin="anonymous"></script>
                     <script src="./assets/js/config.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+                    <script src="./assets/js/supabase-client.js"></script>
                     <script src="./assets/js/filtros-mobile.js?v=1.0"></script>
                     <script src="./assets/js/filtros-desktop.js?v=1.0"></script>
                     <script src="./assets/js/main.js?v=1.3" defer></script>

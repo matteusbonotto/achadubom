@@ -24,6 +24,29 @@ yarn-error.log*
 firebase.json
 .firebaserc
 .firebase/hosting.cHVibGlj.cache
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+*.env
+.env.*
+
+# Arquivos com credenciais sensíveis
+*CREDENTIALS*
+*SECRETS*
+*PASSWORD*
+*KEY*
+*TOKEN*
+
+# Arquivos SQL com dados sensíveis (manter apenas templates)
+supabase-schema-completo.sql
+supabase-schema.sql
+supabase-schema-idempotente.sql
+configurar-cron-keep-alive.sql
+configurar-cron-shopee.sql
+CONFIGURACAO-FINAL.txt
+CRIAR-ENV.txt
 public/404.html
 public/admin.html
 public/index.html

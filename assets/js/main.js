@@ -20,6 +20,9 @@ class ProdutosManager {
             categorias: false
         };
         this.favoritos = this.carregarFavoritos();
+        
+        // Inicializar cliente Supabase
+        this.supabase = window.getSupabaseClient?.() || null;
 
         this.init();
     }
@@ -110,10 +113,80 @@ class ProdutosManager {
     }
 
     /**
-     * Carrega produtos do arquivo JSON
+     * Carrega produtos do Supabase
      */
     async carregarProdutos() {
         try {
+            // Tentar carregar do Supabase primeiro
+            if (this.supabase) {
+                const { data, error } = await this.supabase
+                    .from('produtos')
+                    .select('*')
+                    .eq('ativo', true)
+                    .order('criado_em', { ascending: false });
+
+                if (!error && data) {
+                    // Processar produtos do Supabase
+                    // categorias e imagem vêm como JSON strings, precisam ser parseados
+                    const produtosProcessados = data.map(produto => {
+                        // Parsear categorias se for string JSON
+                        if (typeof produto.categorias === 'string') {
+                            try {
+                                produto.categorias = JSON.parse(produto.categorias);
+                            } catch (e) {
+                                console.warn('Erro ao parsear categorias:', e);
+                                produto.categorias = ['geral'];
+                            }
+                        }
+                        
+                        // Parsear imagem se for string JSON
+                        if (typeof produto.imagem === 'string') {
+                            try {
+                                produto.imagem = JSON.parse(produto.imagem);
+                            } catch (e) {
+                                console.warn('Erro ao parsear imagem:', e);
+                                produto.imagem = [];
+                            }
+                        }
+                        
+                        return produto;
+                    });
+                    
+                    // Remover produtos duplicados por código
+                    const produtosUnicos = [];
+                    const codigosVistos = new Set();
+                    
+                    produtosProcessados.forEach(produto => {
+                        if (!codigosVistos.has(produto.codigo)) {
+                            codigosVistos.add(produto.codigo);
+                            produtosUnicos.push(produto);
+                        } else {
+                            console.warn(`⚠️ Produto duplicado removido: ${produto.codigo} - ${produto.titulo}`);
+                        }
+                    });
+                    
+                    this.produtos = produtosUnicos;
+                    this.produtosFiltrados = [...this.produtos];
+
+                    // Seleciona produto destaque (primeiro com categoria "destaque")
+                    this.produtoDestaque = this.produtos.find(p =>
+                        p.categorias && Array.isArray(p.categorias) && p.categorias.includes('destaque')
+                    ) || this.produtos[0];
+
+                    console.log(`✅ ${this.produtos.length} produtos carregados do Supabase`);
+
+                    // Disparar evento para informar que os produtos foram carregados
+                    document.dispatchEvent(new CustomEvent('produtos-carregados', {
+                        detail: { produtos: this.produtos }
+                    }));
+
+                    return;
+                } else {
+                    console.warn('⚠️ Erro ao carregar do Supabase, tentando fallback:', error);
+                }
+            }
+
+            // Fallback para JSON se Supabase não estiver disponível
             const response = await fetch('./assets/data/produtos.json');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -142,10 +215,10 @@ class ProdutosManager {
 
             // Seleciona produto destaque (primeiro com categoria "destaque")
             this.produtoDestaque = this.produtos.find(p =>
-                p.categorias.includes('destaque')
+                p.categorias && p.categorias.includes('destaque')
             ) || this.produtos[0];
 
-            console.log(`✅ ${this.produtos.length} produtos únicos carregados com sucesso`);
+            console.log(`⚠️ ${this.produtos.length} produtos carregados do JSON (fallback)`);
 
             // Disparar evento para informar que os produtos foram carregados
             document.dispatchEvent(new CustomEvent('produtos-carregados', {
@@ -701,8 +774,8 @@ class ProdutosManager {
                     <span class="vendas-info"><i class="bi bi-graph-up"></i> ${vendas}</span>
                   </div>
                   <div class="produto-badges">
-                    <div class="loja-badge-lista">
-                      <img src="${logoLoja}" alt="${produto.loja}" />
+                    <div class="loja-badge-lista" title="${produto.loja || 'Loja'}">
+                      <img src="${logoLoja}" alt="${produto.loja || 'Loja'}" />
                     </div>
                     ${badgesCategorias}
                   </div>
@@ -718,8 +791,8 @@ class ProdutosManager {
         return `
           <div class="card-produto floating" data-codigo="${produto.codigo}">
             <div class="card-header">
-              <div class="loja-badge">
-                <img src="${logoLoja}" alt="${produto.loja}" />
+              <div class="loja-badge" title="${produto.loja || 'Loja'}">
+                <img src="${logoLoja}" alt="${produto.loja || 'Loja'}" />
               </div>
               ${badgesCategorias}
             </div>
@@ -786,8 +859,8 @@ class ProdutosManager {
                     <span class="vendas-info"><i class="bi bi-graph-up"></i> ${vendas}</span>
                   </div>
                   <div class="produto-badges-mobile">
-                    <div class="loja-badge-mobile-lista">
-                      <img src="${logoLoja}" alt="${produto.loja}" />
+                    <div class="loja-badge-mobile-lista" title="${produto.loja || 'Loja'}">
+                      <img src="${logoLoja}" alt="${produto.loja || 'Loja'}" />
                     </div>
                     ${badgesCategorias}
                   </div>
@@ -803,8 +876,8 @@ class ProdutosManager {
         return `
           <div class="card-produto-mobile floating" data-codigo="${produto.codigo}">
             <div class="card-header-mobile">
-              <div class="loja-badge-mobile">
-                <img src="${logoLoja}" alt="${produto.loja}" />
+              <div class="loja-badge-mobile" title="${produto.loja || 'Loja'}">
+                <img src="${logoLoja}" alt="${produto.loja || 'Loja'}" />
               </div>
               ${badgesCategorias}
             </div>
@@ -1331,21 +1404,7 @@ class DataRefreshManager {
     }
 
     async reloadData() {
-        // Forçar reload dos produtos sem cache
-        const timestamp = Date.now();
-        const response = await fetch(`./assets/data/produtos.json?t=${timestamp}`, {
-            cache: 'no-cache',
-            headers: {
-                'Cache-Control': 'no-cache',
-                'Pragma': 'no-cache'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Erro ao carregar novos dados');
-        }
-
-        // Reinicializar o sistema de produtos
+        // Recarregar produtos do Supabase
         if (window.produtosManager) {
             await window.produtosManager.carregarProdutos();
             window.produtosManager.aplicarFiltros();
@@ -1893,6 +1952,45 @@ class HeroCarrossel {
 
     async carregarProdutos() {
         try {
+            // Tentar carregar do Supabase
+            const supabase = window.getSupabaseClient?.();
+            if (supabase) {
+                const { data, error } = await supabase
+                    .from('produtos')
+                    .select('*')
+                    .eq('ativo', true)
+                    .order('criado_em', { ascending: false })
+                    .limit(12);
+                
+                if (!error && data) {
+                    // Processar produtos (parsear JSON strings)
+                    const produtosProcessados = data.map(produto => {
+                        if (typeof produto.categorias === 'string') {
+                            try {
+                                produto.categorias = JSON.parse(produto.categorias);
+                            } catch (e) {
+                                produto.categorias = ['geral'];
+                            }
+                        }
+                        if (typeof produto.imagem === 'string') {
+                            try {
+                                produto.imagem = JSON.parse(produto.imagem);
+                            } catch (e) {
+                                produto.imagem = [];
+                            }
+                        }
+                        return produto;
+                    });
+                    
+                    // Ordenar por vendas
+                    this.produtos = produtosProcessados
+                        .sort((a, b) => this.parseVendas(b.vendas) - this.parseVendas(a.vendas))
+                        .slice(0, 12);
+                    return;
+                }
+            }
+            
+            // Fallback para JSON
             const response = await fetch('./assets/data/produtos.json');
             const dados = await response.json();
             
@@ -1909,7 +2007,27 @@ class HeroCarrossel {
 
     parseVendas(vendas) {
         if (!vendas) return 0;
-        const numero = vendas.toString().replace(/[^\d]/g, '');
+        
+        const texto = vendas.toString().toLowerCase().trim();
+        
+        // Detectar formato "50mil vendidos", "1M vendidos", etc.
+        const match = texto.match(/(\d+(?:[.,]\d+)?)\s*(mil|m|milhão|milhões|k)?/);
+        
+        if (match) {
+            const numero = parseFloat(match[1].replace(',', '.'));
+            const unidade = match[2] || '';
+            
+            if (unidade === 'm' || unidade === 'milhão' || unidade === 'milhões') {
+                return numero * 1000000;
+            } else if (unidade === 'mil' || unidade === 'k') {
+                return numero * 1000;
+            } else {
+                return numero;
+            }
+        }
+        
+        // Fallback: tentar extrair apenas números
+        const numero = texto.replace(/[^\d]/g, '');
         return parseInt(numero) || 0;
     }
 
@@ -1919,12 +2037,10 @@ class HeroCarrossel {
     }
 
     templateProduto(produto) {
-        const categoria = Array.isArray(produto.categorias) ? produto.categorias[0] : produto.categoria || 'Geral';
-        
         // Truncar título para 20 caracteres
-        const tituloTruncado = produto.titulo.length > 20 
+        const tituloTruncado = produto.titulo && produto.titulo.length > 20 
             ? produto.titulo.substring(0, 20) + '...' 
-            : produto.titulo;
+            : (produto.titulo || 'Produto');
         
         // Buscar logo da loja usando o método do ProdutosManager
         let logoLoja = '';
@@ -1933,32 +2049,54 @@ class HeroCarrossel {
         } else {
             // Fallback para logos padrão
             const logos = {
-                'Shopee': './assets/images/logo/shopee.png',
-                'Mercado Livre': './assets/images/logo/mercadolivre.png',
-                'Amazon': './assets/images/logo/amazon.png',
-                'AliExpress': './assets/images/logo/aliexpress.png'
+                'Shopee': './assets/images/shopee.png',
+                'Mercado Livre': './assets/images/ml.png',
+                'Amazon': './assets/images/amazon.jpg',
+                'AliExpress': './assets/images/aliexpress.png'
             };
             logoLoja = logos[produto.loja] || `https://via.placeholder.com/40x40/666666/FFFFFF?text=${produto.loja?.charAt(0) || 'L'}`;
         }
         
+        // Gerar badges de categorias (usando o mesmo método dos cards normais)
+        let badgesCategorias = '';
+        if (window.produtosManager && typeof window.produtosManager.gerarBadgesCategorias === 'function') {
+            badgesCategorias = window.produtosManager.gerarBadgesCategorias(produto, 3, false);
+        } else {
+            // Fallback: gerar badges manualmente
+            if (Array.isArray(produto.categorias) && produto.categorias.length > 0) {
+                badgesCategorias = produto.categorias.slice(0, 3).map(cat => 
+                    `<span class="categoria-badge-hero">${cat}</span>`
+                ).join('');
+            } else if (produto.categoria && produto.categoria !== 'undefined' && produto.categoria !== 'null') {
+                badgesCategorias = `<span class="categoria-badge-hero">${produto.categoria}</span>`;
+            }
+        }
+        
+        // Garantir que imagem sempre tenha um valor válido
+        const imagemUrl = (Array.isArray(produto.imagem) && produto.imagem.length > 0) 
+            ? produto.imagem[0] 
+            : (typeof produto.imagem === 'string' ? produto.imagem : 'https://via.placeholder.com/300x300?text=Sem+Imagem');
+        
         return `
             <div class="hero-produto">
-                <div class="card-header-mobile">
-                    <div class="loja-badge-mobile">
-                        <img src="${logoLoja}" alt="${produto.loja}" onerror="this.src='https://via.placeholder.com/40x40/666666/FFFFFF?text=L'" />
+                <div class="card-header">
+                    <div class="loja-badge" title="${produto.loja || 'Loja'}">
+                        <img src="${logoLoja}" alt="${produto.loja || 'Loja'}" onerror="this.src='https://via.placeholder.com/40x40/666666/FFFFFF?text=L'" />
                     </div>
-                    <span class="categoria-badge-hero">${categoria}</span>
+                    <div class="categorias-badges">
+                        ${badgesCategorias}
+                    </div>
                 </div>
                 
                 <div class="card-imagem-mobile">
-                    <img src="${produto.imagem[0]}" alt="${produto.titulo}" loading="lazy">
+                    <img src="${imagemUrl}" alt="${produto.titulo || 'Produto'}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x300?text=Sem+Imagem'">
                 </div>
                 
                 <div class="card-body-mobile">
                     <h3 class="card-titulo-hero">${tituloTruncado}</h3>
                     <div class="card-footer-mobile">
-                        <span class="produto-codigo-mobile">#${produto.codigo}</span>
-                        <a href="${produto.url}" target="_blank" class="btn-quero-mobile" rel="noopener">
+                        <span class="produto-codigo" style="font-family: 'Segoe UI', sans-serif;">#${produto.codigo || 'N/A'}</span>
+                        <a href="${produto.url || '#'}" target="_blank" class="btn-quero-mobile" rel="noopener">
                             <i class="bi bi-link-45deg"></i> QUERO!
                         </a>
                     </div>
@@ -2024,6 +2162,45 @@ class HeroCarrosselMobile {
 
     async carregarProdutos() {
         try {
+            // Tentar carregar do Supabase
+            const supabase = window.getSupabaseClient?.();
+            if (supabase) {
+                const { data, error } = await supabase
+                    .from('produtos')
+                    .select('*')
+                    .eq('ativo', true)
+                    .order('criado_em', { ascending: false })
+                    .limit(12);
+                
+                if (!error && data) {
+                    // Processar produtos (parsear JSON strings)
+                    const produtosProcessados = data.map(produto => {
+                        if (typeof produto.categorias === 'string') {
+                            try {
+                                produto.categorias = JSON.parse(produto.categorias);
+                            } catch (e) {
+                                produto.categorias = ['geral'];
+                            }
+                        }
+                        if (typeof produto.imagem === 'string') {
+                            try {
+                                produto.imagem = JSON.parse(produto.imagem);
+                            } catch (e) {
+                                produto.imagem = [];
+                            }
+                        }
+                        return produto;
+                    });
+                    
+                    // Ordenar por vendas
+                    this.produtos = produtosProcessados
+                        .sort((a, b) => this.parseVendas(b.vendas) - this.parseVendas(a.vendas))
+                        .slice(0, 12);
+                    return;
+                }
+            }
+            
+            // Fallback para JSON
             const response = await fetch('./assets/data/produtos.json');
             const dados = await response.json();
             
@@ -2040,7 +2217,27 @@ class HeroCarrosselMobile {
 
     parseVendas(vendas) {
         if (!vendas) return 0;
-        const numero = vendas.toString().replace(/[^\d]/g, '');
+        
+        const texto = vendas.toString().toLowerCase().trim();
+        
+        // Detectar formato "50mil vendidos", "1M vendidos", etc.
+        const match = texto.match(/(\d+(?:[.,]\d+)?)\s*(mil|m|milhão|milhões|k)?/);
+        
+        if (match) {
+            const numero = parseFloat(match[1].replace(',', '.'));
+            const unidade = match[2] || '';
+            
+            if (unidade === 'm' || unidade === 'milhão' || unidade === 'milhões') {
+                return numero * 1000000;
+            } else if (unidade === 'mil' || unidade === 'k') {
+                return numero * 1000;
+            } else {
+                return numero;
+            }
+        }
+        
+        // Fallback: tentar extrair apenas números
+        const numero = texto.replace(/[^\d]/g, '');
         return parseInt(numero) || 0;
     }
 
@@ -2050,12 +2247,10 @@ class HeroCarrosselMobile {
     }
 
     templateProduto(produto) {
-        const categoria = Array.isArray(produto.categorias) ? produto.categorias[0] : produto.categoria || 'Geral';
-        
         // Truncar título para 20 caracteres
-        const tituloTruncado = produto.titulo.length > 20 
+        const tituloTruncado = produto.titulo && produto.titulo.length > 20 
             ? produto.titulo.substring(0, 20) + '...' 
-            : produto.titulo;
+            : (produto.titulo || 'Produto');
         
         // Buscar logo da loja usando o método do ProdutosManager
         let logoLoja = '';
@@ -2064,32 +2259,54 @@ class HeroCarrosselMobile {
         } else {
             // Fallback para logos padrão
             const logos = {
-                'Shopee': './assets/images/logo/shopee.png',
-                'Mercado Livre': './assets/images/logo/mercadolivre.png',
-                'Amazon': './assets/images/logo/amazon.png',
-                'AliExpress': './assets/images/logo/aliexpress.png'
+                'Shopee': './assets/images/shopee.png',
+                'Mercado Livre': './assets/images/ml.png',
+                'Amazon': './assets/images/amazon.jpg',
+                'AliExpress': './assets/images/aliexpress.png'
             };
             logoLoja = logos[produto.loja] || `https://via.placeholder.com/40x40/666666/FFFFFF?text=${produto.loja?.charAt(0) || 'L'}`;
         }
         
+        // Gerar badges de categorias (usando o mesmo método dos cards normais)
+        let badgesCategorias = '';
+        if (window.produtosManager && typeof window.produtosManager.gerarBadgesCategorias === 'function') {
+            badgesCategorias = window.produtosManager.gerarBadgesCategorias(produto, 3, true);
+        } else {
+            // Fallback: gerar badges manualmente
+            if (Array.isArray(produto.categorias) && produto.categorias.length > 0) {
+                badgesCategorias = produto.categorias.slice(0, 3).map(cat => 
+                    `<span class="categoria-badge-hero">${cat}</span>`
+                ).join('');
+            } else if (produto.categoria && produto.categoria !== 'undefined' && produto.categoria !== 'null') {
+                badgesCategorias = `<span class="categoria-badge-hero">${produto.categoria}</span>`;
+            }
+        }
+        
+        // Garantir que imagem sempre tenha um valor válido
+        const imagemUrl = (Array.isArray(produto.imagem) && produto.imagem.length > 0) 
+            ? produto.imagem[0] 
+            : (typeof produto.imagem === 'string' ? produto.imagem : 'https://via.placeholder.com/300x300?text=Sem+Imagem');
+        
         return `
             <div class="hero-produto">
                 <div class="card-header-mobile">
-                    <div class="loja-badge-mobile">
-                        <img src="${logoLoja}" alt="${produto.loja}" onerror="this.src='https://via.placeholder.com/40x40/666666/FFFFFF?text=L'" />
+                    <div class="loja-badge-mobile" title="${produto.loja || 'Loja'}">
+                        <img src="${logoLoja}" alt="${produto.loja || 'Loja'}" onerror="this.src='https://via.placeholder.com/40x40/666666/FFFFFF?text=L'" />
                     </div>
-                    <span class="categoria-badge-hero">${categoria}</span>
+                    <div class="categorias-badges">
+                        ${badgesCategorias}
+                    </div>
                 </div>
                 
                 <div class="card-imagem-mobile">
-                    <img src="${produto.imagem[0]}" alt="${produto.titulo}" loading="lazy">
+                    <img src="${imagemUrl}" alt="${produto.titulo || 'Produto'}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x300?text=Sem+Imagem'">
                 </div>
                 
                 <div class="card-body-mobile">
                     <h3 class="card-titulo-hero">${tituloTruncado}</h3>
                     <div class="card-footer-mobile">
-                        <span class="produto-codigo-mobile">#${produto.codigo}</span>
-                        <a href="${produto.url}" target="_blank" class="btn-quero-mobile" rel="noopener">
+                        <span class="produto-codigo-mobile" style="font-family: 'Segoe UI', sans-serif;">#${produto.codigo || 'N/A'}</span>
+                        <a href="${produto.url || '#'}" target="_blank" class="btn-quero-mobile" rel="noopener">
                             <i class="bi bi-link-45deg"></i> QUERO!
                         </a>
                     </div>

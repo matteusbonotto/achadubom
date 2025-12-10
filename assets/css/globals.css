@@ -25,7 +25,7 @@
   /* Bordas suaves */
 
   /* Gradientes */
-  --gradiente-hero: linear-gradient(-180deg, #00b7ff 20%, #fffb00 100%);
+  --gradiente-hero: linear-gradient(-180deg, #00b7ff 20%, #ffea00 50%, #ffffff 100%);
   --gradiente-card: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
   /* Tipografia */
   --fonte-primaria: 'Poppins', sans-serif;

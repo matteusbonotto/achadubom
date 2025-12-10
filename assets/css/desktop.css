@@ -3,6 +3,14 @@
    ============================================= */
 
 /* =============================================
+   PROTEÇÃO CONTRA TARJA BRANCA NO HERO
+   NUNCA usar margin-top no hero-desktop!
+   ============================================= */
+.hero-desktop {
+  margin-top: 0 !important;
+}
+
+/* =============================================
    HEADER DESKTOP
    ============================================= */
 
@@ -173,7 +181,7 @@ body > li {
    BANNER HERO DESKTOP
    ============================================= */
 .hero-desktop {
-  margin-top: 80px;
+  margin-top: 0 !important;
   min-height: 100vh;
   background: var(--gradiente-hero);
   display: flex;
@@ -181,26 +189,14 @@ body > li {
   justify-content: center;
   position: relative;
   overflow: hidden;
-  padding: var(--espacamento-lg) 0 var(--espacamento-xxl) 0;
+  padding: calc(80px + var(--espacamento-lg)) 0 var(--espacamento-xxl) 0;
   border: none;
   border-radius: 0;
 }
 
 /* Gradiente fade-out no bottom - TRANSLÚCIDO para mesclar com próxima seção */
 .hero-desktop::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 200px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(255, 255, 255, 1) 100%
-  );
-  pointer-events: none;
-  z-index: 1;
+  display: none;
 }
 
 .hero-content {
@@ -376,43 +372,46 @@ body > li {
 }
 
 /* Estilos dos cards hero - baseados no mobile */
-.hero-produto .card-header-mobile {
+.hero-produto .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--espacamento-md);
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  padding: var(--espacamento-sm);
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   z-index: 3;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
-  border-radius: 20px 20px 0 0;
-  pointer-events: none;
+  background: transparent;
 }
 
 .hero-produto .card-header-mobile > * {
   pointer-events: auto;
 }
 
-.hero-produto .loja-badge-mobile {
-  width: 32px;
-  height: 32px;
+.hero-produto .loja-badge {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background: white;
+  box-shadow: var(--sombra-suave);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border: 2px solid white;
 }
 
-.hero-produto .loja-badge-mobile img {
-  width: 20px;
-  height: 20px;
+.hero-produto .loja-badge img {
+  width: 28px;
+  height: 28px;
   object-fit: contain;
+}
+
+.hero-produto .categorias-badges {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .hero-produto .categoria-badge-hero {
@@ -426,6 +425,7 @@ body > li {
   border: 1px solid rgba(255, 255, 255, 0.2);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .hero-produto .card-imagem-mobile {
@@ -520,7 +520,7 @@ body > li {
   gap: var(--espacamento-md);
 }
 
-.hero-produto .produto-codigo-mobile {
+.hero-produto .produto-codigo {
   font-size: 0.7rem;
   color: white;
   font-weight: 600;
@@ -533,7 +533,7 @@ body > li {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-family: 'Courier New', monospace;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .hero-produto .btn-quero-mobile {
@@ -1086,21 +1086,32 @@ body > li {
 }
 
 .loja-badge-lista {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: white;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: white;
   box-shadow: var(--sombra-suave);
-  overflow: hidden;
+  min-width: 40px;
+  height: 40px;
 }
 
 .loja-badge-lista img {
   width: 28px;
   height: 28px;
   object-fit: contain;
+  flex-shrink: 0;
+}
+
+.loja-badge-lista .loja-nome {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--cor-texto);
+  white-space: nowrap;
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .categoria-badge-lista {
@@ -1178,18 +1189,17 @@ body > li {
 }
 
 .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espacamento-sm);
+  padding: var(--espacamento-md);
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  padding: var(--espacamento-md);
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  z-index: 3;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
-  border-radius: 20px 20px 0 0;
-  pointer-events: none;
+  z-index: 10;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), transparent);
 }
 
 .card-header > * {
@@ -1197,21 +1207,32 @@ body > li {
 }
 
 .loja-badge {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: white;
-  box-shadow: var(--sombra-suave);
   display: flex;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  background: white;
+  box-shadow: var(--sombra-suave);
+  min-width: 40px;
+  height: 40px;
 }
 
 .loja-badge img {
   width: 28px;
   height: 28px;
   object-fit: contain;
+  flex-shrink: 0;
+}
+
+.loja-badge .loja-nome {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--cor-texto);
+  white-space: nowrap;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ===== BADGES DE CATEGORIAS - MÚLTIPLAS ===== */
@@ -1453,7 +1474,7 @@ body > li {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-family: 'Courier New', monospace;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .btn-quero {

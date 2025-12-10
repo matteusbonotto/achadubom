@@ -28,38 +28,7 @@
 
     <!-- Admin Protection Script -->
     <script src="./assets/js/config.js"></script>
-    <script>
-            // Proteção do painel administrativo
-            (function() {
-                const checkAdminAccess = () => {
-                    if (typeof window.AchaduBomConfig === 'undefined') {
-                        redirectToHome('Configuração não encontrada.');
-                        return;
-                    }
-
-                    const config = window.AchaduBomConfig;
-                    const adminEnabled = config.admin && config.admin.enabled === true;
-
-                    if (!adminEnabled) {
-                        redirectToHome('Painel administrativo desabilitado.');
-                        return;
-                    }
-
-                    // Se chegou aqui, o admin está habilitado
-                    if (config.debug && config.debug.showConsoleMessages) {
-                        console.log('🔑 Acesso ao admin autorizado');
-                    }
-                };
-
-                const redirectToHome = (message) => {
-                    alert('⚠️ ' + message);
-                    window.location.href = './index.html';
-                };
-
-                // Verificar acesso imediatamente
-                checkAdminAccess();
-            })();
-        </script>
+    <script src="./assets/js/auth.js"></script>
 
     <style>
     /* Estilos específicos do Admin */
@@ -364,6 +333,56 @@
       display: flex;
       align-items: flex-start;
       gap: 1.5rem;
+    }
+
+    .item-checkbox {
+      display: flex;
+      align-items: center;
+      padding-top: 0.5rem;
+    }
+
+    .item-checkbox input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .checkbox-selecionar-todos {
+      cursor: pointer;
+    }
+
+    .barra-acoes-massa {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: var(--cor-primaria);
+      color: white;
+      border-bottom: 1px solid var(--cor-borda);
+    }
+
+    .acoes-massa-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+    }
+
+    .acoes-massa-botoes {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .acoes-massa-botoes .btn {
+      margin: 0;
+    }
+
+    .filtros-admin {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
     }
     
     .item-produto:hover {
@@ -882,7 +901,44 @@
       <div class="loading-spinner"></div>
     </div>
 
-    <div class="admin-container">
+    <!-- Modal de Login -->
+    <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header" style="background: linear-gradient(135deg, #2e7d32, #4caf50); color: white;">
+            <h5 class="modal-title" id="modalLoginLabel">
+              <i class="bi bi-shield-lock"></i> Acesso Administrativo
+            </h5>
+          </div>
+          <div class="modal-body">
+            <form id="form-login">
+              <div class="form-group mb-3">
+                <label for="login-email">
+                  <i class="bi bi-envelope"></i> Email
+                </label>
+                <input type="email" id="login-email" class="form-control" required 
+                       placeholder="Digite sua conta de email" autocomplete="email">
+              </div>
+              <div class="form-group mb-3">
+                <label for="login-senha">
+                  <i class="bi bi-key"></i> Senha
+                </label>
+                <input type="password" id="login-senha" class="form-control" required 
+                       placeholder="Digite sua senha" autocomplete="current-password">
+              </div>
+              <div id="login-erro" class="alert alert-danger" style="display: none;"></div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-custom btn-confianca" id="btn-login">
+              <i class="bi bi-box-arrow-in-right"></i> Entrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-container" id="admin-container" style="display: none;">
       <!-- Header -->
       <header class="admin-header">
         <h1 class="admin-titulo">
@@ -905,6 +961,10 @@
           <button class="btn-custom btn-urgente"
             id="btn-importar-csv">
             <i class="bi bi-upload"></i> Importar CSV
+          </button>
+
+          <button class="btn-custom btn-urgente" id="btn-logout" title="Sair">
+            <i class="bi bi-box-arrow-right"></i> Sair
           </button>
 
           <a href="./index.html" class="btn-custom btn-destaque">
@@ -1153,10 +1213,26 @@
                 <div class="mb-3">
                   <label for="arquivo-csv" class="form-label">
                     <i class="bi bi-file-earmark-spreadsheet"></i>
-                    Selecionar arquivo CSV
+                    Selecionar arquivo(s) CSV
+                    <small class="text-muted d-block">Você pode selecionar múltiplos arquivos para importar em sequência</small>
                   </label>
                   <input type="file" class="form-control" id="arquivo-csv"
-                    accept=".csv">
+                    accept=".csv" multiple>
+                  <div id="arquivos-selecionados" class="mt-2" style="display: none;">
+                    <small class="text-muted">Arquivos selecionados:</small>
+                    <ul id="lista-arquivos" class="list-unstyled mt-1 mb-0"></ul>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="extrair-imagens-auto" checked>
+                    <label class="form-check-label" for="extrair-imagens-auto">
+                      <i class="bi bi-image"></i>
+                      <strong>Extrair imagens automaticamente</strong>
+                      <small class="text-muted d-block">Tenta extrair imagens das URLs dos produtos (pode ser lento)</small>
+                    </label>
+                  </div>
                 </div>
 
                 <div class="preview-section" id="preview-section"
@@ -1190,16 +1266,21 @@
                   </div>
                 </div>
 
-                <div class="progress" id="progress-bar" style="display: none;">
+                <div class="progress mb-2" id="progress-bar" style="display: none; height: 30px;">
                   <div
-                    class="progress-bar progress-bar-striped progress-bar-animated"
+                    class="progress-bar progress-bar-striped progress-bar-animated bg-success"
                     role="progressbar"
-                    style="width: 0%">0%</div>
+                    style="width: 0%; font-weight: bold; line-height: 30px;">0%</div>
                 </div>
 
-                <div id="progress-status" class="mt-2 small text-muted"
-                  style="display: none;">
-                  Preparando importação...
+                <div id="progress-status" class="mt-2 p-3 bg-light rounded border"
+                  style="display: none; font-size: 0.9rem; line-height: 1.6;">
+                  <div class="text-center">
+                    <div class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                      <span class="visually-hidden">Carregando...</span>
+                    </div>
+                    <span>Preparando importação...</span>
+                  </div>
                 </div>
 
                 <div id="resultado-importacao" class="mt-3"></div>
@@ -1223,10 +1304,13 @@
       <!-- Lista de Produtos -->
       <section class="lista-produtos">
         <div class="lista-header">
-          <h2>
-            <i class="bi bi-list-ul"></i>
-            Produtos Cadastrados
-          </h2>
+          <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
+            <input type="checkbox" id="selecionar-todos" class="checkbox-selecionar-todos" onchange="adminManager.toggleSelecionarTodos()" style="width: 20px; height: 20px; cursor: pointer;">
+            <h2 style="margin: 0;">
+              <i class="bi bi-list-ul"></i>
+              Produtos Cadastrados
+            </h2>
+          </div>
 
           <div class="lista-stats">
             <div class="stat-item">
@@ -1237,7 +1321,33 @@
               <i class="bi bi-check-circle"></i>
               <span id="produtos-ativos">0 ativos</span>
             </div>
+          </div>
+        </div>
 
+        <!-- Barra de ações em massa -->
+        <div id="barra-acoes-massa" class="barra-acoes-massa" style="display: none;">
+          <div class="acoes-massa-info">
+            <i class="bi bi-check-square"></i>
+            <span id="contador-selecionados">0 produtos selecionados</span>
+          </div>
+          <div class="acoes-massa-botoes">
+            <button class="btn btn-sm btn-outline-primary" onclick="adminManager.abrirModalEdicaoMassa()">
+              <i class="bi bi-pencil"></i> Editar em Massa
+            </button>
+            <button class="btn btn-sm btn-outline-danger" onclick="adminManager.confirmarExclusaoMassa()">
+              <i class="bi bi-trash"></i> Excluir Selecionados
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" onclick="adminManager.limparSelecao()">
+              <i class="bi bi-x-lg"></i> Limpar Seleção
+            </button>
+          </div>
+        </div>
+
+        <!-- Filtros de busca -->
+        <div class="filtros-admin" style="padding: 1rem 1.5rem; background: var(--cor-fundo); border-bottom: 1px solid var(--cor-borda);">
+          <div class="busca-admin">
+            <input type="text" id="busca-produtos" placeholder="Buscar por título, código ou loja..." oninput="adminManager.filtrarProdutos(this.value)">
+            <i class="bi bi-search"></i>
           </div>
         </div>
 
@@ -1250,8 +1360,26 @@
     <!-- Scripts -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./assets/js/admin.js"></script>
+    <!-- Supabase Client JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./assets/js/config.js"></script>
+    <script src="./assets/js/supabase-client.js"></script>
     <script src="./assets/js/admin-api.js"></script>
+    <!-- admin.js removido - AdminManager já está em admin-api.js -->
+    
+    <script>
+      // Configurar logout
+      document.addEventListener('DOMContentLoaded', () => {
+        const btnLogout = document.getElementById('btn-logout');
+        if (btnLogout && window.authManager) {
+          btnLogout.addEventListener('click', () => {
+            if (confirm('Deseja realmente sair?')) {
+              window.authManager.fazerLogout();
+            }
+          });
+        }
+      });
+    </script>
 
     <script>
     // Atualização das estatísticas

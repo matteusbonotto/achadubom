@@ -19,7 +19,7 @@ Um Progressive Web App (PWA) moderno e responsivo para exibir produtos e ofertas
 - **Framework:** Bootstrap 5 + Bootstrap Icons
 - **Fontes:** Google Fonts (Poppins + Open Sans)
 - **PWA:** Service Worker + Web App Manifest
-- **Base de Dados:** JSON local (simulando API)
+- **Base de Dados:** Supabase (PostgreSQL)
 
 ### 🎨 **Design & UX**
 - **Animações:** Efeitos flutuantes, transições suaves, micro-interações
@@ -46,12 +46,22 @@ achadubom/
 │   │
 │   └── 📁 js/
 │       ├── main.js            # Lógica principal da aplicação
-│       └── admin.js           # Lógica do painel administrativo
+│       ├── admin-api.js       # Lógica do painel administrativo (Supabase)
+│       ├── auth.js            # Sistema de autenticação
+│       ├── config.js          # Configurações do sistema
+│       ├── supabase-client.js # Cliente Supabase
+│       ├── filtros-desktop.js # Sistema de filtros desktop
+│       └── filtros-mobile.js  # Sistema de filtros mobile
 ```
 
 ## 🚀 Como Executar
 
-### **Opção 1: Servidor Python (Recomendado)**
+### **Opção 1: Live Server (VS Code - Recomendado)**
+1. Instale a extensão "Live Server" no VS Code
+2. Clique com botão direito em `index.html`
+3. Selecione "Open with Live Server"
+
+### **Opção 2: Servidor HTTP Python**
 ```bash
 # Navegue até a pasta do projeto
 cd achadubom
@@ -61,11 +71,6 @@ python -m http.server 8000
 
 # Acesse: http://localhost:8000
 ```
-
-### **Opção 2: Live Server (VS Code)**
-1. Instale a extensão "Live Server" no VS Code
-2. Clique com botão direito em `index.html`
-3. Selecione "Open with Live Server"
 
 ### **Opção 3: Qualquer Servidor Web**
 - Apache, Nginx, IIS, etc.
@@ -163,7 +168,7 @@ python -m http.server 8000
 - `toggleFavorito()` - Gerencia favoritos no localStorage
 - `navegarCarrossel()` - Navega entre imagens
 
-#### **`AdminManager` (admin.js)**
+#### **`AdminManager` (admin-api.js)**
 - `salvarProduto()` - Adiciona/edita produtos
 - `excluirProduto()` - Remove produtos com confirmação
 - `validarDados()` - Valida formulário completo
