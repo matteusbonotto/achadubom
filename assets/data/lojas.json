@@ -1,0 +1,27 @@
+[
+    {
+        "id": "shopee",
+        "loja": "Shopee",
+        "imagem": "./assets/images/shopee.png"
+    },
+    {
+        "id": "mercado_livre",
+        "loja": "Mercado Livre",
+        "imagem": "./assets/images/ml.png"
+    },
+    {
+        "id": "amazon",
+        "loja": "Amazon",
+        "imagem": "./assets/images/amazon.jpg"
+    },
+    {
+        "id": "aliexpress",
+        "loja": "AliExpress",
+        "imagem": "./assets/images/aliexpress.png"
+    },
+    {
+        "id": "evertom",
+        "loja": "Movelaria Tonsom",
+        "imagem": "./assets/images/tonsom.jpg"
+    }
+]
