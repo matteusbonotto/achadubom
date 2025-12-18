@@ -11,6 +11,7 @@ class AdminManager {
         this.produtoEditando = null;
         this.modoEdicao = false;
         this.arquivosCSV = []; // Array para múltiplos arquivos CSV
+        this.inicializado = false;
         
         // Usar cliente Supabase singleton (evita múltiplas instâncias)
         this.supabase = window.getSupabaseClient?.() || null;
@@ -20,32 +21,81 @@ class AdminManager {
         }
 
         // Aguardar autenticação antes de inicializar
-        if (window.authManager) {
-            this.init();
-        } else {
-            // Aguardar authManager estar disponível
-            setTimeout(() => {
-                if (window.authManager) {
+        this.aguardarAutenticacao();
+    }
+
+    /**
+     * Aguarda a autenticação e inicializa o admin
+     */
+    aguardarAutenticacao() {
+        const verificarEInicializar = () => {
+            // Verificar se authManager existe e se o container está visível
+            const container = document.getElementById('admin-container');
+            if (container && container.style.display !== 'none') {
+                if (!this.inicializado) {
                     this.init();
                 }
-            }, 500);
-        }
+                return true;
+            }
+            return false;
+        };
+
+        // Tentar imediatamente
+        if (verificarEInicializar()) return;
+
+        // Se não, aguardar e tentar novamente
+        const intervalo = setInterval(() => {
+            if (verificarEInicializar()) {
+                clearInterval(intervalo);
+            }
+        }, 300);
+
+        // Timeout máximo de 10 segundos
+        setTimeout(() => {
+            clearInterval(intervalo);
+            if (!this.inicializado) {
+                console.warn('⚠️ Timeout aguardando autenticação');
+            }
+        }, 10000);
     }
 
     /**
      * Inicialização do painel admin
      */
     async init() {
+        if (this.inicializado) {
+            console.log('⚠️ Admin já inicializado');
+            return;
+        }
+
         try {
             console.log('🛠️ Iniciando painel administrativo...');
-            await this.carregarProdutos();
+            this.inicializado = true;
+            
+            // Configurar event listeners primeiro
             this.configurarEventListeners();
-            this.renderizarLista();
             this.configurarFormulario();
-            this.preencherOpcoesLojas(); // Adicionar opções de lojas
+            this.preencherOpcoesLojas();
+            
+            // Carregar produtos
+            await this.carregarProdutos();
+            
+            // Renderizar lista (isso também atualiza as estatísticas)
+            this.renderizarLista();
+            
+            // Forçar atualização das estatísticas
+            this.atualizarEstatisticasDashboard();
+            
+            console.log('✅ Painel administrativo inicializado com sucesso!');
+            this.mostrarNotificacao(`✅ ${this.produtos.length} produtos carregados!`, 'sucesso');
+            
         } catch (error) {
-            console.error('Erro na inicialização do admin:', error);
-            this.mostrarNotificacao('Erro ao carregar dados. Verifique se o servidor Python está rodando.', 'erro');
+            console.error('❌ Erro na inicialização do admin:', error);
+            this.inicializado = false;
+            this.mostrarNotificacao('Erro ao carregar dados. Verifique a conexão.', 'erro');
+            
+            // Renderizar lista vazia para mostrar estado de erro
+            this.renderizarLista();
         }
     }
 
@@ -58,24 +108,34 @@ class AdminManager {
                 throw new Error('Supabase não inicializado');
             }
 
-            // Buscar produtos ativos do Supabase
+            console.log('📦 Carregando produtos do Supabase...');
+
+            // Buscar TODOS os produtos do Supabase (ativos e inativos)
             const { data, error } = await this.supabase
                 .from('produtos')
                 .select('*')
-                .eq('ativo', true)
                 .order('criado_em', { ascending: false });
 
             if (error) {
+                console.error('❌ Erro na query:', error);
                 throw error;
             }
 
             this.produtos = data || [];
             console.log(`✅ ${this.produtos.length} produtos carregados do Supabase`);
+            
+            // Atualizar estatísticas se a função existir
+            if (typeof atualizarEstatisticas === 'function') {
+                atualizarEstatisticas();
+            }
+
+            return this.produtos;
 
         } catch (error) {
             console.error('❌ Erro ao carregar produtos do Supabase:', error);
-            this.mostrarNotificacao('Erro ao carregar produtos. Verifique a conexão com o Supabase.', 'erro');
-            throw error;
+            this.produtos = [];
+            this.mostrarNotificacao('Erro ao carregar produtos. Verifique a conexão.', 'erro');
+            return [];
         }
     }
 
@@ -259,19 +319,28 @@ class AdminManager {
      * Configurar event listeners
      */
     configurarEventListeners() {
-        // Botão novo produto
+        console.log('🔗 Configurando event listeners...');
+
+        // Botão novo produto (header e sidebar)
         document.getElementById('btn-novo-produto')?.addEventListener('click', () => {
             this.novoProduto();
         });
 
         // Formulário de produto
-        document.getElementById('form-produto')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await this.salvarProduto();
-        });
+        const formProduto = document.getElementById('form-produto');
+        if (formProduto) {
+            formProduto.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await this.salvarProduto();
+            });
+        }
 
-        // Busca
+        // Busca (ambos os campos)
         document.getElementById('busca-admin')?.addEventListener('input', (e) => {
+            this.filtrarProdutos(e.target.value);
+        });
+        
+        document.getElementById('busca-produtos')?.addEventListener('input', (e) => {
             this.filtrarProdutos(e.target.value);
         });
 
@@ -282,17 +351,19 @@ class AdminManager {
 
         // Botão importar CSV
         document.getElementById('btn-importar-csv')?.addEventListener('click', () => {
-            // Preencher lojas antes de abrir o modal
-            this.preencherLojasCSV();
-            const modal = new bootstrap.Modal(document.getElementById('modalImportarCSV'));
-            modal.show();
+            this.abrirModalImportarCSV();
         });
 
-        // Preencher lojas quando o modal for aberto (backup)
+        // Preencher lojas quando o modal for aberto
         const modalImportarCSV = document.getElementById('modalImportarCSV');
         if (modalImportarCSV) {
             modalImportarCSV.addEventListener('show.bs.modal', () => {
                 this.preencherLojasCSV();
+            });
+            
+            // Limpar estado ao fechar
+            modalImportarCSV.addEventListener('hidden.bs.modal', () => {
+                this.limparModalCSV();
             });
         }
 
@@ -305,6 +376,54 @@ class AdminManager {
         document.getElementById('btn-processar-csv')?.addEventListener('click', async () => {
             await this.processarCSV();
         });
+
+        console.log('✅ Event listeners configurados!');
+    }
+
+    /**
+     * Abre o modal de importação CSV
+     */
+    abrirModalImportarCSV() {
+        // Preencher lojas antes de abrir
+        this.preencherLojasCSV();
+        
+        const modalEl = document.getElementById('modalImportarCSV');
+        if (modalEl) {
+            const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+            modal.show();
+        }
+    }
+
+    /**
+     * Limpa o estado do modal CSV
+     */
+    limparModalCSV() {
+        this.arquivosCSV = [];
+        
+        const inputArquivo = document.getElementById('arquivo-csv');
+        if (inputArquivo) inputArquivo.value = '';
+        
+        const arquivosSelecionados = document.getElementById('arquivos-selecionados');
+        if (arquivosSelecionados) arquivosSelecionados.style.display = 'none';
+        
+        const progressBar = document.getElementById('progress-bar');
+        if (progressBar) {
+            progressBar.style.display = 'none';
+            const bar = progressBar.querySelector('.progress-bar');
+            if (bar) {
+                bar.style.width = '0%';
+                bar.textContent = '0%';
+            }
+        }
+        
+        const progressStatus = document.getElementById('progress-status');
+        if (progressStatus) progressStatus.style.display = 'none';
+        
+        const resultado = document.getElementById('resultado-importacao');
+        if (resultado) resultado.innerHTML = '';
+        
+        const btnProcessar = document.getElementById('btn-processar-csv');
+        if (btnProcessar) btnProcessar.disabled = true;
     }
 
     /**
@@ -362,40 +481,54 @@ class AdminManager {
 
         // Mapear ícones para cada loja
         const icones = {
-            'Shopee': 'bi-bag-fill text-warning',
-            'Mercado Livre': 'bi-link text-primary',
-            'Amazon': 'bi-box-fill text-success',
-            'AliExpress': 'bi-globe text-danger',
-            'Casas Bahia': 'bi-house-fill text-info',
-            'Magazine Luiza': 'bi-shop text-primary',
-            'Americanas': 'bi-star-fill text-danger',
-            'Submarino': 'bi-water text-info',
-            'Extra': 'bi-plus-circle text-success',
-            'Carrefour': 'bi-cart-fill text-warning'
+            'Shopee': 'bi-bag-fill',
+            'Mercado Livre': 'bi-link-45deg',
+            'Amazon': 'bi-box-fill',
+            'AliExpress': 'bi-globe2',
+            'Casas Bahia': 'bi-house-fill',
+            'Magazine Luiza': 'bi-shop',
+            'Americanas': 'bi-star-fill',
+            'Submarino': 'bi-water',
+            'Extra': 'bi-plus-circle-fill',
+            'Carrefour': 'bi-cart-fill'
         };
 
-        // Criar HTML das lojas dinamicamente
-        let html = '<div class="row g-2">';
+        // Criar HTML das lojas dinamicamente com novo design
+        let html = '';
 
         lojas.forEach((loja, index) => {
             const icone = icones[loja] || 'bi-shop';
             const lojaId = loja.toLowerCase().replace(/\s+/g, '-');
             
             html += `
-                <div class="col-md-6 col-lg-4">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="loja" 
-                               id="loja-${lojaId}" value="${loja}" ${index === 0 ? 'checked' : ''}>
-                        <label class="form-check-label" for="loja-${lojaId}">
-                            <i class="bi ${icone}"></i> ${loja}
-                        </label>
-                    </div>
-                </div>
+                <label class="loja-option ${index === 0 ? 'selected' : ''}" for="loja-${lojaId}">
+                    <input type="radio" name="loja" id="loja-${lojaId}" value="${loja}" ${index === 0 ? 'checked' : ''} style="display: none;">
+                    <i class="bi ${icone}"></i>
+                    <span>${loja}</span>
+                </label>
             `;
         });
 
-        html += '</div>';
         csvLojaSelection.innerHTML = html;
+
+        // Adicionar evento de seleção visual
+        csvLojaSelection.querySelectorAll('.loja-option').forEach(option => {
+            option.addEventListener('click', () => {
+                csvLojaSelection.querySelectorAll('.loja-option').forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+                option.querySelector('input').checked = true;
+                
+                // Desabilitar campo "Outro" quando seleciona uma loja
+                const lojaOutroTexto = document.getElementById('loja-outro-texto');
+                if (lojaOutroTexto) {
+                    lojaOutroTexto.disabled = true;
+                }
+                const lojaOutroRadio = document.getElementById('loja-outro');
+                if (lojaOutroRadio) {
+                    lojaOutroRadio.checked = false;
+                }
+            });
+        });
 
         // Configurar evento para campo "Outro"
         const lojaOutroRadio = document.getElementById('loja-outro');
@@ -405,6 +538,7 @@ class AdminManager {
             lojaOutroRadio.addEventListener('change', () => {
                 lojaOutroTexto.disabled = !lojaOutroRadio.checked;
                 if (lojaOutroRadio.checked) {
+                    csvLojaSelection.querySelectorAll('.loja-option').forEach(o => o.classList.remove('selected'));
                     lojaOutroTexto.focus();
                 }
             });
@@ -1254,16 +1388,19 @@ class AdminManager {
 
         if (!imagemInput || !previewContainer) return;
 
-        const urls = imagemInput.value.split('\n').filter(url => url.trim());
+        const urls = imagemInput.value
+            .split(/[\n,]/)
+            .map(url => url.trim())
+            .filter(url => url.length > 0 && url.startsWith('http'));
 
         if (urls.length === 0) {
-            previewContainer.innerHTML = '<p>Nenhuma imagem para visualizar</p>';
+            previewContainer.innerHTML = '<p class="text-muted text-center mb-0">Nenhuma imagem para visualizar</p>';
             return;
         }
 
         previewContainer.innerHTML = urls.map((url, index) => `
             <div class="preview-item">
-                <img src="${url.trim()}" alt="Preview ${index + 1}" loading="lazy">
+                <img src="${url}" alt="Preview ${index + 1}" loading="lazy" onerror="this.src='https://via.placeholder.com/100x100/f0f4f8/94a3b8?text=Erro'">
                 <div class="preview-numero">${index + 1}</div>
             </div>
         `).join('');
@@ -1282,18 +1419,37 @@ class AdminManager {
                 return;
             }
 
+            // Mostrar loading
+            const btnSalvar = document.getElementById('btn-salvar');
+            const textoOriginal = btnSalvar?.innerHTML;
+            if (btnSalvar) {
+                btnSalvar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Salvando...';
+                btnSalvar.disabled = true;
+            }
+
             // Determinar se é criação ou edição
             const metodo = this.modoEdicao ? 'PUT' : 'POST';
 
             await this.salvarProdutoAPI(dadosFormulario, metodo);
 
             // Fechar modal e limpar formulário
-            const modal = bootstrap.Modal.getInstance(document.getElementById('modalProduto'));
-            modal.hide();
+            const modalEl = document.getElementById('modalProduto');
+            if (modalEl) {
+                const modal = bootstrap.Modal.getInstance(modalEl);
+                if (modal) modal.hide();
+            }
+            
             this.limparFormulario();
 
         } catch (error) {
             console.error('Erro ao salvar produto:', error);
+        } finally {
+            // Restaurar botão
+            const btnSalvar = document.getElementById('btn-salvar');
+            if (btnSalvar) {
+                btnSalvar.innerHTML = '<i class="bi bi-check-lg"></i> <span>Salvar Produto</span>';
+                btnSalvar.disabled = false;
+            }
         }
     }
 
@@ -1301,8 +1457,21 @@ class AdminManager {
      * Confirmar exclusão
      */
     async confirmarExclusao(codigo) {
-        if (confirm(`Tem certeza que deseja excluir o produto ${codigo}?`)) {
-            await this.excluirProdutoAPI(codigo);
+        if (confirm(`Tem certeza que deseja excluir o produto "${codigo}"?\n\nEsta ação não pode ser desfeita.`)) {
+            try {
+                await this.excluirProdutoAPI(codigo);
+                
+                // Fechar modal se estiver aberto
+                const modalEl = document.getElementById('modalProduto');
+                if (modalEl) {
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    if (modal) modal.hide();
+                }
+                
+                this.limparFormulario();
+            } catch (error) {
+                console.error('Erro ao excluir:', error);
+            }
         }
     }
 
@@ -1316,59 +1485,112 @@ class AdminManager {
         const container = document.getElementById('lista-produtos');
         const produtos = produtosFiltrados || this.produtos;
 
-        if (!container) return;
-
-        if (produtos.length === 0) {
-            container.innerHTML = `
-                <div class="text-center py-4">
-                    <i class="bi bi-inbox fs-1 text-muted"></i>
-                    <p class="text-muted mt-2">Nenhum produto encontrado</p>
-                </div>
-            `;
+        if (!container) {
+            console.warn('⚠️ Container lista-produtos não encontrado');
             return;
         }
 
-        container.innerHTML = produtos.map(produto => this.templateItemLista(produto)).join('');
-        this.configurarEventListenersLista();
+        console.log(`🎨 Renderizando ${produtos.length} produtos...`);
+
+        if (produtos.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="bi bi-inbox"></i>
+                    <h3>Nenhum produto encontrado</h3>
+                    <p>Adicione produtos clicando em "Novo Produto" ou importe via CSV.</p>
+                </div>
+            `;
+        } else {
+            container.innerHTML = produtos.map(produto => this.templateItemLista(produto)).join('');
+            this.configurarEventListenersLista();
+        }
+        
+        // Atualizar estatísticas após renderizar
+        this.atualizarEstatisticasDashboard();
+    }
+
+    /**
+     * Atualiza as estatísticas do dashboard
+     */
+    atualizarEstatisticasDashboard() {
+        try {
+            const produtos = this.produtos || [];
+            
+            // Calcular estatísticas
+            const stats = {
+                total: produtos.length,
+                ativos: produtos.filter(p => p.ativo !== false).length,
+                inativos: produtos.filter(p => p.ativo === false).length,
+                favoritos: produtos.filter(p => p.favorito === true).length,
+                lojas: [...new Set(produtos.map(p => p.loja).filter(l => l && l.trim()))].length
+            };
+            
+            // Atualizar elementos do DOM
+            const updateEl = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            };
+            
+            updateEl('total-produtos', stats.total);
+            updateEl('produtos-ativos', stats.ativos);
+            updateEl('produtos-favoritos', stats.favoritos);
+            updateEl('total-lojas', stats.lojas);
+            updateEl('nav-produtos-count', stats.total);
+            
+            console.log('📊 Dashboard atualizado:', stats);
+            
+            // Também chamar função global se existir
+            if (typeof window.atualizarEstatisticas === 'function') {
+                window.atualizarEstatisticas();
+            }
+            
+        } catch (error) {
+            console.error('Erro ao atualizar estatísticas:', error);
+        }
     }
 
     /**
      * Template para item da lista
      */
     templateItemLista(produto) {
-        const statusClass = produto.ativo ? 'ativo' : 'inativo';
-        const statusIcon = produto.ativo ? 'check-circle-fill' : 'x-circle-fill';
-        const statusColor = produto.ativo ? 'success' : 'danger';
+        const statusClass = produto.ativo ? 'active' : 'inactive';
+        const statusText = produto.ativo ? 'Ativo' : 'Inativo';
+        const statusIcon = produto.ativo ? 'bi-check-circle-fill' : 'bi-x-circle-fill';
+        const itemClass = produto.ativo ? '' : 'inactive';
 
         return `
-            <div class="item-produto ${statusClass}" data-codigo="${produto.codigo}">
-                <div class="item-checkbox">
+            <div class="product-item ${itemClass}" data-codigo="${produto.codigo}">
+                <div class="product-checkbox">
                     <input type="checkbox" class="checkbox-produto" data-codigo="${produto.codigo}" onchange="adminManager.atualizarSelecao()">
                 </div>
-                <div class="item-imagem">
-                    <img src="${produto.imagem?.[0] || 'https://via.placeholder.com/60x60/ddd/999?text=Sem+Img'}" 
-                         alt="${produto.titulo}" loading="lazy">
+                <div class="product-image">
+                    <img src="${produto.imagem?.[0] || 'https://via.placeholder.com/64x64/334155/94a3b8?text=Sem+Img'}" 
+                         alt="${produto.titulo}" loading="lazy" onerror="this.src='https://via.placeholder.com/64x64/334155/94a3b8?text=Erro'">
                 </div>
-                <div class="item-info">
-                    <div class="item-titulo">${produto.titulo}</div>
-                    <div class="item-detalhes">
-                        <span class="item-codigo">Código: ${produto.codigo}</span>
-                        <span class="item-loja">${produto.loja}</span>
-                        <span class="item-preco">R$ ${produto.preco?.toFixed(2)}</span>
+                <div class="product-info">
+                    <div class="product-title">${produto.titulo}</div>
+                    <div class="product-meta">
+                        <span class="product-code"><i class="bi bi-hash"></i>${produto.codigo}</span>
+                        <span><i class="bi bi-shop"></i>${produto.loja || 'N/A'}</span>
+                        <span class="product-price"><i class="bi bi-tag"></i>R$ ${produto.preco?.toFixed(2) || '0.00'}</span>
+                        ${produto.vendas ? `<span><i class="bi bi-graph-up"></i>${produto.vendas}</span>` : ''}
                     </div>
                 </div>
-                <div class="item-status">
-                    <i class="bi bi-${statusIcon} text-${statusColor}"></i>
+                <div class="product-status">
+                    <span class="status-badge ${statusClass}">
+                        <i class="bi ${statusIcon}"></i>
+                        ${statusText}
+                    </span>
                 </div>
-                <div class="item-acoes">
-                    <button class="btn btn-sm btn-outline-primary" onclick="adminManager.editarProduto('${produto.codigo}')" title="Editar">
-                        <i class="bi bi-pencil"></i> Editar
+                <div class="product-actions">
+                    <button class="action-btn edit" onclick="adminManager.editarProduto('${produto.codigo}')" title="Editar produto">
+                        <i class="bi bi-pencil-fill"></i>
                     </button>
-                    <button class="btn btn-sm btn-outline-info" onclick="adminManager.duplicarProduto('${produto.codigo}')" title="Duplicar">
+                    <button class="action-btn duplicate" onclick="adminManager.duplicarProduto('${produto.codigo}')" title="Duplicar produto">
                         <i class="bi bi-copy"></i>
                     </button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="adminManager.confirmarExclusao('${produto.codigo}')" title="Excluir">
-                        <i class="bi bi-trash"></i>
+                    <button class="action-btn delete" onclick="adminManager.confirmarExclusao('${produto.codigo}')" title="Excluir produto">
+                        <i class="bi bi-trash-fill"></i>
                     </button>
                 </div>
             </div>
@@ -1402,25 +1624,38 @@ class AdminManager {
         const container = document.createElement('div');
         container.id = 'notificacoes';
         container.className = 'position-fixed top-0 end-0 p-3';
-        container.style.zIndex = '1060';
+        container.style.zIndex = '9999';
+        container.style.maxWidth = '400px';
         document.body.appendChild(container);
         return container;
     }
 
     // Adicionar outras funções necessárias (validação, formulário, etc.)
     obterDadosFormulario() {
+        const categoriasInput = document.getElementById('categorias')?.value || '';
+        const categorias = categoriasInput
+            .split(',')
+            .map(c => c.trim().toLowerCase())
+            .filter(c => c.length > 0);
+
+        const imagemInput = document.getElementById('imagem')?.value || '';
+        const imagens = imagemInput
+            .split(/[\n,]/)
+            .map(img => img.trim())
+            .filter(img => img.length > 0 && img.startsWith('http'));
+
         return {
-            codigo: document.getElementById('codigo').value,
-            ativo: document.getElementById('ativo').checked,
-            titulo: document.getElementById('titulo').value,
-            descricao: document.getElementById('descricao').value,
-            url: document.getElementById('url').value,
-            imagem: document.getElementById('imagem').value.split('\n').filter(img => img.trim()),
-            categorias: Array.from(document.querySelectorAll('input[name="categorias"]:checked')).map(cb => cb.value),
-            favorito: document.getElementById('favorito').checked,
-            loja: document.getElementById('loja').value,
-            preco: parseFloat(document.getElementById('preco').value) || 0,
-            vendas: document.getElementById('vendas').value || '0 vendas'
+            codigo: document.getElementById('codigo')?.value?.trim() || '',
+            ativo: document.getElementById('ativo')?.checked ?? true,
+            titulo: document.getElementById('titulo')?.value?.trim() || '',
+            descricao: document.getElementById('descricao')?.value?.trim() || '',
+            url: document.getElementById('url')?.value?.trim() || '',
+            imagem: imagens,
+            categorias: categorias.length > 0 ? categorias : ['geral'],
+            favorito: document.getElementById('favorito')?.checked ?? false,
+            loja: document.getElementById('loja')?.value || '',
+            preco: parseFloat(document.getElementById('preco')?.value) || 0,
+            vendas: document.getElementById('vendas')?.value?.trim() || '0 vendas'
         };
     }
 
@@ -1448,60 +1683,157 @@ class AdminManager {
         this.produtoEditando = null;
         this.limparFormulario();
 
-        const modal = new bootstrap.Modal(document.getElementById('modalProduto'));
-        modal.show();
+        // Atualizar UI do modal
+        const tituloModal = document.getElementById('modal-titulo');
+        const btnSalvar = document.getElementById('btn-salvar');
+        const btnExcluir = document.getElementById('btn-excluir');
+        
+        if (tituloModal) tituloModal.textContent = 'Novo Produto';
+        if (btnSalvar) btnSalvar.innerHTML = '<i class="bi bi-check-lg"></i> <span>Salvar Produto</span>';
+        if (btnExcluir) btnExcluir.style.display = 'none';
+
+        const modalEl = document.getElementById('modalProduto');
+        if (modalEl) {
+            const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+            modal.show();
+        }
     }
 
     editarProduto(codigo) {
         const produto = this.produtos.find(p => p.codigo === codigo);
-        if (!produto) return;
+        if (!produto) {
+            this.mostrarNotificacao('Produto não encontrado', 'erro');
+            return;
+        }
 
         this.modoEdicao = true;
         this.produtoEditando = produto;
+        
+        // Atualizar UI do modal
+        const tituloModal = document.getElementById('modal-titulo');
+        const btnSalvar = document.getElementById('btn-salvar');
+        const btnExcluir = document.getElementById('btn-excluir');
+        
+        if (tituloModal) tituloModal.textContent = 'Editar Produto';
+        if (btnSalvar) btnSalvar.innerHTML = '<i class="bi bi-check-lg"></i> <span>Atualizar Produto</span>';
+        if (btnExcluir) btnExcluir.style.display = 'inline-flex';
+        
         this.preencherFormulario(produto);
 
-        const modal = new bootstrap.Modal(document.getElementById('modalProduto'));
-        modal.show();
+        const modalEl = document.getElementById('modalProduto');
+        if (modalEl) {
+            const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+            modal.show();
+        }
     }
 
     duplicarProduto(codigo) {
         const produto = this.produtos.find(p => p.codigo === codigo);
-        if (!produto) return;
+        if (!produto) {
+            this.mostrarNotificacao('Produto não encontrado', 'erro');
+            return;
+        }
 
         this.modoEdicao = false;
         this.produtoEditando = null;
 
-        const novoProduto = { ...produto };
-        novoProduto.codigo = produto.codigo + '_copy';
-        novoProduto.titulo = produto.titulo + ' (Cópia)';
+        // Criar cópia do produto com novo código
+        const novoProduto = { 
+            ...produto,
+            codigo: `${produto.codigo}_${Date.now().toString().slice(-6)}`,
+            titulo: `${produto.titulo} (Cópia)`
+        };
+
+        // Atualizar UI do modal
+        const tituloModal = document.getElementById('modal-titulo');
+        const btnSalvar = document.getElementById('btn-salvar');
+        const btnExcluir = document.getElementById('btn-excluir');
+        
+        if (tituloModal) tituloModal.textContent = 'Duplicar Produto';
+        if (btnSalvar) btnSalvar.innerHTML = '<i class="bi bi-check-lg"></i> <span>Criar Cópia</span>';
+        if (btnExcluir) btnExcluir.style.display = 'none';
 
         this.preencherFormulario(novoProduto);
 
-        const modal = new bootstrap.Modal(document.getElementById('modalProduto'));
-        modal.show();
+        const modalEl = document.getElementById('modalProduto');
+        if (modalEl) {
+            const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+            modal.show();
+        }
+        
+        this.mostrarNotificacao('Produto duplicado! Altere o código e salve.', 'info');
     }
 
     preencherFormulario(produto) {
-        document.getElementById('codigo').value = produto.codigo || '';
-        document.getElementById('ativo').checked = produto.ativo !== false;
-        document.getElementById('titulo').value = produto.titulo || '';
-        document.getElementById('descricao').value = produto.descricao || '';
-        document.getElementById('url').value = produto.url || '';
-        document.getElementById('imagem').value = (produto.imagem || []).join('\n');
-        document.getElementById('favorito').checked = produto.favorito || false;
-        document.getElementById('loja').value = produto.loja || '';
-        document.getElementById('preco').value = produto.preco || '';
-        document.getElementById('vendas').value = produto.vendas || '';
+        // Campos básicos
+        const setVal = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.value = val ?? '';
+        };
+        
+        const setChecked = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.checked = val ?? false;
+        };
 
-        // Categorias
-        document.querySelectorAll('input[name="categorias"]').forEach(cb => {
-            cb.checked = (produto.categorias || []).includes(cb.value);
-        });
+        setVal('codigo', produto.codigo);
+        setVal('titulo', produto.titulo);
+        setVal('descricao', produto.descricao);
+        setVal('url', produto.url);
+        setVal('loja', produto.loja);
+        setVal('preco', produto.preco);
+        setVal('vendas', produto.vendas);
+        
+        // Imagens - juntar com quebra de linha
+        const imagens = Array.isArray(produto.imagem) ? produto.imagem.join('\n') : (produto.imagem || '');
+        setVal('imagem', imagens);
+        
+        // Categorias - juntar com vírgula
+        const categorias = Array.isArray(produto.categorias) ? produto.categorias.join(', ') : (produto.categorias || '');
+        setVal('categorias', categorias);
+        
+        // Checkboxes
+        setChecked('ativo', produto.ativo !== false);
+        setChecked('favorito', produto.favorito);
+
+        // Atualizar contador de caracteres
+        const descricaoEl = document.getElementById('descricao');
+        const contadorEl = document.getElementById('contador-caracteres');
+        if (descricaoEl && contadorEl) {
+            contadorEl.textContent = `${descricaoEl.value.length} caracteres`;
+        }
+
+        // Atualizar preview de imagens
+        this.atualizarPreviewImagens();
     }
 
     limparFormulario() {
-        document.getElementById('form-produto').reset();
-        document.querySelectorAll('input[name="categorias"]').forEach(cb => cb.checked = false);
+        const form = document.getElementById('form-produto');
+        if (form) {
+            form.reset();
+        }
+        
+        // Resetar estados
+        this.modoEdicao = false;
+        this.produtoEditando = null;
+        
+        // Limpar preview de imagens
+        const previewContainer = document.getElementById('preview-imagens');
+        if (previewContainer) {
+            previewContainer.innerHTML = '<p class="text-muted text-center mb-0">Nenhuma imagem para visualizar</p>';
+        }
+        
+        // Resetar contador
+        const contador = document.getElementById('contador-caracteres');
+        if (contador) {
+            contador.textContent = '0 caracteres';
+        }
+        
+        // Garantir checkbox ativo marcado por padrão
+        const ativoCheckbox = document.getElementById('ativo');
+        if (ativoCheckbox) {
+            ativoCheckbox.checked = true;
+        }
     }
 
     filtrarProdutos(termo) {
@@ -1524,7 +1856,61 @@ class AdminManager {
     }
 
     configurarFormulario() {
-        // Configurações específicas do formulário se necessário
+        // Contador de caracteres da descrição
+        const descricaoInput = document.getElementById('descricao');
+        const contadorCaracteres = document.getElementById('contador-caracteres');
+        
+        if (descricaoInput && contadorCaracteres) {
+            descricaoInput.addEventListener('input', () => {
+                const count = descricaoInput.value.length;
+                contadorCaracteres.textContent = `${count} caracteres`;
+            });
+        }
+
+        // Preview de imagens
+        const imagemInput = document.getElementById('imagem');
+        if (imagemInput) {
+            imagemInput.addEventListener('input', () => {
+                this.atualizarPreviewImagens();
+            });
+        }
+
+        // Atualizar título do modal baseado no modo
+        const modalProduto = document.getElementById('modalProduto');
+        if (modalProduto) {
+            modalProduto.addEventListener('show.bs.modal', () => {
+                const tituloModal = document.getElementById('modal-titulo');
+                const btnSalvar = document.getElementById('btn-salvar');
+                const btnExcluir = document.getElementById('btn-excluir');
+                
+                if (this.modoEdicao) {
+                    if (tituloModal) tituloModal.textContent = 'Editar Produto';
+                    if (btnSalvar) btnSalvar.innerHTML = '<i class="bi bi-check-lg"></i> <span>Atualizar Produto</span>';
+                    if (btnExcluir) btnExcluir.style.display = 'inline-flex';
+                } else {
+                    if (tituloModal) tituloModal.textContent = 'Novo Produto';
+                    if (btnSalvar) btnSalvar.innerHTML = '<i class="bi bi-check-lg"></i> <span>Salvar Produto</span>';
+                    if (btnExcluir) btnExcluir.style.display = 'none';
+                }
+            });
+            
+            // Limpar formulário ao fechar modal
+            modalProduto.addEventListener('hidden.bs.modal', () => {
+                if (!this.modoEdicao) {
+                    this.limparFormulario();
+                }
+            });
+        }
+
+        // Botão excluir dentro do modal
+        const btnExcluir = document.getElementById('btn-excluir');
+        if (btnExcluir) {
+            btnExcluir.addEventListener('click', () => {
+                if (this.produtoEditando) {
+                    this.confirmarExclusao(this.produtoEditando.codigo);
+                }
+            });
+        }
     }
 
     /**
@@ -1547,7 +1933,11 @@ class AdminManager {
         }
 
         if (barraAcoes) {
-            barraAcoes.style.display = selecionados.length > 0 ? 'flex' : 'none';
+            if (selecionados.length > 0) {
+                barraAcoes.classList.add('show');
+            } else {
+                barraAcoes.classList.remove('show');
+            }
         }
 
         // Atualizar checkbox "selecionar todos"
@@ -1852,10 +2242,13 @@ class AdminManager {
      * Retorna estatísticas dos produtos
      */
     getEstatisticas() {
+        const produtos = this.produtos || [];
         return {
-            total: this.produtos.length,
-            ativos: this.produtos.filter(p => p.ativo).length,
-            inativos: this.produtos.filter(p => !p.ativo).length
+            total: produtos.length,
+            ativos: produtos.filter(p => p.ativo !== false).length,
+            inativos: produtos.filter(p => p.ativo === false).length,
+            favoritos: produtos.filter(p => p.favorito === true).length,
+            lojas: [...new Set(produtos.map(p => p.loja).filter(l => l && l.trim()))].length
         };
     }
 }
